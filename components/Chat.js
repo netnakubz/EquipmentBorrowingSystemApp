@@ -10,12 +10,9 @@ import { Card } from 'react-native-paper';
 
 export default function Chat({ props, navigation, user }) {
     const name = props.userTwoName;
-    console.log(user);
-    // const chat = props.chat;
-    // const time = props.time;
     const onPressChat = (roomId) => {
         console.log('Clicked');
-        navigation.navigate('Chat', {
+        navigation.navigate('DirectMessage', {
             roomId: roomId,
             destination: props.name,
             user: user

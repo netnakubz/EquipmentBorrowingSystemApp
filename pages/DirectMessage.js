@@ -9,8 +9,7 @@ import Stomp from 'webstomp-client';
 export default function DirectMessage({ route, navigation }) {
   const [messages, setMessages] = useState([]);
   const { destination, roomId, user } = route.params;
-  console.log(user)
-  const SOCKET_URL = 'http://192.168.1.138:8080/ws';
+  const SOCKET_URL = 'http://192.168.0.104:8080/ws';
   var socket = '';
   var stompClient = '';
   var connected = false;
@@ -21,10 +20,8 @@ export default function DirectMessage({ route, navigation }) {
     alert("Generate contract");
   }
   const getChat = async () => {
-    const data = await axios.get(`http://192.168.1.138:8080/api/v1/getMessage?roomId=${roomId}&userId=${parseInt(user)}`);
-    console.log(data.data);
+    const data = await axios.get(`http://192.168.0.104:8080/api/v1/getMessage?roomId=${roomId}&userId=${parseInt(user)}`);
     setMessages((data.data));
-
   }
   useEffect(() => {
     getChat();
@@ -37,7 +34,6 @@ export default function DirectMessage({ route, navigation }) {
         connected = true;
         stompClient.subscribe(`/chat/private-${roomId}`, (val) => {
           const newMessage = JSON.parse(val.body);
-          console.log(newMessage.createdAt);
           const object = [{
             _id: newMessage._id,
             createdAt: newMessage.createdAt,
@@ -74,7 +70,6 @@ export default function DirectMessage({ route, navigation }) {
   }, []);
 
   const onSend = useCallback((messages = []) => {
-    console.log(messages);
 
     // setMessages((previousMessages) =>
     //   GiftedChat.append(previousMessages, messages)
