@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { Card } from 'react-native-paper';
 
+
 export default function Chat({ props, navigation, user }) {
     const name = props.userTwoName;
     const onPressChat = (roomId) => {
@@ -47,6 +48,7 @@ export default function Chat({ props, navigation, user }) {
                 </View>
             </Card>
         </TouchableOpacity>
+    
     );
 }
 

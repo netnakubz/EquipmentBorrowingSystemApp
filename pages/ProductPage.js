@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, Button, Image, TouchableOpacity } from "react-native";
+import { ScrollView, View, Text, StyleSheet, Button, Image, TouchableOpacity } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { Dimensions } from "react-native";
 const windowWidth = Dimensions.get('window').width;
@@ -37,84 +37,96 @@ export function ProductPage({ navigation, route }) {
     }, []);
 
     return (
-        <View style={styles.container}>
-            <View style={styles.imageZone}>
-                <Image
-                    style={styles.postImage}
-                    resizeMode="cover"
-                    source={{ uri: "https://i.pinimg.com/736x/b1/16/0f/b1160fdd10b71b095c19366845fd6b3e.jpg" }}
-                />
-            </View>
-            <View style={styles.postDetails}>
-                <View style={styles.postContents}>
-                    <View style={styles.row}>
+        <View>
+            <ScrollView
+                style={{ backgroundColor: "white" }}
+            >
+                <View style={styles.imageZone}>
+                    <Image
+                        style={styles.postImage}
+                        resizeMode="cover"
+                        source={{ uri: "https://i.pinimg.com/736x/b1/16/0f/b1160fdd10b71b095c19366845fd6b3e.jpg" }}
+                    />
+                </View>
+                <View style={styles.postDetails}>
+                    <View style={styles.postContents}>
+                        <View style={styles.row}>
+                            <View>
+                                <Text style={{ color: "#464646" }}>{item.type}</Text>
+                            </View>
+                            <View>
+                                <TouchableOpacity
+                                    onPress={() => { handleLikeClick() }}
+                                >
+                                    <Ionicons name={isLiked ? "heart" : "heart-outline"} size={30} color={isLiked ? "#FF6280" : "black"} />
+                                </TouchableOpacity>
+                            </View></View>
                         <View>
-                            <Text style={{ color: "#464646" }}>{item.type}</Text>
+                            <Text style={[styles.itemName, { color: "#464646" }]}>{item.name}</Text>
                         </View>
-                        <View>
-                            <TouchableOpacity
-                                onPress={() => { handleLikeClick() }}
-                            >
-                                <Ionicons name={isLiked ? "heart" : "heart-outline"} size={30} color={isLiked ? "#FF6280" : "black"} />
-                            </TouchableOpacity>
-                        </View></View>
-                    <View>
-                        <Text style={[styles.itemName, { color: "#464646" }]}>{item.name}</Text>
-                    </View>
-                    <View style={{ flexDirection: 'row', marginTop: 25 }}>
-                        <Text style={{ fontSize: 20, color: "#464646" }}>ราคาที่เสนอ</Text>
-                        <Text style={{ fontSize: 20, marginLeft: 10, color: "#FF6280" }}>{item.price} THB</Text>
-                    </View>
-                    <View style={{ marginTop: 25 }}>
-                        <Text style={{ color: "#464646" }}>
-                            {item.desc}
-                        </Text>
-                    </View>
-                    <View style={{ marginTop: 25 }}>
-                        <Text style={{ color: "#464646", fontWeight: "bold" }}>รายละเอียด</Text>
-                        <Text style={{ color: "#464646" }}>คลัง : {item.totalStock}</Text>
-                        <Text style={{ fontSize: 13, color: "#464646" }}>เช่าแล้ว : {item.totalRent} ครั้ง</Text>
-                    </View>
-                    <View style={{ marginTop: 25 }}>
-                        <Text style={{ textAlign: "center" }}>____________________________________</Text>
-                    </View>
-                    <View style={[styles.row, { marginTop: 25 }]}>
-                        <View>
-                            <Image
-                                style={{ width: 50, height: 50, borderRadius: 50 }}
-                                source={{ uri: owner.photo }} />
+                        <View style={{ flexDirection: 'row', marginTop: 20 }}>
+                            <Text style={{ fontSize: 20, color: "#464646" }}>ราคาที่เสนอ</Text>
+                            <Text style={{ fontSize: 20, marginLeft: 10, color: "#FF6280" }}>{item.price} THB</Text>
                         </View>
-                        <View>
-                            <Text style={{ fontWeight: "bold", color: "#464646", fontSize: 16 }}>{owner.name}</Text>
-                            <Text>{owner.email}</Text>
+                        <View style={{ marginTop: 20 }}>
+                            <Text style={{ color: "#464646" }}>
+                                {item.desc}
+                            </Text>
                         </View>
-                        <View>
-                            <TouchableOpacity
-                                onPress={() => contactBtn()}
-                            >
-                                <View style={{
-                                    width: 80,
-                                    height: 40,
-                                    backgroundColor: "#FF6280",
-                                    borderRadius: 30,
-                                    justifyContent: 'center',
+                        <View style={{ marginTop: 20 }}>
+                            <Text style={{ color: "#464646", fontWeight: "bold" }}>รายละเอียด</Text>
+                            <Text style={{ color: "#464646" }}>คลัง : {item.totalStock}</Text>
+                            <Text style={{ fontSize: 13, color: "#464646" }}>เช่าแล้ว : {item.totalRent} ครั้ง</Text>
+                        </View>
+                        <View style={{ marginTop: 20 }}>
+                            <Text style={{ textAlign: "center" }}>____________________________________</Text>
+                        </View>
+                    </View>
+                </View>
+            </ScrollView>
+            <View style={[styles.row,
+            {
+                bottom: 10,
+                position: 'absolute',
+                justifyContent: "space-evenly",
+                left: 0,
+                right: 0
+            }]}
+            >
+                <View>
+                    <Image
+                        style={{ width: 50, height: 50, borderRadius: 50 }}
+                        source={{ uri: owner.photo }} />
+                </View>
+                <View>
+                    <Text style={{ fontWeight: "bold", color: "#464646", fontSize: 16 }}>{owner.name}</Text>
+                    <Text>{owner.email}</Text>
+                </View>
+                <View>
+                    <TouchableOpacity
+                        onPress={() => contactBtn()}
+                    >
+                        <View style={{
+                            width: 80,
+                            height: 40,
+                            backgroundColor: "#FF6280",
+                            borderRadius: 30,
+                            justifyContent: 'center',
 
-                                }}>
-                                    <Text
-                                        style={{
-                                            textAlign: "center",
-                                            margin: 'auto',
-                                            color: 'white',
-                                            fontSize: 18,
-                                            fontWeight: "bold"
-                                        }}
-                                    >
-                                        ติดต่อ
-                                    </Text>
-                                </View>
-                            </TouchableOpacity>
+                        }}>
+                            <Text
+                                style={{
+                                    textAlign: "center",
+                                    margin: 'auto',
+                                    color: 'white',
+                                    fontSize: 18,
+                                    fontWeight: "bold"
+                                }}
+                            >
+                                ติดต่อ
+                            </Text>
                         </View>
-                    </View>
+                    </TouchableOpacity>
                 </View>
             </View>
         </View>
@@ -141,7 +153,7 @@ const styles = StyleSheet.create({
         borderTopLeftRadius: 50,
         borderTopRightRadius: 50,
         backgroundColor: "white",
-        height: windowHeight - windowHeight / 2.3,
+        height: windowHeight - windowHeight / 2.3
     },
     imageZone: {
         height: windowHeight / 2.3

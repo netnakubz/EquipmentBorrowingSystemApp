@@ -1667,7 +1667,7 @@
   dependencies:
     "@types/node" "*"
 
-"@types/hammerjs@^2.0.36":
+"@types/hammerjs@^2.0.36", "@types/hammerjs@^2.0.38":
   "integrity" "sha512-ewXv/ceBaJprikMcxCmWU1FKyMAQ2X7a9Gtmzw8fcg2kIePI1crERDM818W+XYrxqdBBOdlf2rm137bU+BltCA=="
   "resolved" "https://registry.npmjs.org/@types/hammerjs/-/hammerjs-2.0.41.tgz"
   "version" "2.0.41"
@@ -4983,12 +4983,13 @@
     "react-native-ratings" "8.0.4"
     "react-native-size-matters" "^0.3.1"
 
-"react-native-gesture-handler@>= 1.0.0", "react-native-gesture-handler@~1.10.2":
-  "integrity" "sha512-cBGMi1IEsIVMgoox4RvMx7V2r6bNKw0uR1Mu1o7NbuHS6BRSVLq0dP34l2ecnPlC+jpWd3le6Yg1nrdCjby2Mw=="
-  "resolved" "https://registry.npmjs.org/react-native-gesture-handler/-/react-native-gesture-handler-1.10.3.tgz"
-  "version" "1.10.3"
+"react-native-gesture-handler@^1.10.0", "react-native-gesture-handler@>= 1.0.0":
+  "integrity" "sha512-ezqA2Hyy6pFF7uxRZA8TeRUZs4zMo5DQQjo0UfFVJyAqjMraDkbz+t/uCfyBowrnOyOiNAhPHB85k6vgPvlZ+g=="
+  "resolved" "https://registry.npmjs.org/react-native-gesture-handler/-/react-native-gesture-handler-1.10.0.tgz"
+  "version" "1.10.0"
   dependencies:
     "@egjs/hammerjs" "^2.0.17"
+    "@types/hammerjs" "^2.0.38"
     "fbjs" "^3.0.0"
     "hoist-non-react-statics" "^3.3.0"
     "invariant" "^2.2.4"
@@ -5074,6 +5075,11 @@
   "resolved" "https://registry.npmjs.org/react-native-size-matters/-/react-native-size-matters-0.3.1.tgz"
   "version" "0.3.1"
 
+"react-native-swipe-item@^0.6.1":
+  "integrity" "sha512-7ZZTP2ny14zxq/xgwpjSutXATqkY3fE50MHQhxqHRhTeCwon59ANDS5Bbek6HP7M+0snA1Lv4uiu9X9EMLcBbw=="
+  "resolved" "https://registry.npmjs.org/react-native-swipe-item/-/react-native-swipe-item-0.6.1.tgz"
+  "version" "0.6.1"
+
 "react-native-typing-animation@^0.1.7":
   "integrity" "sha512-4H3rF9M+I2yAZpYJcY0Mb29TXkn98QK12rrKSY6LZj1BQD9NNmRZuNXzwX4XHapsIz+N/J8M3p27FOQPbfzqeg=="
   "resolved" "https://registry.npmjs.org/react-native-typing-animation/-/react-native-typing-animation-0.1.7.tgz"
@@ -5100,7 +5106,7 @@
     "normalize-css-color" "^1.0.2"
     "prop-types" "^15.6.0"
 
-"react-native@*", "react-native@>=0.11", "react-native@>=0.42.0", "react-native@>=0.57", "react-native@>=0.64.0-rc.0 || 0.0.0-*", "react-native@0.64.3":
+"react-native@*", "react-native@>=0.11", "react-native@>=0.42.0", "react-native@>=0.57", "react-native@>=0.62.0", "react-native@>=0.64.0-rc.0 || 0.0.0-*", "react-native@0.64.3":
   "integrity" "sha512-2OEU74U0Ek1/WeBzPbg6XDsCfjF/9fhrNX/5TFgEiBKd5mNc9LOZ/OlMmkb7iues/ZZ/oc51SbEfLRQdcW0fVw=="
   "resolved" "https://registry.npmjs.org/react-native/-/react-native-0.64.3.tgz"
   "version" "0.64.3"
@@ -5153,7 +5159,7 @@
     "loose-envify" "^1.4.0"
     "prop-types" "^15.6.2"
 
-"react@*", "react@^17.0.0 || ^18.0.0", "react@^18.0.0", "react@>= 16.8.0", "react@>=16.3.0", "react@>=16.6.0", "react@>=17.0.1", "react@16 || 17", "react@17.0.1":
+"react@*", "react@^17.0.0 || ^18.0.0", "react@^18.0.0", "react@>= 16.8.0", "react@>=16.11.0", "react@>=16.3.0", "react@>=16.6.0", "react@>=17.0.1", "react@16 || 17", "react@17.0.1":
   "integrity" "sha512-lG9c9UuMHdcAexXtigOZLX8exLWkW0Ku29qPRU8uhF2R9BN96dLCt0psvzPLlHc5OWkgymP3qwTRgbnw5BKx3w=="
   "resolved" "https://registry.npmjs.org/react/-/react-17.0.1.tgz"
   "version" "17.0.1"
