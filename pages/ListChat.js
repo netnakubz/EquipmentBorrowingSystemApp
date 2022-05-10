@@ -6,7 +6,9 @@ import DirectMessage from "./DirectMessage";
 const ChatStack = createNativeStackNavigator();
 export default function ListChat() {
   return (
-    <ChatStack.Navigator>
+    <ChatStack.Navigator
+      screenOptions={{ headerShown: false }}
+    >
       <ChatStack.Screen component={Room} name="Room" />
       <ChatStack.Screen component={DirectMessage} name="DirectMessage" />
     </ChatStack.Navigator>

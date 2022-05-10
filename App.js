@@ -29,8 +29,51 @@ import { PersonalScreen } from './pages/PersonalScreen';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createNativeStackNavigator } from "@react-navigation/native-stack"
+import { ProductPage } from './pages/ProductPage';
 
 const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator();
+
+const BottomNav = () => {
+  return (
+    <Tab.Navigator
+      initialRouteName='Home'
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
+          if (route.name === 'Home') {
+            iconName = 'home-outline';
+          } else if (route.name === 'Like') {
+            iconName = 'heart-outline';
+          } else if (route.name === 'PersonalScreen') {
+            iconName = 'person-outline';
+          } else if (route.name === 'Chat') {
+            iconName = 'chatbubbles-outline';
+          }
+          if (focused) {
+            color = '#FF6280';
+          }
+          // You can return any component that you like here!
+          return <Ionicons name={iconName} size={size} color={color} />;
+        },
+        tabBarShowLabel: false,
+        tabBarStyle: [
+          {
+            display: 'flex',
+          },
+          null,
+        ],
+      })}>
+      <Tab.Screen name="Home" options={{ headerShown: false }} component={HomeScreen} />
+      <Tab.Screen name="Like" options={{ title: "สิ่งที่ฉันถูกใจ" }} component={LikeScreen} />
+      <Tab.Screen name="Chat" component={ListChat} />
+      <Tab.Screen name="PersonalScreen" component={PersonalScreen} />
+    </Tab.Navigator>
+  );
+}
+
+
 export default function App() {
   const isDarkMode = useColorScheme() === 'dark';
   const backgroundStyle = {
@@ -39,40 +82,10 @@ export default function App() {
   return (
     <SafeAreaView style={styles.container}>
       <NavigationContainer>
-        <Tab.Navigator
-          screenOptions={({ route }) => ({
-            tabBarIcon: ({ focused, color, size }) => {
-              let iconName;
-              if (route.name === 'Home') {
-                iconName = 'home-outline';
-              } else if (route.name === 'LikeScreen') {
-                iconName = 'heart-outline';
-              } else if (route.name === 'PersonalScreen') {
-                iconName = 'person-outline';
-              } else if (route.name === 'ChatRoom') {
-                iconName = 'chatbubbles-outline';
-              }
-              if (focused) {
-                color = '#FF6280';
-              }
-              // You can return any component that you like here!
-              return <Ionicons name={iconName} size={size} color={color} />;
-            },
-
-            headerShown: false,
-            tabBarShowLabel: false,
-            tabBarStyle: [
-              {
-                display: 'flex',
-              },
-              null,
-            ],
-          })}>
-          <Tab.Screen name="Home" component={HomeScreen} />
-          <Tab.Screen name="LikeScreen" component={LikeScreen} />
-          <Tab.Screen name="ChatRoom" component={ListChat} />
-          <Tab.Screen name="PersonalScreen" component={PersonalScreen} />
-        </Tab.Navigator>
+        <Stack.Navigator >
+          <Stack.Screen component={BottomNav} options={{ headerShown: false }} name="BottomNav" />
+          <Stack.Screen component={ProductPage} name="ProductPage" />
+        </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaView>
   );

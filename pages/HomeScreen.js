@@ -1,44 +1,23 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Text,
   View,
   StyleSheet,
   ScrollView,
-  Dimensions,
   TouchableOpacity,
-  Image,
-  Button,
 } from 'react-native';
 
-import {FAB} from 'react-native-elements';
-import {Dropdown} from 'react-native-element-dropdown';
+import { Dropdown } from 'react-native-element-dropdown';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import axios from 'axios';
-import {Card, Overlay, SearchBar} from 'react-native-elements';
-import ActionButton from 'react-native-action-button';
-const width = (Dimensions.get('window').width - 40) / 2.5;
+import { Card, Overlay, SearchBar } from 'react-native-elements';
+import { Product } from '../components/Product';
+import { ProductPage } from "./ProductPage"
 
-const Item = ({item}) => {
-  const onClickItem = postId => {
-    console.log(postId);
-  };
-  return (
-    <TouchableOpacity onPress={() => onClickItem(item.postId)}>
-      <Card containerStyle={styles.cardCnt}>
-        <Card.Image source={{uri: item.img}} />
-        <View>
-          <Text style={styles.cardText}>{item.details}</Text>
-        </View>
-        <View>
-          <Text>{item.price}฿ / วัน</Text>
-        </View>
-      </Card>
-    </TouchableOpacity>
-  );
-};
-var contentColor;
-export const HomeScreen = () => {
+import { createNativeStackNavigator } from "@react-navigation/native-stack"
+
+const RenderHomeScreen = () => {
   const [searchText, setSearchText] = useState('');
   const [typeOfItem, setTypeOfItem] = useState([]);
   const [value, setValue] = useState(null);
@@ -64,14 +43,14 @@ export const HomeScreen = () => {
   //     fetchData();
   // }, []);
   const data = [
-    {label: 'Item 1', value: '1'},
-    {label: 'Item 2', value: '2'},
-    {label: 'Item 3', value: '3'},
-    {label: 'Item 4', value: '4'},
-    {label: 'Item 5', value: '5'},
-    {label: 'Item 6', value: '6'},
-    {label: 'Item 7', value: '7'},
-    {label: 'Item 8', value: '8'},
+    { label: 'Item 1', value: '1' },
+    { label: 'Item 2', value: '2' },
+    { label: 'Item 3', value: '3' },
+    { label: 'Item 4', value: '4' },
+    { label: 'Item 5', value: '5' },
+    { label: 'Item 6', value: '6' },
+    { label: 'Item 7', value: '7' },
+    { label: 'Item 8', value: '8' },
   ];
   const post = [
     {
@@ -110,42 +89,7 @@ export const HomeScreen = () => {
       img: 'https://i.pinimg.com/736x/b1/16/0f/b1160fdd10b71b095c19366845fd6b3e.jpg',
       price: 50,
     },
-    {
-      postId: 1,
-      details: 'Post details',
-      img: 'https://i.pinimg.com/736x/b1/16/0f/b1160fdd10b71b095c19366845fd6b3e.jpg',
-      price: 50,
-    },
-    {
-      postId: 2,
-      details: 'Post details',
-      img: 'https://i.pinimg.com/736x/b1/16/0f/b1160fdd10b71b095c19366845fd6b3e.jpg',
-      price: 50,
-    },
-    {
-      postId: 3,
-      details: 'Post details',
-      img: 'https://i.pinimg.com/736x/b1/16/0f/b1160fdd10b71b095c19366845fd6b3e.jpg',
-      price: 50,
-    },
-    {
-      postId: 4,
-      details: 'Post details',
-      img: 'https://i.pinimg.com/736x/b1/16/0f/b1160fdd10b71b095c19366845fd6b3e.jpg',
-      price: 50,
-    },
-    {
-      postId: 5,
-      details: 'Post details',
-      img: 'https://i.pinimg.com/736x/b1/16/0f/b1160fdd10b71b095c19366845fd6b3e.jpg',
-      price: 50,
-    },
-    {
-      postId: 6,
-      details: 'Post details',
-      img: 'https://i.pinimg.com/736x/b1/16/0f/b1160fdd10b71b095c19366845fd6b3e.jpg',
-      price: 50,
-    },
+
   ];
   const contentType = [
     {
@@ -173,7 +117,7 @@ export const HomeScreen = () => {
     setContent(type);
   };
   return (
-    <View style={styles.container} containerStyle={{background: 'transparent'}}>
+    <View style={styles.container} containerStyle={{ background: 'transparent' }}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View>
           <Text style={styles.textContent}>{content}</Text>
@@ -216,7 +160,7 @@ export const HomeScreen = () => {
                 key={index}
                 onPress={() => handleContent(item.type)}>
                 <View
-                  style={[styles.contentType, {backgroundColor: item.color}]}>
+                  style={[styles.contentType, { backgroundColor: item.color }]}>
                   <Text style={styles.contentText}>{item.type}</Text>
                 </View>
               </TouchableOpacity>
@@ -225,14 +169,14 @@ export const HomeScreen = () => {
         </View>
         <View style={styles.contentColumn}>
           {post.map((item, key) => (
-            <View style={{width: '50%'}} key={key}>
-              <Item item={item} />
+            <View style={{ width: '50%' }} key={key}>
+              <Product item={item} />
             </View>
           ))}
         </View>
       </ScrollView>
       <View>
-        <View style={{alignItems: 'center', justifyContent: 'center'}}>
+        <View style={{ alignItems: 'center', justifyContent: 'center' }}>
           <Overlay
             overlayStyle={{
               position: 'absolute',
@@ -245,7 +189,7 @@ export const HomeScreen = () => {
             onBackdropPress={() => handlePressAddButton()}>
             <View>
               <TouchableOpacity>
-                <Text style={{textAlign: 'center'}}>สร้างโพสต์ปล่อยเช่า</Text>
+                <Text style={{ textAlign: 'center' }}>สร้างโพสต์ปล่อยเช่า</Text>
               </TouchableOpacity>
             </View>
             <View
@@ -258,7 +202,7 @@ export const HomeScreen = () => {
             />
             <View>
               <TouchableOpacity>
-                <Text style={{textAlign: 'center'}}>สร้างโพสต์ขอยืม</Text>
+                <Text style={{ textAlign: 'center' }}>สร้างโพสต์ขอยืม</Text>
               </TouchableOpacity>
             </View>
           </Overlay>
@@ -284,6 +228,14 @@ export const HomeScreen = () => {
         </View>
       </View>
     </View>
+  );
+}
+const HomeStack = createNativeStackNavigator();
+export const HomeScreen = () => {
+  return (
+    <HomeStack.Navigator screenOptions={{ headerShown: false }}>
+      <HomeStack.Screen component={RenderHomeScreen} name="RenderHomeScreen" />
+    </HomeStack.Navigator>
   );
 };
 const styles = StyleSheet.create({
@@ -320,7 +272,7 @@ const styles = StyleSheet.create({
   cardCnt: {
     borderWidth: 0,
     shadowColor: 'rgba(0,0,0, 0.0)', // Remove Shadow for iOS
-    shadowOffset: {height: 0, width: 0},
+    shadowOffset: { height: 0, width: 0 },
     shadowOpacity: 0,
     shadowRadius: 0,
     elevation: 0, // Remove Shadow for Android
