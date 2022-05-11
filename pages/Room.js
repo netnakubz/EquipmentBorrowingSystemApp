@@ -57,7 +57,7 @@ export default function Room({ navigation }) {
         const data = await axios.get(
             `http://192.168.0.104:8080/api/v1/getListChat?userId=${selectedValue}`
         );
-        // setRoom(data.data);
+        setRoom(data.data);
     };
     useEffect(() => {
         getListChat();
@@ -66,18 +66,18 @@ export default function Room({ navigation }) {
         <ScrollView showsVerticalScrollIndicator={false}>
             <View>
                 <GestureHandlerRootView>
-                    <Swipeable
-                        renderRightActions={renderLeftActions}
-                    >
-                        {rooms.map((room, index) => (
+                    {rooms.map((room, index) => (
+                        <Swipeable
+                            renderRightActions={renderLeftActions}
+                        >
                             <Chat
                                 props={room}
                                 user={selectedValue}
                                 key={index}
                                 navigation={navigation}
                             />
-                        ))}
-                    </Swipeable>
+                        </Swipeable>
+                    ))}
                 </GestureHandlerRootView>
             </View>
         </ScrollView>

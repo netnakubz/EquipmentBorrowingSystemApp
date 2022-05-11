@@ -31,6 +31,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { ProductPage } from './pages/ProductPage';
+import DirectMessage from './pages/DirectMessage';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -67,8 +68,8 @@ const BottomNav = () => {
       })}>
       <Tab.Screen name="Home" options={{ headerShown: false }} component={HomeScreen} />
       <Tab.Screen name="Like" options={{ title: "สิ่งที่ฉันถูกใจ" }} component={LikeScreen} />
-      <Tab.Screen name="Chat" component={ListChat} />
-      <Tab.Screen name="PersonalScreen" component={PersonalScreen} />
+      <Tab.Screen name="Chat" options={{ headerShown: false }} component={ListChat} />
+      <Tab.Screen name="PersonalScreen" options={{ headerShown: false }} component={PersonalScreen} />
     </Tab.Navigator>
   );
 }
@@ -85,6 +86,7 @@ export default function App() {
         <Stack.Navigator >
           <Stack.Screen component={BottomNav} options={{ headerShown: false }} name="BottomNav" />
           <Stack.Screen component={ProductPage} name="ProductPage" />
+          <Stack.Screen component={DirectMessage} name="DirectMessage" />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaView>

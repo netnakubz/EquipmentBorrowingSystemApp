@@ -8,15 +8,9 @@ const ChatStack = createNativeStackNavigator();
 
 
 export default function ListChat() {
-  
-
   return (
-    <ChatStack.Navigator
-      screenOptions={{ headerShown: false }}
-    >
+    <ChatStack.Navigator>
       <ChatStack.Screen component={Room} name="Room" />
-      <ChatStack.Screen component={DirectMessage} name="DirectMessage" />
     </ChatStack.Navigator>
-
   );
 }

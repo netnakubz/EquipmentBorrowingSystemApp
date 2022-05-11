@@ -5,6 +5,7 @@ import { Dimensions } from "react-native";
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Hr from "../components/Hr";
 
 export function ProductPage({ navigation, route }) {
     const [postId, setPostId] = useState(route.params);
@@ -79,7 +80,7 @@ export function ProductPage({ navigation, route }) {
                             <Text style={{ fontSize: 13, color: "#464646" }}>เช่าแล้ว : {item.totalRent} ครั้ง</Text>
                         </View>
                         <View style={{ marginTop: 20 }}>
-                            <Text style={{ textAlign: "center" }}>____________________________________</Text>
+                            <Hr size={40}/>
                         </View>
                     </View>
                 </View>
