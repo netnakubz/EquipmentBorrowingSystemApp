@@ -79,9 +79,11 @@ export function PersonalScreen() {
                         showsHorizontalScrollIndicator={false}
                     >
                         {
-                            a.map((e, index) => {
-                                return <ListItemRent key={index} />
-                            })
+                            a.map((e, index) => (
+                                <View key={index}>
+                                    <ListItemRent />
+                                </View>
+                            ))
                         }
                     </ScrollView>
                 </View>
