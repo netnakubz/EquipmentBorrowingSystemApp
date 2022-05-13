@@ -63,7 +63,6 @@ export default function DirectMessage({ route, navigation }) {
   // },
   // ]
   const onReceiveMessage = useCallback((messages = []) => {
-
     setMessages((previousMessages) =>
       GiftedChat.append(previousMessages, messages)
     );

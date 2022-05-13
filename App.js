@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   useColorScheme,
   ScrollView,
+  Button
 } from 'react-native';
 // or any pure javascript modules available in npm
 import { Card } from 'react-native-paper';
@@ -27,12 +28,13 @@ import { HomeScreen } from './pages/HomeScreen';
 import { LikeScreen } from './pages/LikeScreen';
 import { PersonalScreen } from './pages/PersonalScreen';
 
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { ProductPage } from './pages/ProductPage';
 import DirectMessage from './pages/DirectMessage';
-
+import RentPage from './pages/RentPage';
+import PickerItemLendRent from './pages/PickerItemLendRent';
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
@@ -80,6 +82,7 @@ export default function App() {
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
+  
   return (
     <SafeAreaView style={styles.container}>
       <NavigationContainer>
@@ -87,6 +90,8 @@ export default function App() {
           <Stack.Screen component={BottomNav} options={{ headerShown: false }} name="BottomNav" />
           <Stack.Screen component={ProductPage} name="ProductPage" />
           <Stack.Screen component={DirectMessage} name="DirectMessage" />
+          <Stack.Screen component={RentPage} name="RentPage" />
+          <Stack.Screen component={PickerItemLendRent} name="PickerItemLendRent" />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaView>

@@ -36,7 +36,6 @@ export function ProductPage({ navigation, route }) {
             headerTransparent: true,
         });
     }, []);
-
     return (
         <View>
             <ScrollView

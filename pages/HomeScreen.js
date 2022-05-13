@@ -14,7 +14,7 @@ import axios from 'axios';
 import { Card, Overlay, SearchBar } from 'react-native-elements';
 import { Product } from '../components/Product';
 import { ProductPage } from "./ProductPage"
-
+import { useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 
 const RenderHomeScreen = () => {
@@ -133,6 +133,17 @@ const RenderHomeScreen = () => {
     if (content === type) return;
     setContent(type);
   };
+  const navigation = useNavigation();
+  const handleLendBtn = () => {
+    navigation.navigate("RentPage");
+    setVisible(false);
+
+  }
+  const handleRentBtn = () => {
+    navigation.navigate("RentPage");
+    setVisible(false);
+
+  }
   return (
     <View style={styles.container} containerStyle={{ background: 'transparent' }}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -213,7 +224,9 @@ const RenderHomeScreen = () => {
             isVisible={visible}
             onBackdropPress={() => handlePressAddButton()}>
             <View>
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => handleLendBtn()}
+              >
                 <Text style={{ textAlign: 'center' }}>สร้างโพสต์ปล่อยเช่า</Text>
               </TouchableOpacity>
             </View>
@@ -226,7 +239,9 @@ const RenderHomeScreen = () => {
               }}
             />
             <View>
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => handleRentBtn()}
+              >
                 <Text style={{ textAlign: 'center' }}>สร้างโพสต์ขอยืม</Text>
               </TouchableOpacity>
             </View>
