@@ -11,7 +11,10 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { ProductPage } from '../pages/ProductPage';
 import { useNavigation } from '@react-navigation/native';
 const ProductStack = createNativeStackNavigator();
-export function Product({ item }) {
+
+
+
+export function ProductLend({ item }) {
     const navigation = useNavigation();
     const onClickItem = postId => {
         // console.log(postId);
@@ -19,17 +22,36 @@ export function Product({ item }) {
             postId: postId
         });
     };
+    function generateRandomColor() {
+        var letters = '0123456789ABCDEF';
+        var color = '#';
+        for (var i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    }
     return (
         <TouchableOpacity onPress={() => onClickItem(item.postId)}>
-            <Card containerStyle={styles.cardCnt}>
-                <Card.Image
-                    style={{ borderRadius: 30}}
-                    source={{ uri: item.img }} />
+            <Card containerStyle={[styles.cardCnt, { backgroundColor: generateRandomColor() }]}>
+                <Card.Title
+                >
+                    <Text style={{ color: "white" }}>หาเมาส์ไร้สาย</Text>
+                </Card.Title>
                 <View>
-                    <Text style={styles.cardText}>{item.details}</Text>
+                    <Text>50 THB ต่อวัน</Text>
                 </View>
                 <View>
-                    <Text>{item.price}฿ / วัน</Text>
+                    <Text>
+                        โพสต์เมื่อ ...
+                    </Text>
+                </View>
+                <View>
+                    <Text>
+                        รายละเอียด
+                    </Text>
+                </View>
+                <View>
+                    <Text style={{ textAlign: 'right' }}>เช่า 2 วัน</Text>
                 </View>
             </Card>
         </TouchableOpacity>
@@ -44,7 +66,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0,
         shadowRadius: 0,
         elevation: 0, // Remove Shadow for Android
-        backgroundColor: 'transparent',
+        borderRadius: 30,
     },
     cardText: {
         textAlign: 'left',

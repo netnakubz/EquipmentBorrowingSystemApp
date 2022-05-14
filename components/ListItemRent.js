@@ -7,7 +7,7 @@ export default function ListItemRent() {
         >
             <View style={styles.item}>
                 <View style={styles.itemBorder}>
-                    <View >
+                    <View>
                         <Image
                             style={styles.itemImage}
                             source={{ uri: "https://picsum.photos/200/300" }} />
@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
         height: 80,
         resizeMode: "cover",
         justifyContent: "center",
-        alignItems: 'center'
+        alignItems: 'center',
     },
     item: {
         marginLeft: 10,
