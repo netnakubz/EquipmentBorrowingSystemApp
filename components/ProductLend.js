@@ -18,7 +18,7 @@ export function ProductLend({ item }) {
     const navigation = useNavigation();
     const onClickItem = postId => {
         // console.log(postId);
-        navigation.navigate('ProductPage', {
+        navigation.navigate('DirectMessage', {
             postId: postId
         });
     };

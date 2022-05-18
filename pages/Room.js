@@ -7,6 +7,7 @@ import { Card } from 'react-native-paper';
 const screenWidth = Dimensions.get('window').width;
 
 import { GestureHandlerRootView, Swipeable } from 'react-native-gesture-handler';
+import { Ionicons } from "@expo/vector-icons";
 
 export default function Room({ navigation }) {
     const [rooms, setRoom] = useState([]);
@@ -14,43 +15,70 @@ export default function Room({ navigation }) {
     const deleteBtn = () => {
         console.log("delete")
     }
+    const muteBtn = () => {
+        console.log("mute");
+    }
     const renderLeftActions = (progress, dragX) => {
         const trans = dragX.interpolate({
             inputRange: [0, 50, 100, 101],
             outputRange: [0, 0, 0, 1],
         });
         return (
-            <View>
-                <TouchableOpacity
-                    onPress={() => deleteBtn()}
-                    style={{
-                        flex: 1,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        transform: [{ translateX: trans }]
-                    }}
-                >
-                    <View style={{
-                        width: 80,
-                        height: 40,
-                        backgroundColor: "#FF6280",
-                        borderRadius: 30,
-                        justifyContent: 'center',
-                    }}>
-                        <Text
-                            style={{
-                                textAlign: "center",
-                                margin: 'auto',
-                                color: 'white',
-                                fontSize: 18,
-                                fontWeight: "bold"
-                            }}
-                        >
-                            ลบ
-                        </Text>
-                    </View>
-                </TouchableOpacity>
-            </View>
+            <View style={styles.rightBtn}>
+                <View>
+                    <TouchableOpacity
+                        onPress={() => deleteBtn()}
+                        style={{
+                            flex: 1,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            transform: [{ translateX: trans }]
+                        }}
+                    >
+                        <View style={{
+                            width: 60,
+                            height: 40,
+                            backgroundColor: "#FF0031",
+                            borderRadius: 30,
+                            justifyContent: 'center',
+                        }}>
+                            <Text
+                                style={{
+                                    textAlign: "center",
+                                    margin: 'auto',
+                                    color: 'white',
+                                    fontSize: 18,
+                                    fontWeight: "bold"
+                                }}
+                            >
+                                ลบ
+                            </Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
+                <View>
+                    <TouchableOpacity
+                        onPress={() => muteBtn()}
+                        style={{
+                            flex: 1,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            transform: [{ translateX: trans }]
+                        }}
+                    >
+                        <View style={{
+                            width: 50,
+                            height: 40,
+                            backgroundColor: "#FED15C",
+                            borderRadius: 30,
+                            justifyContent: 'center',
+                            alignItems: 'center'
+                        }}>
+                            <Ionicons name="notifications-off-outline" size={18} />
+                        </View>
+                    </TouchableOpacity>
+                </View >
+            </View >
         );
     }
     const getListChat = async () => {
@@ -68,12 +96,12 @@ export default function Room({ navigation }) {
                 <GestureHandlerRootView>
                     {rooms.map((room, index) => (
                         <Swipeable
+                            key={index}
                             renderRightActions={renderLeftActions}
                         >
                             <Chat
                                 props={room}
                                 user={selectedValue}
-                                key={index}
                                 navigation={navigation}
                             />
                         </Swipeable>
@@ -99,21 +127,7 @@ const styles = StyleSheet.create({
     chatName: {
         fontWeight: 'bold',
     },
+    rightBtn: {
+        flexDirection: 'row'
+    }
 });
-{/* <Card style={styles.card}>
-    <View style={styles.row}>
-        <View>
-            <Image
-                style={{ width: 50, height: 50 }}
-                source={{
-                    uri: "https://i.pinimg.com/736x/b1/16/0f/b1160fdd10b71b095c19366845fd6b3e.jpg",
-                }}
-            />
-        </View>
-        <View style={{ flex: 1 }}>
-            <View>
-                <Text style={styles.chatName}>Kanit</Text>
-            </View>
-        </View>
-    </View>
-</Card> */}

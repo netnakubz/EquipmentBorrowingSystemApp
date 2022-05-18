@@ -20,6 +20,7 @@ import { useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 
 import { UnderHeader } from '../components/UnderHeader';
+import { HomePageHeader } from '../components/HomePageHeader';
 
 export const FindToLendPage = () => {
     const [searchText, setSearchText] = useState('');
@@ -149,43 +150,10 @@ export const FindToLendPage = () => {
 
     }
     return (
-        <View style={styles.container} containerStyle={{ background: 'transparent' }}>
-            <ScrollView showsVerticalScrollIndicator={false}>
-                <View>
-                    <Text style={styles.textContent}>{content}</Text>
-                    <Text style={styles.textHeader}>Find to Lend</Text>
-                    <UnderHeader page={"FindToLend"} />
-                </View>
-                <View>
-                    <SearchBar
-                        round={true}
-                        platform="android"
-                        lightTheme={true}
-                        placeholder="What are you looking for?"
-                        onChangeText={e => handleSearchText(e)}
-                        value={searchText}
-                    />
-                </View>
-                <View>
-                    <Dropdown
-                        style={styles.dropdown}
-                        placeholderStyle={styles.placeholderStyle}
-                        selectedTextStyle={styles.selectedTextStyle}
-                        inputSearchStyle={styles.inputSearchStyle}
-                        iconStyle={styles.iconStyle}
-                        data={data}
-                        search
-                        maxHeight={300}
-                        labelField="label"
-                        valueField="value"
-                        placeholder={selectedType}
-                        searchPlaceholder="Search..."
-                        value={value}
-                        onChange={item => {
-                            setValue(item.value);
-                        }}
-                    />
-                </View>
+        <ScrollView>
+            <HomePageHeader content={content} page="FindToLend" />
+
+            <View style={styles.container} containerStyle={{ background: 'transparent' }}>
                 <View style={styles.contentColumn}>
                     {post.map((item, key) => {
                         if (item.suggestions.includes(content)) {
@@ -201,64 +169,8 @@ export const FindToLendPage = () => {
                         }
                     })}
                 </View>
-            </ScrollView>
-            <View>
-                <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-                    <Overlay
-                        overlayStyle={{
-                            position: 'absolute',
-                            bottom: 130,
-                            right: 10,
-                        }}
-                        width="auto"
-                        height="auto"
-                        isVisible={visible}
-                        onBackdropPress={() => handlePressAddButton()}>
-                        <View>
-                            <TouchableOpacity
-                                onPress={() => handleLendBtn()}
-                            >
-                                <Text style={{ textAlign: 'center' }}>สร้างโพสต์ปล่อยเช่า</Text>
-                            </TouchableOpacity>
-                        </View>
-                        <View
-                            style={{
-                                marginTop: 10,
-                                marginBottom: 10,
-                                borderBottomWidth: 1,
-                                borderBottomColor: 'black',
-                            }}
-                        />
-                        <View>
-                            <TouchableOpacity
-                                onPress={() => handleRentBtn()}
-                            >
-                                <Text style={{ textAlign: 'center' }}>สร้างโพสต์ขอยืม</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </Overlay>
-                </View>
-                <View>
-                    <TouchableOpacity
-                        style={{
-                            borderWidth: 1,
-                            borderColor: 'rgba(0,0,0,0)',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            width: 60,
-                            position: 'absolute',
-                            bottom: 10,
-                            right: 10,
-                            height: 60,
-                            backgroundColor: '#FF6280',
-                            borderRadius: 100,
-                        }}
-                        onPress={() => handlePressAddButton()}>
-                        <Ionicons name="add-outline" size={50} color="#fff" />
-                    </TouchableOpacity>
-                </View>
             </View>
-        </View>
+        </ScrollView>
     );
 }
 
