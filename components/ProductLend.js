@@ -15,6 +15,7 @@ const ProductStack = createNativeStackNavigator();
 
 
 export function ProductLend({ item }) {
+    const [usedColors, setUsedColors] = useState([]);
     const navigation = useNavigation();
     const onClickItem = postId => {
         // console.log(postId);
@@ -23,12 +24,9 @@ export function ProductLend({ item }) {
         });
     };
     function generateRandomColor() {
-        var letters = '0123456789ABCDEF';
-        var color = '#';
-        for (var i = 0; i < 6; i++) {
-            color += letters[Math.floor(Math.random() * 16)];
-        }
-        return color;
+        const colors = ["#FAC7C0", "#FFDB94", "#CAE3D4", "#F0D7C4", "#B9E4E7", "#FFCADD"];
+        const randNumber = Math.floor(Math.random() * colors.length);
+        return colors[randNumber];
     }
     return (
         <TouchableOpacity onPress={() => onClickItem(item.postId)}>

@@ -1,9 +1,11 @@
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
-import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, Touchable } from "react-native";
 import Hr from '../components/Hr';
 import ListItemRent from "../components/ListItemRent";
+import { useNavigation } from '@react-navigation/native';
 export function PersonalScreen() {
+    const navigation = useNavigation();
     const [profile, setProfile] = useState({
         name: "สมชายรักดี",
         email: "6210210000@psu.ac.th",
@@ -19,7 +21,16 @@ export function PersonalScreen() {
         { name: "RC00000001 - Logitech M350 Mouse" },
         { name: "RC00000002 - Logitech M350 Mouse" }
     ]);
-    const a = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+    const a = [1, 2, 3, 4];
+    const handlePressEditProfile = () => {
+        navigation.navigate("EditUserProfile", {
+            userId: 10001,
+            name: profile.name
+        });
+    }
+    const handlePressMore = () => {
+        navigation.navigate("ManageItem");
+    }
     return (
         <ScrollView>
             <View style={styles.container}>
@@ -38,15 +49,17 @@ export function PersonalScreen() {
                 <Hr size={40} />
                 <View style={[styles.personalInfo, styles.row]}>
                     <View>
-                        <Text style={{ fontSize: 16 }}>ข้อมูลส่วนตัว</Text>
+                        <Text style={{ fontSize: 18, color: '#464646' }}>ข้อมูลส่วนตัว</Text>
                     </View>
                     <View>
                         <TouchableOpacity
                             onPress={() => {
-                                console.log("Edit info")
+                                handlePressEditProfile();
                             }}
                         >
-                            <Ionicons size={20} name="pencil-outline" />
+                            <Text
+                                style={{ color: '#FF6280', fontSize: 18 }}
+                            >แก้ไข</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -62,13 +75,18 @@ export function PersonalScreen() {
                 <Hr size={40} />
                 <View style={[styles.itemRent, styles.row]}>
                     <View>
-                        <Text>อุปกรณ์ที่ให้เช่า</Text>
+                        <Text
+                            style={{ fontSize: 18, color: '#464646' }}
+
+                        >อุปกรณ์ที่ให้เช่า</Text>
                     </View>
                     <View>
                         <TouchableOpacity
-                            onPress={() => { console.log("add") }}
+                            onPress={() => { handlePressMore() }}
                         >
-                            <Ionicons name="add" size={20} />
+                            <Text
+                                style={{ color: '#FF6280', fontSize: 18 }}
+                            >เพิ่ม</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -85,6 +103,20 @@ export function PersonalScreen() {
                                 </View>
                             ))
                         }
+                        <TouchableOpacity
+                            onPress={() => { handlePressMore() }}
+                        >
+                            <View style={styles.moreItem}>
+
+                                <View>
+                                    <Ionicons name="chevron-forward-circle-outline" size={40} color="#FF6280" />
+                                </View>
+                                <View>
+                                    <Text style={{ color: '#FF6280' }}>ดูเพิ่ม</Text>
+                                </View>
+                            </View>
+                        </TouchableOpacity>
+
                     </ScrollView>
                 </View>
                 <Hr size={40} />
@@ -125,14 +157,15 @@ const styles = StyleSheet.create({
         display: 'flex'
     },
     profileImage: {
-        width: 50,
-        height: 50,
-        borderRadius: 30
+        width: 80,
+        height: 80,
+        borderRadius: 80 / 2
     },
     profileName: {
         fontSize: 20,
         fontWeight: 'bold',
         marginLeft: 10,
+        color: '#464646'
     },
     personalInfo: {
         justifyContent: "space-between",
@@ -147,5 +180,16 @@ const styles = StyleSheet.create({
     },
     itemRentContents: {
         padding: 20
+    },
+    moreItem: {
+        marginLeft: 10,
+        width: 100,
+        height: 100,
+        resizeMode: "cover",
+        justifyContent: "center",
+        alignItems: 'center',
+        borderWidth: 1,
+        borderStyle: 'dotted',
+        borderColor: "#FF6280"
     }
 })

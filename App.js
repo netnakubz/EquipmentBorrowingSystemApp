@@ -26,7 +26,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Navbar } from './components/Navbar';
 import { HomeScreen } from './pages/HomeScreen';
 import { LikeScreen } from './pages/LikeScreen';
-import { PersonalScreen } from './pages/PersonalScreen';
+import { PersonalScreen } from './pages/ProfileScreen';
 
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -35,6 +35,8 @@ import { ProductPage } from './pages/ProductPage';
 import DirectMessage from './pages/DirectMessage';
 import RentPage from './pages/RentPage';
 import PickerItemLendRent from './pages/PickerItemLendRent';
+import { EditUserProfile } from './pages/EditUserProfile';
+import { ManageItem } from './pages/ManageItem';
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
@@ -82,7 +84,7 @@ export default function App() {
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
-  
+
   return (
     <SafeAreaView style={styles.container}>
       <NavigationContainer>
@@ -92,6 +94,8 @@ export default function App() {
           <Stack.Screen component={DirectMessage} name="DirectMessage" />
           <Stack.Screen component={RentPage} name="RentPage" />
           <Stack.Screen component={PickerItemLendRent} name="PickerItemLendRent" />
+          <Stack.Screen component={EditUserProfile} name="EditUserProfile" />
+          <Stack.Screen component={ManageItem} name="ManageItem" />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaView>

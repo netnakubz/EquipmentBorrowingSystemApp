@@ -23,8 +23,10 @@ export function Product({ item }) {
         <TouchableOpacity onPress={() => onClickItem(item.postId)}>
             <Card containerStyle={styles.cardCnt}>
                 <Card.Image
-                    style={{ borderRadius: 30}}
-                    source={{ uri: item.img }} />
+                    style={{ borderRadius: 30 }}
+                    // source={{ uri: `http://192.168.0.104:8080/getImg?imgUrl=${item.img}` }} />
+                    source={{ uri: `${item.img}` }}
+                />
                 <View>
                     <Text style={styles.cardText}>{item.details}</Text>
                 </View>
