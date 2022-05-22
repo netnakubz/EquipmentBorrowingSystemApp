@@ -29,7 +29,10 @@ export function PersonalScreen() {
         });
     }
     const handlePressMore = () => {
-        navigation.navigate("ManageItem");
+        navigation.navigate("MyItem");
+    }
+    const handlePressAddItem = () => {
+        navigation.navigate("AddItem");
     }
     return (
         <ScrollView>
@@ -82,7 +85,7 @@ export function PersonalScreen() {
                     </View>
                     <View>
                         <TouchableOpacity
-                            onPress={() => { handlePressMore() }}
+                            onPress={() => { handlePressAddItem() }}
                         >
                             <Text
                                 style={{ color: '#FF6280', fontSize: 18 }}

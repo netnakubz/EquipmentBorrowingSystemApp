@@ -1,7 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState, useEffect } from "react";
 import { Keyboard, View, Text, StyleSheet, Image, TouchableOpacity, TextInput, TouchableWithoutFeedback } from "react-native";
-import { Button } from "react-native-elements";
 import { DismissKeyboard } from "../components/DismissKeybord";
 export const EditUserProfile = ({ navigation, route }) => {
     const { name, userId } = route.params;
@@ -77,7 +76,7 @@ export const EditUserProfile = ({ navigation, route }) => {
                                 }}
                             />
                         </View>
-                        <Ionicons name="arrow-forward" size={20} />
+                        <Ionicons name="chevron-forward" size={20} />
                     </View>
                 </View>
                 <View style={[styles.saveBtn, styles.row]}>

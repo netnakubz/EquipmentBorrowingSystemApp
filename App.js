@@ -36,7 +36,8 @@ import DirectMessage from './pages/DirectMessage';
 import RentPage from './pages/RentPage';
 import PickerItemLendRent from './pages/PickerItemLendRent';
 import { EditUserProfile } from './pages/EditUserProfile';
-import { ManageItem } from './pages/ManageItem';
+import { MyItem } from "./pages/MyItem";
+import { AddItem } from './pages/AddItem';
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
@@ -95,7 +96,8 @@ export default function App() {
           <Stack.Screen component={RentPage} name="RentPage" />
           <Stack.Screen component={PickerItemLendRent} name="PickerItemLendRent" />
           <Stack.Screen component={EditUserProfile} name="EditUserProfile" />
-          <Stack.Screen component={ManageItem} name="ManageItem" />
+          <Stack.Screen component={MyItem} name="MyItem" />
+          <Stack.Screen component={AddItem} name="AddItem" />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaView>
