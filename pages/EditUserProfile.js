@@ -9,12 +9,9 @@ export const EditUserProfile = ({ navigation, route }) => {
         console.log("saveBtn");
         navigation.goBack();
     }
-    useEffect(() => {
-        navigation.setOptions({
-            title: name
-        })
-    }, [])
-
+    navigation.setOptions({
+        title: name
+    })
     return (
         <DismissKeyboard>
             <View style={styles.container}>
@@ -84,7 +81,7 @@ export const EditUserProfile = ({ navigation, route }) => {
                         style={styles.btnStyle}
                         onPress={() => handleSaveBtn()}
                     >
-                        <Text>บันทึก</Text>
+                        <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}>บันทึก</Text>
                     </TouchableOpacity>
                 </View>
             </View>

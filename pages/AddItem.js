@@ -1,17 +1,9 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { View, Text, StyleSheet, Image, Button, TouchableOpacity, TextInput } from "react-native";
+import { View, Text, StyleSheet, Image, Button, TouchableOpacity, TextInput, ScrollView } from "react-native";
 import { Ionicons } from "@expo/vector-icons"
 import { Section } from "../components/Section";
 import { DismissKeyboard } from "../components/DismissKeybord";
 import * as ImagePicker from 'expo-image-picker'
-
-const addImage = () => {
-    return (
-        <View>
-
-        </View>
-    );
-}
 
 export const AddItem = ({ navigation }) => {
     const [lenName, setLenName] = useState(0);
@@ -24,12 +16,6 @@ export const AddItem = ({ navigation }) => {
         setItemName(e);
         setLenName(e.length);
     }
-    useEffect(() => {
-        navigation.setOptions({
-            title: "เพิ่มอุปกรณ์"
-        })
-    }, []);
-
     const pickImage = async () => {
         // No permissions request is necessary for launching the image library
         let result = await ImagePicker.launchImageLibraryAsync({
@@ -49,12 +35,19 @@ export const AddItem = ({ navigation }) => {
     const handleDeleteImage = (key) => {
         const index = images.findIndex(item => item.key === key);
         images.splice(index, 1);
-
         setImages(prev => [...prev]);
 
-        
+    }
+    const handleSaveBtn = () => {
+
     }
 
+    const handlePressCategory = () => {
+        navigation.navigate("Category");
+    }
+    const handlePressEquipmentSettings = () => {
+        navigation.navigate("EquipmentSettings");
+    }
     const getImages = useMemo(() => {
         return images.map((e, index) => (
             <View key={e.key} style={{ padding: 3 }}>
@@ -84,121 +77,105 @@ export const AddItem = ({ navigation }) => {
     return (
         <DismissKeyboard>
             <View style={styles.container}>
-                <Section marginTop={10}>
-                    <View style={[styles.row, { flexWrap: 'wrap' }]}>
-                        {
-                            images && getImages
-                        }
-                        <TouchableOpacity
-                            onPress={() => pickImage()}
-                        >
-                            <View style={{ padding: 3 }}>
-                                <View style={[styles.moreItem, styles.row]}>
-                                    <View>
-                                        <Ionicons name="add" size={20} color="#FF6280" />
+                <ScrollView>
+                    <View >
+                        <Section marginTop={10}>
+                            <View style={[styles.row, { flexWrap: 'wrap' }]}>
+                                {
+                                    images && getImages
+                                }
+                                <TouchableOpacity
+                                    onPress={() => pickImage()}
+                                >
+                                    <View style={{ padding: 3 }}>
+                                        <View style={[styles.moreItem, styles.row]}>
+                                            <View>
+                                                <Ionicons name="add" size={20} color="#FF6280" />
+                                            </View>
+                                            <View>
+                                                <Text style={{ color: '#FF6280' }}>เพิ่มูปภาพ</Text>
+                                            </View>
+                                        </View>
+                                    </View>
+                                </TouchableOpacity>
+                            </View>
+                        </Section>
+                        <Section marginTop={10}>
+                            <View>
+                                <View style={[styles.row, { justifyContent: 'space-between' }]}>
+                                    <View style={styles.row}>
+                                        <Text>ชื่ออุปกรณ์</Text>
+                                        <Text style={{ color: "#FF6820" }}> *</Text>
                                     </View>
                                     <View>
-                                        <Text style={{ color: '#FF6280' }}>เพิ่มูปภาพ</Text>
+                                        <Text>{getTotalLength}/30</Text>
                                     </View>
                                 </View>
                             </View>
+                            <View style={{ marginTop: 10 }}>
+                                <TextInput
+                                    placeholder="เพิ่มชื่ออุปกรณ์"
+                                    placeholderTextColor={"#B4B4B4"}
+                                    onChangeText={(e) => handleText(e)}
+                                    maxLength={30}
+                                />
+                            </View>
+                        </Section>
+                        <TouchableOpacity
+                            onPress={() => handlePressCategory()}
+                        >
+                            <Section marginTop={2}>
+                                <View style={[styles.row, { justifyContent: 'space-between', alignContent: 'center' }]}>
+                                    <View style={[styles.row, { alignItems: 'center' }]}>
+                                        <View>
+                                            <Ionicons name="list-outline" size={30} color={"#B4B4B4"} />
+                                        </View>
+                                        <View style={[styles.row, { marginLeft: 5 }]}>
+                                            <Text style={{ fontSize: 16 }}>หมวดหมู่</Text>
+                                            <Text style={{ color: "#FF6820" }}> *</Text>
+                                        </View>
+                                    </View>
+                                    <View>
+                                        <View>
+                                            <Ionicons name="chevron-forward" size={30} color={"#B4B4B4"} />
+                                        </View>
+                                    </View>
+                                </View>
+                            </Section>
                         </TouchableOpacity>
-                    </View>
-                </Section>
-                <Section marginTop={10}>
-                    <View>
-                        <View style={[styles.row, { justifyContent: 'space-between' }]}>
-                            <View style={styles.row}>
-                                <Text>ชื่ออุปกรณ์</Text>
-                                <Text style={{ color: "#FF6820" }}>*</Text>
-                            </View>
-                            <View>
-                                <Text>{getTotalLength}/30</Text>
-                            </View>
-                        </View>
-                    </View>
-                    <View style={{ marginTop: 10 }}>
-                        <TextInput
-                            placeholder="เพิ่มชื่ออุปกรณ์"
-                            placeholderTextColor={"#B4B4B4"}
-                            onChangeText={(e) => handleText(e)}
-                            maxLength={30}
-                        />
-                    </View>
-                </Section>
-                <Section marginTop={2}>
-                    <View style={[styles.row, { justifyContent: 'space-between', alignContent: 'center' }]}>
-                        <View style={[styles.row, { alignItems: 'center' }]}>
-                            <View>
-                                <Ionicons name="list-outline" size={30} color={"#B4B4B4"} />
-                            </View>
-                            <View style={[styles.row, { marginLeft: 5 }]}>
-                                <Text style={{ fontSize: 16 }}>หมวดหมู่</Text>
-                                <Text style={{ color: "#FF6820" }}> *</Text>
-                            </View>
-                        </View>
-                        <View>
-                            <View>
-                                <Ionicons name="chevron-forward" size={30} color={"#B4B4B4"} />
-                            </View>
-                        </View>
-                    </View>
-                </Section>
-                <Section marginTop={2}>
-                    <View style={[styles.row, { justifyContent: 'space-between', alignContent: 'center' }]}>
-                        <View style={[styles.row, { alignItems: 'center' }]}>
-                            <View>
-                                <Ionicons name="options-outline" size={30} color={"#B4B4B4"} />
-                            </View>
-                            <View style={[styles.row, { marginLeft: 5 }]}>
-                                <Text style={{ fontSize: 16 }}>ตั้งค่าอุปกรณ์</Text>
-                                <Text style={{ color: "#FF6820" }}> *</Text>
-                            </View>
-                        </View>
-                        <View>
-                            <View>
-                                <Ionicons name="chevron-forward" size={30} color={"#B4B4B4"} />
-                            </View>
-                        </View>
-                    </View>
-                </Section>
-                <Section marginTop={2}>
-                    <View style={[styles.row, { justifyContent: 'space-between', alignContent: 'center' }]}>
-                        <View style={[styles.row, { alignItems: 'center' }]}>
-                            <View>
-                                <Ionicons name="pricetag-outline" size={30} color={"#B4B4B4"} />
-                            </View>
-                            <View style={[styles.row, { marginLeft: 5 }]}>
-                                <Text style={{ fontSize: 16 }}>ตั้งค่าอุปกรณ์</Text>
-                                <Text style={{ color: "#FF6820" }}> *</Text>
-                            </View>
-                        </View>
-                        <View>
-                            <View>
-                                <Ionicons name="chevron-forward" size={30} color={"#B4B4B4"} />
-                            </View>
-                        </View>
-                    </View>
-                </Section>
-                <Section marginTop={2}>
-                    <View style={[styles.row, { justifyContent: 'space-between', alignContent: 'center' }]}>
-                        <View style={[styles.row, { alignItems: 'center' }]}>
-                            <View>
-                                <Ionicons name="layers-outline" size={30} color={"#B4B4B4"} />
-                            </View>
-                            <View style={[styles.row, { marginLeft: 5 }]}>
-                                <Text style={{ fontSize: 16 }}>หมวดหมู่</Text>
-                                <Text style={{ color: "#FF6820" }}> *</Text>
-                            </View>
-                        </View>
-                        <View>
-                            <View>
-                                <Ionicons name="chevron-forward" size={30} color={"#B4B4B4"} />
-                            </View>
-                        </View>
-                    </View>
-                </Section>
-            </View >
+                        <TouchableOpacity
+                            onPress={() => handlePressEquipmentSettings()}
+                        >
+                            <Section marginTop={2}>
+                                <View style={[styles.row, { justifyContent: 'space-between', alignContent: 'center' }]}>
+                                    <View style={[styles.row, { alignItems: 'center' }]}>
+                                        <View>
+                                            <Ionicons name="options-outline" size={30} color={"#B4B4B4"} />
+                                        </View>
+                                        <View style={[styles.row, { marginLeft: 5 }]}>
+                                            <Text style={{ fontSize: 16 }}>ตั้งค่าอุปกรณ์</Text>
+                                            <Text style={{ color: "#FF6820" }}> *</Text>
+                                        </View>
+                                    </View>
+                                    <View>
+                                        <View>
+                                            <Ionicons name="chevron-forward" size={30} color={"#B4B4B4"} />
+                                        </View>
+                                    </View>
+                                </View>
+                            </Section>
+                        </TouchableOpacity>
+                    </View >
+                </ScrollView>
+                <View style={[styles.saveBtn, styles.row]}>
+                    <TouchableOpacity
+                        style={styles.btnStyle}
+                        onPress={() => handleSaveBtn()}
+                    >
+                        <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}>บันทึก</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
         </DismissKeyboard >
     );
 }
@@ -219,6 +196,20 @@ const styles = StyleSheet.create({
     },
     row: {
         flexDirection: "row"
+    },
+    saveBtn: {
+        position: "absolute",
+        justifyContent: "center",
+        bottom: 10,
+        width: '100%',
+    },
+    btnStyle: {
+        backgroundColor: "#FF6280",
+        borderRadius: 40,
+        height: 44,
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '90%',
     },
 
 })

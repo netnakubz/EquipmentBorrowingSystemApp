@@ -38,6 +38,8 @@ import PickerItemLendRent from './pages/PickerItemLendRent';
 import { EditUserProfile } from './pages/EditUserProfile';
 import { MyItem } from "./pages/MyItem";
 import { AddItem } from './pages/AddItem';
+import { Category } from './pages/Category';
+import { EquipmentSettings } from './pages/EquipmentSettings';
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
@@ -95,9 +97,11 @@ export default function App() {
           <Stack.Screen component={DirectMessage} name="DirectMessage" />
           <Stack.Screen component={RentPage} name="RentPage" />
           <Stack.Screen component={PickerItemLendRent} name="PickerItemLendRent" />
-          <Stack.Screen component={EditUserProfile} name="EditUserProfile" />
-          <Stack.Screen component={MyItem} name="MyItem" />
-          <Stack.Screen component={AddItem} name="AddItem" />
+          <Stack.Screen component={EditUserProfile} name="EditUserProfile"  />
+          <Stack.Screen component={MyItem} name="MyItem" options={{ title: "อุปกรณ์ของฉัน" }} />
+          <Stack.Screen component={AddItem} name="AddItem" options={{ title: "เพิ่มอุปกรณ์" }} />
+          <Stack.Screen component={Category} name="Category" options={{ title: "หมวดหมู่" }} />
+          <Stack.Screen component={EquipmentSettings} name="EquipmentSettings" options={{ title: "ตั้งค่าอุปกรณ์" }} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaView>
