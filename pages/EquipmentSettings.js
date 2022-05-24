@@ -7,24 +7,42 @@ import { Section } from "../components/Section";
 import { Input } from "react-native-elements";
 export const EquipmentSettings = ({ navigation }) => {
     const [countItem, setCountItem] = useState(1);
-    const [serials, setSerials] = useState([]);
-    const [objects, setObjects] = useState([{ key: "abc", serial: "", price: 0 }]);
+    const [objects, setObjects] = useState([]);
     const scrollViewRef = useRef();
     const handleSaveBtn = () => {
     }
     const handlePressDelete = (key) => {
-        const index = objects.findIndex(item => item.key === key);
+
         if (countItem > 1) {
             setCountItem(prev => --prev);
-            objects.splice(index, 1);
+            objects.splice(findIndexByKey(key), 1);
             setObjects(prev => [...prev]);
         }
     }
-    const handlePressAddItem = () => {
-        let key = (Math.random() + 1).toString(36).substring(2);
-        setCountItem(prev => ++prev);
-        setObjects(prev => [...prev, { key: key, serial: "", price: 0 }]);
+    const getKey = () => {
+        return (Math.random() + 1).toString(36).substring(2);
     }
+    const handlePressAddItem = () => {
+        setCountItem(prev => ++prev);
+        setObjects(prev => [...prev, { key: getKey(), serial: "", price: 0 }]);
+    }
+    const findIndexByKey = (key) => {
+        return objects.findIndex(item => item.key === key);
+    }
+    const handleSerialChange = (key, e) => {
+        let tempObjects = objects;
+        tempObjects[findIndexByKey(key)].serial = e;
+        setObjects(tempObjects);
+    }
+    const handlePriceChange = (key, e) => {
+        let tempObjects = objects;
+        tempObjects[findIndexByKey(key)].price = e;
+        setObjects(tempObjects);
+    }
+    useEffect(() => {
+        setObjects(prev => [...prev, { key: getKey(), serials: "", price: 0 }]);
+    }, []);
+
     return (
         <View style={styles.container}>
             <View style={{ flex: 0.9 }}>
@@ -61,6 +79,7 @@ export const EquipmentSettings = ({ navigation }) => {
                                 <View style={[styles.row, { justifyContent: 'space-between', maxHeight: 20, alignItems: 'center' }]}>
                                     <View style={{ flex: 0.6, marginTop: 10 }}>
                                         <Input
+                                            onChangeText={(e) => handleSerialChange(el.key, e)}
                                             placeholder="HX1234ER"
                                             inputContainerStyle={{
                                                 borderBottomColor: "#00000000"
@@ -69,6 +88,7 @@ export const EquipmentSettings = ({ navigation }) => {
                                     </View>
                                     <View style={{ flex: 0.4, marginTop: 10 }}>
                                         <Input
+                                            onChangeText={(e) => handlePriceChange(el.key, e)}
                                             placeholder="20"
                                             keyboardType="numeric"
                                             containerStyle={{
