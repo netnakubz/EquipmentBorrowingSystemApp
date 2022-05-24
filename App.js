@@ -33,15 +33,17 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { ProductPage } from './pages/ProductPage';
 import DirectMessage from './pages/DirectMessage';
-import RentPage from './pages/RentPage';
+import LendPage from './pages/LendPage';
 import PickerItemLendRent from './pages/PickerItemLendRent';
 import { EditUserProfile } from './pages/EditUserProfile';
 import { MyItem } from "./pages/MyItem";
 import { AddItem } from './pages/AddItem';
 import { Category } from './pages/Category';
 import { EquipmentSettings } from './pages/EquipmentSettings';
+import { RentPage } from './pages/RentPage';
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
+import * as ImagePicker from 'expo-image-picker'
 
 const BottomNav = () => {
   return (
@@ -87,7 +89,13 @@ export default function App() {
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
-
+  // React.useEffect(() => {
+  //   const getPermission = async () => {
+  //     let result = await ImagePicker.getCameraPermissionsAsync();
+  //     console.log(result);
+  //   }
+  //   getPermission();
+  // }, []);
   return (
     <SafeAreaView style={styles.container}>
       <NavigationContainer>
@@ -95,9 +103,10 @@ export default function App() {
           <Stack.Screen component={BottomNav} options={{ headerShown: false }} name="BottomNav" />
           <Stack.Screen component={ProductPage} name="ProductPage" />
           <Stack.Screen component={DirectMessage} name="DirectMessage" />
-          <Stack.Screen component={RentPage} name="RentPage" />
+          <Stack.Screen component={LendPage} name="LendPage" options={{ title: "โพสต์ปล่อยเช่า" }} />
+          <Stack.Screen component={RentPage} name="RentPage" options={{ title: "โพสต์ขอยืม" }} />
           <Stack.Screen component={PickerItemLendRent} name="PickerItemLendRent" />
-          <Stack.Screen component={EditUserProfile} name="EditUserProfile"  />
+          <Stack.Screen component={EditUserProfile} name="EditUserProfile" />
           <Stack.Screen component={MyItem} name="MyItem" options={{ title: "อุปกรณ์ของฉัน" }} />
           <Stack.Screen component={AddItem} name="AddItem" options={{ title: "เพิ่มอุปกรณ์" }} />
           <Stack.Screen component={Category} name="Category" options={{ title: "หมวดหมู่" }} />

@@ -2,6 +2,8 @@ import { Ionicons } from "@expo/vector-icons";
 import React, { useState, useEffect } from "react";
 import { Keyboard, View, Text, StyleSheet, Image, TouchableOpacity, TextInput, TouchableWithoutFeedback } from "react-native";
 import { DismissKeyboard } from "../components/DismissKeybord";
+import * as ImagePicker from 'expo-image-picker'
+
 export const EditUserProfile = ({ navigation, route }) => {
     const { name, userId } = route.params;
     const [tel, setTel] = useState("0987654321");
@@ -9,9 +11,28 @@ export const EditUserProfile = ({ navigation, route }) => {
         console.log("saveBtn");
         navigation.goBack();
     }
-    navigation.setOptions({
-        title: name
-    })
+
+
+    const pickImage = async () => {
+        // No permissions request is necessary for launching the image library
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            // allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+            allowsMultipleSelection: true
+        });
+        // console.log(result);
+        let key = (Math.random() + 1).toString(36).substring(2);
+        if (!result.cancelled) {
+            setImages(prev => [...prev, { key: key, uri: result.uri }]);
+        }
+    };
+    useEffect(() => {
+        navigation.setOptions({
+            title: name
+        })
+    }, []);
     return (
         <DismissKeyboard>
             <View style={styles.container}>
@@ -29,7 +50,9 @@ export const EditUserProfile = ({ navigation, route }) => {
                             >{name}</Text>
                         </View>
                         <View>
-                            <TouchableOpacity>
+                            <TouchableOpacity
+                                onPress={() => pickImage()}
+                            >
                                 <Text style={{ color: '#FF6280' }}>เปลี่ยนรุปโปรไฟล์</Text>
                             </TouchableOpacity>
                         </View>

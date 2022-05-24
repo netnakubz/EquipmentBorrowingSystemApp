@@ -12,7 +12,6 @@ export const EquipmentSettings = ({ navigation }) => {
     const handleSaveBtn = () => {
     }
     const handlePressDelete = (key) => {
-
         if (countItem > 1) {
             setCountItem(prev => --prev);
             objects.splice(findIndexByKey(key), 1);
@@ -130,7 +129,6 @@ export const EquipmentSettings = ({ navigation }) => {
                         </TouchableOpacity>
                     </Section>
                 </ScrollView>
-
             </View>
             <View style={{ flex: 0.1 }}>
                 <View style={[styles.saveBtn, styles.row]}>

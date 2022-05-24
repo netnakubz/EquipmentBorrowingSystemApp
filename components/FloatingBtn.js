@@ -17,7 +17,7 @@ export const FloatingBtn = () => {
         console.log('Hello Floting button');
     };
     const handleLendBtn = () => {
-        navigation.navigate("RentPage");
+        navigation.navigate("LendPage");
         setVisible(false);
     }
     const handleRentBtn = () => {

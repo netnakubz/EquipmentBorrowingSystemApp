@@ -18,17 +18,32 @@ export default function PickerItemLendRent({ route }) {
         });
     }
     return (
-        <View>
-            <Picker
-                selectedValue={val}
-                onValueChange={(itemValue, itemIndex) => {
-                    setValue(itemValue);
-                }
-                }
-            >
-                <Picker.Item label="Java" value="Java" />
-                <Picker.Item label="JavaScript" value="JavaScript" />
-            </Picker >
+        <View style={styles.conatiner}>
+            <View style={styles.col}>
+                <Picker
+                    selectedValue={val}
+                    onValueChange={(itemValue, itemIndex) => {
+                        setValue(itemValue);
+                    }
+                    }
+                >
+                    <Picker.Item label="Java" value="Java" />
+                    <Picker.Item label="JavaScript" value="JavaScript" />
+                </Picker >
+            </View>
         </View>
+
     )
 }
+
+const styles = StyleSheet.create({
+    conatiner: {
+        flex: 1
+    },
+    col: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignContent: 'center',
+    }
+});
