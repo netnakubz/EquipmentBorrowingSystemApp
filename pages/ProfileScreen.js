@@ -1,11 +1,65 @@
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
-import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, Touchable } from "react-native";
+import { View, Text, StyleSheet, Image, ScrollView, Dimensions, TouchableOpacity, Touchable } from "react-native";
 import Hr from '../components/Hr';
 import ListItemRent from "../components/ListItemRent";
 import { useNavigation } from '@react-navigation/native';
+import { MyItem } from "./MyItem";
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+const Tab = createMaterialTopTabNavigator();
+
+const Allproduct = () => {
+    const handlePressMore = () => {
+        navigation.navigate("MyItem");
+    }
+    return (
+        <ScrollView
+
+            nestedScrollEnabled={true}
+            contentContainerStyle={{ flexGrow: 1 }}
+        >
+            <View
+                style={styles.container}
+            >
+                <View style={[styles.itemRentContents, styles.row, { flexWrap: 'wrap' }]}>
+                    {
+                        Array(12).fill(0).map((e, index) => (
+                            <View key={index}>
+                                <ListItemRent />
+                            </View>
+                        ))
+                    }
+                </View>
+
+                {/* <TouchableOpacity
+        //                 onPress={() => { handlePressMore() }}
+        //             >
+        //                 <View style={styles.moreItem}>
+
+        //                     <View>
+        //                         <Ionicons name="chevron-forward-circle-outline" size={40} color="#FF6280" />
+        //                     </View>
+        //                     <View>
+        //                         <Text style={{ color: '#FF6280' }}>ดูเพิ่ม</Text>
+        //                     </View>
+        //                 </View>
+        //     
+                </TouchableOpacity> */}
+            </View >
+        </ScrollView>
+    );
+}
+const Type = () => {
+    return <View>
+        <Text>Type</Text>
+    </View>
+}
+
 export function PersonalScreen() {
     const navigation = useNavigation();
+    const [tabHeight, setTabHeight] = useState(0);
+    const [activeTab, setActiveTab] = useState("tab1");
+    const { height: heightOfDeviceScreen } = Dimensions.get('window');
     const [profile, setProfile] = useState({
         name: "สมชายรักดี",
         email: "6210210000@psu.ac.th",
@@ -21,62 +75,71 @@ export function PersonalScreen() {
         { name: "RC00000001 - Logitech M350 Mouse" },
         { name: "RC00000002 - Logitech M350 Mouse" }
     ]);
-    const a = [1, 2, 3, 4];
     const handlePressEditProfile = () => {
         navigation.navigate("EditUserProfile", {
             userId: 10001,
             name: profile.name
         });
     }
-    const handlePressMore = () => {
-        navigation.navigate("MyItem");
-    }
+
     const handlePressAddItem = () => {
         navigation.navigate("AddItem");
     }
     return (
-        <ScrollView>
-            <View style={styles.container}>
-                <View style={styles.row}>
-                    <View>
-                        <Image
-                            style={styles.profileImage}
-                            resizeMode="cover"
-                            source={{ uri: "https://i.pinimg.com/736x/b1/16/0f/b1160fdd10b71b095c19366845fd6b3e.jpg" }}
-                        />
+        <View style={styles.container}>
+            <ScrollView
+                nestedScrollEnabled={true}
+                contentContainerStyle={{ flexGrow: 1 }}
+            >
+                <View style={{ padding: 20 }}>
+                    <View style={styles.row}>
+                        <View>
+                            <Image
+                                style={styles.profileImage}
+                                resizeMode="cover"
+                                source={{ uri: "https://i.pinimg.com/736x/b1/16/0f/b1160fdd10b71b095c19366845fd6b3e.jpg" }}
+                            />
+                        </View>
+                        <View style={{ justifyContent: 'center' }}>
+                            <Text style={styles.profileName}>{profile.name}</Text>
+                        </View>
                     </View>
-                    <View style={{ justifyContent: 'center' }}>
-                        <Text style={styles.profileName}>{profile.name}</Text>
+                    <Hr size={40} />
+                    <View style={[styles.personalInfo, styles.row]}>
+                        <View>
+                            <Text style={{ fontSize: 18, color: '#464646' }}>ข้อมูลส่วนตัว</Text>
+                        </View>
+                        <View>
+                            <TouchableOpacity
+                                onPress={() => {
+                                    handlePressEditProfile();
+                                }}
+                            >
+                                <Text
+                                    style={{ color: '#FF6280', fontSize: 18 }}
+                                >แก้ไข</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                    <Hr size={40} />
+                    <View style={styles.personalInfoContents}>
+                        <View >
+                            <Text> Email : {profile.email}</Text>
+                        </View>
+                        <View style={{ marginTop: 10 }}>
+                            <Text> Tel : {profile.Tel}</Text>
+                        </View>
                     </View>
                 </View>
-                <Hr size={40} />
-                <View style={[styles.personalInfo, styles.row]}>
-                    <View>
-                        <Text style={{ fontSize: 18, color: '#464646' }}>ข้อมูลส่วนตัว</Text>
-                    </View>
-                    <View>
-                        <TouchableOpacity
-                            onPress={() => {
-                                handlePressEditProfile();
-                            }}
-                        >
-                            <Text
-                                style={{ color: '#FF6280', fontSize: 18 }}
-                            >แก้ไข</Text>
-                        </TouchableOpacity>
-                    </View>
+                <View style={styles.container}>
+                    <Tab.Navigator>
+                        <Tab.Screen component={activeTab === "tab1" ? Allproduct : Type} listeners={{ focus: () => setActiveTab("tab1") }} name="AllProduct" />
+                        <Tab.Screen component={Type} name="Type" />
+                    </Tab.Navigator>
                 </View>
-                <Hr size={40} />
-                <View style={styles.personalInfoContents}>
-                    <View >
-                        <Text> Email : {profile.email}</Text>
-                    </View>
-                    <View style={{ marginTop: 10 }}>
-                        <Text> Tel : {profile.Tel}</Text>
-                    </View>
-                </View>
-                <Hr size={40} />
-                <View style={[styles.itemRent, styles.row]}>
+            </ScrollView>
+
+            {/* <View style={[styles.itemRent, styles.row]}>
                     <View>
                         <Text
                             style={{ fontSize: 18, color: '#464646' }}
@@ -145,15 +208,15 @@ export function PersonalScreen() {
                             })
                         }
                     </ScrollView>
-                </View>
-            </View>
-        </ScrollView>
+                </View> */}
+        </View>
+
     );
 }
 
 const styles = StyleSheet.create({
     container: {
-        padding: 20
+        flex: 1
     },
     row: {
         flexDirection: "row",
