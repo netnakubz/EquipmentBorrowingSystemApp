@@ -21,7 +21,7 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import Ionicons from '@expo/vector-icons/Ionicons';
 //Screen
 import { Navbar } from './components/Navbar';
 import { HomeScreen } from './pages/HomeScreen';
@@ -44,6 +44,7 @@ import { RentPage } from './pages/RentPage';
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 import * as ImagePicker from 'expo-image-picker'
+import { useEffect } from 'react';
 
 const BottomNav = () => {
   return (
@@ -85,6 +86,11 @@ const BottomNav = () => {
 
 
 export default function App() {
+  const loadFont = async()=>{
+  }
+  useEffect(()=>{
+    
+  },[]);
   const isDarkMode = useColorScheme() === 'dark';
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
@@ -155,6 +161,6 @@ const styles = StyleSheet.create({
   },
   container: {
     marginTop: 10,
-    flex: 1
+    flex: 1,
   }
 });

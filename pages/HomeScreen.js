@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler'
 import { Dropdown } from 'react-native-element-dropdown';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import Swiper from 'react-native-swiper'
 
 import { Dimensions } from 'react-native';

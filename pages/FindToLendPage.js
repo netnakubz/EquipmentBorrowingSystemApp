@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 
 import { Dropdown } from 'react-native-element-dropdown';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import Swiper from 'react-native-swiper'
 
 

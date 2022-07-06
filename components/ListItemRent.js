@@ -1,49 +1,62 @@
-import React from "react";
+import Ionicons from '@expo/vector-icons/Ionicons';
+import React, { useState } from "react";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
-export default function ListItemRent() {
+import { Card } from "react-native-elements"
+export default function ListItemRent(props) {
+    const { activeTab, setActiveTab, index } = props;
+    const icons = ["pricetag-outline", "receipt-outline", "cloud-outline"];
     return (
-        <TouchableOpacity
-            onPress={() => { console.log("item") }}
-        >
-            <View style={styles.item}>
-                <View style={styles.itemBorder}>
-                    <View>
-                        <Image
-                            style={styles.itemImage}
-                            source={{ uri: "https://picsum.photos/200/300" }} />
+        <View style={{ flex: 1, backgroundColor: 'white', top: 0 }}>
+            {
+                index <= 2 ?
+                    <TouchableOpacity onPress={() => { setActiveTab(`tab${index}`) }}>
+                        <View style={{ flex: 1 }}>
+                            <View style={[styles.row, { justifyContent: 'center' }]}>
+                                <View style={activeTab === `tab${index}` ? styles.underline : null}>
+                                    <View style={{ flex: 1 }}>
+                                        <View style={[styles.row, { justifyContent: 'center' }]}>
+                                            <Ionicons name={icons[index]} size={30} />
+                                        </View>
+                                    </View>
+                                </View>
+                            </View>
+                        </View>
+                    </TouchableOpacity>
+                    :
+                    <View >
+                        <TouchableOpacity
+                            onPress={() => { console.log("item") }}
+                        >
+                            <View style={styles.item}>
+                                <View style={styles.itemBorder}>
+                                    <Image
+                                        style={styles.itemImage}
+                                        source={{ uri: "https://picsum.photos/200/300" }} />
+                                </View>
+                            </View>
+                        </TouchableOpacity>
                     </View>
-                </View>
-                <View style={styles.itemContents}>
-                    <View>
-                        <Text>ITEM NAME</Text>
-                    </View>
-                    <View>
-                        <Text style={{ color: "#FF6280" }}>ITEM PRICE</Text>
-                    </View>
-                </View>
-            </View>
-        </TouchableOpacity>
-
+            }
+        </View >
     );
 }
 
 const styles = StyleSheet.create({
     itemBorder: {
-        borderRadius: 20,
-        justifyContent: 'center',
-        alignItems: "center",
-        backgroundColor: "grey",
-        width: 100,
-        height: 100,
+        borderWidth: 0.5
     },
     itemImage: {
-        width: 80,
-        height: 80,
+        width: '100%',
+        height: 150,
         resizeMode: "cover",
         justifyContent: "center",
         alignItems: 'center',
     },
-    item: {
-        marginLeft: 10,
+    underline: {
+        width: 100,
+        borderBottomWidth: 2
+    },
+    row: {
+        flexDirection: 'row'
     }
 })

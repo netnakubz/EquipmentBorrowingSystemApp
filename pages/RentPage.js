@@ -1,4 +1,4 @@
-import { Ionicons } from "@expo/vector-icons";
+import Ionicons from '@expo/vector-icons/Ionicons';
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, Dimensions, Modal } from "react-native";
 import { Input } from "react-native-elements";

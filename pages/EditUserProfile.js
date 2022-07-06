@@ -1,4 +1,4 @@
-import { Ionicons } from "@expo/vector-icons";
+import Ionicons from '@expo/vector-icons/Ionicons';
 import React, { useState, useEffect } from "react";
 import { Keyboard, View, Text, StyleSheet, Image, TouchableOpacity, TextInput, TouchableWithoutFeedback } from "react-native";
 import { DismissKeyboard } from "../components/DismissKeybord";

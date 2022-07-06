@@ -4,8 +4,7 @@ import {
     View,
     TouchableOpacity,
 } from 'react-native';
-
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { Overlay } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 export const FloatingBtn = () => {

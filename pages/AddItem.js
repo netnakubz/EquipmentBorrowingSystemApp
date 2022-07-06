@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { View, Text, StyleSheet, Image, Button, TouchableOpacity, TextInput, ScrollView } from "react-native";
-import { Ionicons } from "@expo/vector-icons"
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { Section } from "../components/Section";
 import { DismissKeyboard } from "../components/DismissKeybord";
 import * as ImagePicker from 'expo-image-picker'

@@ -7,8 +7,8 @@ import { Card } from 'react-native-paper';
 const screenWidth = Dimensions.get('window').width;
 
 import { GestureHandlerRootView, Swipeable } from 'react-native-gesture-handler';
-import { Ionicons } from "@expo/vector-icons";
-
+import Ionicons from '@expo/vector-icons/Ionicons';
+import API from "../env/API";
 export default function Room({ navigation }) {
     const [rooms, setRoom] = useState([]);
     const [selectedValue, setSelectedValue] = useState(10001);
@@ -85,7 +85,7 @@ export default function Room({ navigation }) {
         const data = await axios.get(
             `http://192.168.0.104:8080/api/v1/getListChat?userId=${selectedValue}`
         );
-        setRoom(data.data);
+        setRoom(API.getListChat(selectedValue));
     };
     useEffect(() => {
         getListChat();
