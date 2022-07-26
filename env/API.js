@@ -2,6 +2,9 @@ import axios from "axios";
 
 export default API = {
     domain: "http://172.20.10.4:8080",
+    temp: () => {
+        console.log(API.domain);
+    },
     /**
      * 
      * @param {Number} roomId 
@@ -10,7 +13,7 @@ export default API = {
      */
     getChat: async (roomId, user) => {
         const data = await axios.get(
-            `${this.domain}/api/v1/getMessage?roomId=${roomId}&userId=${parseInt(user)}`
+            `${API.domain}/api/v1/getMessage?roomId=${roomId}&userId=${parseInt(user)}`
         );
         return data.data;
     },
@@ -21,7 +24,7 @@ export default API = {
      */
     getListChat: async (selectedValue) => {
         const data = await axios.get(
-            `${this.domain}/api/v1/getListChat?userId=${selectedValue}`
+            `${API.domain}/api/v1/getListChat?userId=${selectedValue}`
         );
         return data.data;
     }

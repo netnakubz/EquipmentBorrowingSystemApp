@@ -7,6 +7,7 @@ import {
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { Overlay } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
+import FAB from 'react-native-fab'
 export const FloatingBtn = () => {
     const navigation = useNavigation();
 
@@ -24,7 +25,7 @@ export const FloatingBtn = () => {
         setVisible(false);
     }
     return (
-        <View>
+        <View style={{ bottom: 50 }}>
             <View style={{ alignItems: 'center', justifyContent: 'center' }}>
                 <Overlay
                     overlayStyle={{

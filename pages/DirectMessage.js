@@ -5,6 +5,7 @@ import { Chip } from 'react-native-paper';
 import axios from 'axios';
 import SockJS from 'sockjs-client';
 import Stomp from 'webstomp-client';
+import API from '../env/API';
 
 export default function DirectMessage({ route, navigation }) {
   const [messages, setMessages] = useState([]);
@@ -20,8 +21,7 @@ export default function DirectMessage({ route, navigation }) {
     alert("Generate contract");
   }
   const getChat = async () => {
-    const data = await axios.get(`http://192.168.0.104:8080/api/v1/getMessage?roomId=${roomId}&userId=${parseInt(user)}`);
-    setMessages((data.data));
+    setMessages(API.getChat());
   }
   useEffect(() => {
     getChat();

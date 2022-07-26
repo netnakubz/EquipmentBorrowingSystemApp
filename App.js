@@ -1,7 +1,6 @@
 import * as React from 'react';
 import {
   Image,
-  Text,
   View,
   StyleSheet,
   SafeAreaView,
@@ -27,7 +26,7 @@ import { Navbar } from './components/Navbar';
 import { HomeScreen } from './pages/HomeScreen';
 import { LikeScreen } from './pages/LikeScreen';
 import { PersonalScreen } from './pages/ProfileScreen';
-
+import { BottomNavigation, Text } from 'react-native-paper';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
@@ -45,8 +44,36 @@ const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 import * as ImagePicker from 'expo-image-picker'
 import { useEffect } from 'react';
+import API from './env/API';
+import { SafeAreaProvider, initialWindowMetrics } from 'react-native-safe-area-context';
 
+const MusicRoute = () => <Text style={{ color: "green" }}>Music</Text>;
+
+const AlbumsRoute = () => <Text style={{ color: "green" }}>Albums</Text>;
+
+const RecentsRoute = () => <Text style={{ color: "green" }}>Recents</Text>;
 const BottomNav = () => {
+  // const [index, setIndex] = React.useState(0);
+  // const [routes] = React.useState([
+  //   { key: 'music', title: 'Favorites', focusedIcon: 'heart', unfocusedIcon: 'heart-outline' },
+  //   { key: 'albums', title: 'Albums', focusedIcon: 'album' },
+  //   { key: 'recents', title: 'Recents', focusedIcon: 'history' },
+  //   { key: 'notifications', title: 'Notifications', focusedIcon: 'bell', unfocusedIcon: 'bell-outline' },
+  // ]);
+
+  // const renderScene = BottomNavigation.SceneMap({
+  //   music: MusicRoute,
+  //   albums: AlbumsRoute,
+  //   recents: RecentsRoute,
+  // });
+
+  // return (
+  //   <BottomNavigation
+  //     navigationState={{ index, routes }}
+  //     onIndexChange={setIndex}
+  //     renderScene={renderScene}
+  //   />
+  // );
   return (
     <Tab.Navigator
       initialRouteName='Home'
@@ -71,6 +98,7 @@ const BottomNav = () => {
         tabBarShowLabel: false,
         tabBarStyle: [
           {
+            position: "absolute", bottom: 0, left: 0, right: 0,
             display: 'flex',
           },
           null,
@@ -86,11 +114,11 @@ const BottomNav = () => {
 
 
 export default function App() {
-  const loadFont = async()=>{
+  const loadFont = async () => {
   }
-  useEffect(()=>{
-    
-  },[]);
+  useEffect(() => {
+    API.temp();
+  }, []);
   const isDarkMode = useColorScheme() === 'dark';
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
@@ -103,7 +131,8 @@ export default function App() {
   //   getPermission();
   // }, []);
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaProvider initialMetrics={initialWindowMetrics}>
+      {/* <SafeAreaView style={styles.container}> */}
       <NavigationContainer>
         <Stack.Navigator >
           <Stack.Screen component={BottomNav} options={{ headerShown: false }} name="BottomNav" />
@@ -119,7 +148,8 @@ export default function App() {
           <Stack.Screen component={EquipmentSettings} name="EquipmentSettings" options={{ title: "ตั้งค่าอุปกรณ์" }} />
         </Stack.Navigator>
       </NavigationContainer>
-    </SafeAreaView>
+      {/* </SafeAreaView> */}
+    </SafeAreaProvider>
   );
 }
 const styles = StyleSheet.create({

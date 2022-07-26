@@ -4,7 +4,9 @@ import {
     View,
     StyleSheet,
     ScrollView,
+    SafeAreaView,
     TouchableOpacity,
+    FlatList
 } from 'react-native';
 
 import { Dropdown } from 'react-native-element-dropdown';
@@ -18,11 +20,14 @@ import { ProductLend } from '../components/ProductLend';
 import { ProductPage } from "./ProductPage"
 import { useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
-
 import { UnderHeader } from '../components/UnderHeader';
 import { HomePageHeader } from '../components/HomePageHeader';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { FloatingBtn } from '../components/FloatingBtn';
+
 
 export const FindToLendPage = () => {
+    const insets = useSafeAreaInsets();
     const [searchText, setSearchText] = useState('');
     const [typeOfItem, setTypeOfItem] = useState([]);
     const [value, setValue] = useState(null);
@@ -150,27 +155,34 @@ export const FindToLendPage = () => {
 
     }
     return (
-        <ScrollView>
-            <HomePageHeader content={content} page="FindToLend" />
-
-            <View style={styles.container} containerStyle={{ background: 'transparent' }}>
-                <View style={styles.contentColumn}>
-                    {post.map((item, key) => {
-                        if (item.suggestions.includes(content)) {
-                            return (
-                                <View style={{ width: '50%' }} key={key}>
-                                    <ProductLend item={item} />
-                                </View>);
-                        } else if (content === "All") {
-                            return (
-                                <View style={{ width: '50%' }} key={key}>
-                                    <ProductLend item={item} />
-                                </View>);
-                        }
-                    })}
-                </View>
-            </View>
-        </ScrollView>
+        <View style={styles.container}>
+            <FlatList
+                ListHeaderComponent={
+                    <HomePageHeader content={content} page="FindToLend" />
+                }
+                data={post}
+                contentContainerStyle={{
+                    flexGrow: 1
+                }}
+                columnWrapperStyle={{ flexWrap: 'wrap' }}
+                numColumns={2}
+                renderItem={({ item }) => {
+                    if (item.suggestions.includes(content)) {
+                        return (
+                            <View style={{ width: '50%', flex: 1 }} >
+                                <ProductLend item={item} />
+                            </View>);
+                    } else if (content === "All") {
+                        return (
+                            <View style={{ width: '50%', flex: 1 }} >
+                                <ProductLend item={item} />
+                            </View>);
+                    }
+                }}
+                keyExtractor={(item) => item.postId}
+                ListFooterComponent={<View style={{ height: 50 }} />}
+            />
+        </View>
     );
 }
 
@@ -186,7 +198,7 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        marginTop: 10,
+        flexGrow: 1,
     },
     contentColumn: {
         flex: 1,

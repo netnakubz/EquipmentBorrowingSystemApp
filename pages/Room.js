@@ -82,9 +82,6 @@ export default function Room({ navigation }) {
         );
     }
     const getListChat = async () => {
-        const data = await axios.get(
-            `http://192.168.0.104:8080/api/v1/getListChat?userId=${selectedValue}`
-        );
         setRoom(API.getListChat(selectedValue));
     };
     useEffect(() => {

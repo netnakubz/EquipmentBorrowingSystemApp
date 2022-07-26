@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, ScrollView, Image, StyleSheet, SafeAreaView } from "react-native";
+import { View, Text, ScrollView, Image, StyleSheet, FlatList, SafeAreaView } from "react-native";
 import { Product } from "../components/Product";
 
 export function LikeScreen() {
@@ -42,15 +42,17 @@ export function LikeScreen() {
         },
     ];
     return (
-        <ScrollView >
-            <View style={styles.contentColumn}>
-                {post.map((item, key) => (
-                    <View style={{ width: '50%' }} key={key}>
-                        <Product item={item} />
-                    </View>
-                ))}
-            </View>
-        </ScrollView>
+        <FlatList
+            data={post}
+            renderItem={({ item }) => (
+                <View style={{ width: '50%' }} >
+                    <Product item={item} />
+                </View>
+            )}
+            numColumns={2}
+            keyExtractor={(item) => item.postId}
+            ListFooterComponent={<View style={{ height: 50 }} />}
+        />
     );
 }
 
@@ -68,7 +70,8 @@ const styles = StyleSheet.create({
         borderRadius: 50,
     },
     container: {
-        flex: 1
+        flex: 1,
+        flexGrow: 1
     },
     contentColumn: {
         flex: 1,

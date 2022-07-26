@@ -3,6 +3,7 @@ import {
   Text,
   View,
   StyleSheet,
+  SafeAreaView,
   TouchableOpacity,
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler'
@@ -22,21 +23,26 @@ import { FloatingBtn } from '../components/FloatingBtn';
 const RenderHomeScreen = () => {
   const [content, setContent] = useState('All');
   return (
-    <View style={styles.sliderBox}>
-      <Swiper
-        showsPagination={false}
-        loop={false}
-        scrollEnabled={true}
-        nestedScrollEnabled={true}
-        // style={styles.sliderBox}
-        removeClippedSubviews={false}
-        containerStyle={{ width: Dimensions.get('window').width, height: Dimensions.get('window').height }}
-      >
-        <FindToBorrowPage content={content} setContent={setContent} />
-        <FindToLendPage />
-      </Swiper>
-      <FloatingBtn />
+    <View
+      style={styles.sliderBox}
+    >
+      <SafeAreaView
+        style={styles.sliderBox}>
+        <Swiper
+          showsPagination={false}
+          loop={false}
+          scrollEnabled={true}
+          nestedScrollEnabled={true}
+          removeClippedSubviews={false}
+          containerStyle={{ width: Dimensions.get('window').width, height: Dimensions.get('window').height }}
+        >
+          <FindToBorrowPage content={content} setContent={setContent} />
+          <FindToLendPage />
+        </Swiper>
+        <FloatingBtn />
+      </SafeAreaView>
     </View>
+
   );
 }
 const HomeStack = createNativeStackNavigator();
@@ -45,6 +51,7 @@ export const HomeScreen = () => {
     <HomeStack.Navigator screenOptions={{ headerShown: false }}>
       <HomeStack.Screen component={RenderHomeScreen} name="RenderHomeScreen" />
     </HomeStack.Navigator>
+
   );
 };
 
