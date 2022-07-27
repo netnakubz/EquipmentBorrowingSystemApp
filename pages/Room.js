@@ -90,6 +90,8 @@ export default function Room({ navigation }) {
     return (
         <ScrollView showsVerticalScrollIndicator={false}>
             <View>
+                <TouchableOpacity onPress={() => setSelectedValue(10001)}><Text>10001</Text></TouchableOpacity>
+                <TouchableOpacity onPress={() => setSelectedValue(10002)}><Text>10002</Text></TouchableOpacity>
                 <GestureHandlerRootView>
                     {rooms.map((room, index) => (
                         <Swipeable

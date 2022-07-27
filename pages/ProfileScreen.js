@@ -32,33 +32,11 @@ export function PersonalScreen() {
     const [ownerItems, setOwnerItems] = useState([
         { name: "RC00000001 - Logitech M350 Mouse" },
         { name: "RC00000002 - Logitech M350 Mouse" },
-        { name: "RC00000001 - Logitech M350 Mouse" },
-        { name: "RC00000002 - Logitech M350 Mouse" },
-        { name: "RC00000001 - Logitech M350 Mouse" },
-        { name: "RC00000002 - Logitech M350 Mouse" },
-        { name: "RC00000001 - Logitech M350 Mouse" },
-        { name: "RC00000001 - Logitech M350 Mouse" },
-        { name: "RC00000001 - Logitech M350 Mouse" },
-        { name: "RC00000001 - Logitech M350 Mouse" },
-        { name: "RC00000001 - Logitech M350 Mouse" },
-        { name: "RC00000001 - Logitech M350 Mouse" },
-        { name: "RC00000001 - Logitech M350 Mouse" },
-        { name: "RC00000001 - Logitech M350 Mouse" },
-        { name: "RC00000001 - Logitech M350 Mouse" },
-        { name: "RC00000001 - Logitech M350 Mouse" },
-        { name: "RC00000001 - Logitech M350 Mouse" },
-        { name: "RC00000001 - Logitech M350 Mouse" },
-        { name: "RC00000001 - Logitech M350 Mouse" },
-        { name: "RC00000001 - Logitech M350 Mouse" },
-        { name: "RC00000001 - Logitech M350 Mouse" },
-        { name: "RC00000001 - Logitech M350 Mouse" },
-        { name: "RC00000001 - Logitech M350 Mouse" },
-        { name: "RC00000001 - Logitech M350 Mouse" },
-        { name: "RC00000001 - Logitech M350 Mouse" },
-        { name: "RC00000001 - Logitech M350 Mouse" },
-        { name: "RC00000001 - Logitech M350 Mouse" },
-        { name: "RC00000001 - Logitech M350 Mouse" },
-        { name: "RC00000002 - Logitech M350 Mouse" }
+        { name: "RC00000003 - Logitech M350 Mouse" },
+        { name: "RC00000004 - Logitech M350 Mouse" },
+        { name: "RC00000005 - Logitech M350 Mouse" },
+        { name: "RC00000006- Logitech M350 Mouse" },
+        { name: "RC00000007 - Logitech M350 Mouse" },
     ]);
     const [y, setY] = useState(new Value(0));
 
@@ -74,7 +52,6 @@ export function PersonalScreen() {
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <StickyHeaderProfile items={ownerItems} />
-
         </SafeAreaView>
     );
 }

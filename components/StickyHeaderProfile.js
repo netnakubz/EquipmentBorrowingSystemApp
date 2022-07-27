@@ -5,6 +5,7 @@ import { Card } from "react-native-elements"
 import { StickyHeaderScrollView } from 'react-native-simple-sticky-header';
 import { Profile } from './Profile';
 import DATA from './data';
+import Hr from './Hr';
 const Profile1 = () => {
     const [profile, setProfile] = useState({
         name: "สมชายรักดี",
@@ -27,6 +28,12 @@ const Profile1 = () => {
 }
 export default function App(props) {
     const { items } = props;
+    const itemHeight = 200 * (items.length / 3);
+    const [showPage, setShowPage] = useState("myItems");
+
+    const hadleShowPage = (page) => {
+        setShowPage(page);
+    }
     return (
         <StickyHeaderScrollView
             top={() => (
@@ -46,9 +53,11 @@ export default function App(props) {
                     >
                         <Profile />
                     </View>
+
                 </View>
             )}
             bottom={() => (
+
                 <View
                     style={{
                         display: 'flex',
@@ -56,55 +65,49 @@ export default function App(props) {
                         justifyContent: 'space-around',
                         width: '100%',
                         height: 50,
-                        alignItems: "center"
+                        alignItems: "center",
                     }}
                 >
-                    <View
-                        style={{
-                            marginTop: 2,
-                        }}
+                    <TouchableOpacity
+                        onPress={() => hadleShowPage("myItems")}
                     >
-                        <TouchableOpacity>
-                            <Feather size={0} name="sliders" />
-                        </TouchableOpacity>
-                    </View>
-                    <View>
-                        <TouchableOpacity>
-                            <Text
-                                style={{
-                                    fontSize: 16,
-                                }}
-                            >
-                                A <Feather size={16} name="chevron-down" />
-                            </Text>
-                        </TouchableOpacity>
-                    </View>
-                    <View
-                        style={{
-                            marginTop: 2,
-                        }}
+                        <Feather size={25} name="grid" />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => hadleShowPage("receipt")}
                     >
-                        <TouchableOpacity>
-                            <Feather size={16} name="sliders" />
-                        </TouchableOpacity>
-                    </View>
-                </View>
+                        <Feather size={25} name="file-text" />
+                    </TouchableOpacity>
+
+
+                    <TouchableOpacity
+                        onPress={() => hadleShowPage("myItems")}
+                    >
+                        <Feather size={25} name="sliders" />
+                    </TouchableOpacity>
+                </ View>
             )}
             topHeight={180}
             bottomHeight={180}
             scrollViewBackground={'#f7f7f7'}
         >
-            <View style={[styles.container, { top: -150 }]}>
+            <View style={[styles.container, { top: -150, height: itemHeight + 30 }]}>
                 <View style={[styles.row]}>
-                    {items.map((item) => (
-                        <View style={[styles.col]} key={item.name}>
-                            <Image
-                                style={{ width: "100%", height: "100%" }}
-                                resizeMode='cover'
-                                source={{ uri: 'https://i.pinimg.com/736x/b1/16/0f/b1160fdd10b71b095c19366845fd6b3e.jpg' }}
-                            />
+                    {showPage === "myItems" &&
+                        items.map((item) => (
+                            <View style={[styles.col]} key={item.name}>
+                                <Image
+                                    style={{ width: "100%", height: "100%" }}
+                                    resizeMode='cover'
+                                    source={{ uri: 'https://i.pinimg.com/736x/b1/16/0f/b1160fdd10b71b095c19366845fd6b3e.jpg' }}
+                                />
+                            </View>
+                        )) ||
+                        showPage === "receipt" &&
+                        <View>
+                            <Text>Hello</Text>
                         </View>
-                    ))}
+                    }
                 </View>
             </View>
         </StickyHeaderScrollView>
@@ -116,12 +119,13 @@ const styles = StyleSheet.create({
     },
     row: {
         flexDirection: "row",
-        flexWrap: "wrap"
+        flexWrap: "wrap",
+        justifyContent: "flex-start"
     },
     col: {
         flexDirection: 'column',
         alignItems: 'center',
-        width: '33%',
+        width: `33.33%`,
         borderWidth: 0.5,
         height: 200
     },
