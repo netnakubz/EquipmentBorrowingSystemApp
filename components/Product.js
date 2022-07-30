@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, memo } from 'react';
 import {
     Text,
     View,
     TouchableOpacity,
-    StyleSheet
+    StyleSheet,
 } from 'react-native';
 
 import { Card, Overlay, SearchBar } from 'react-native-elements';
@@ -11,7 +11,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { ProductPage } from '../pages/ProductPage';
 import { useNavigation } from '@react-navigation/native';
 const ProductStack = createNativeStackNavigator();
-export function Product({ item }) {
+const Product = ({ item }) => {
     const navigation = useNavigation();
     const onClickItem = postId => {
         // console.log(postId);
@@ -37,7 +37,7 @@ export function Product({ item }) {
         </TouchableOpacity>
     );
 };
-
+export default memo(Product);
 const styles = StyleSheet.create({
     cardCnt: {
         borderWidth: 0,

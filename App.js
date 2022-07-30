@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import {
   Image,
   View,
@@ -74,6 +74,8 @@ const BottomNav = () => {
   //     renderScene={renderScene}
   //   />
   // );
+  const [homePage, setHomePage] = useState(true);
+
   return (
     <Tab.Navigator
       initialRouteName='Home'
@@ -104,18 +106,25 @@ const BottomNav = () => {
           null,
         ],
       })}>
-      <Tab.Screen name="Home" options={{ headerShown: false }} component={HomeScreen} />
+      <Tab.Screen name="Home" options={{ headerShown: false }}
+        listeners={() => ({
+          tabPress: (e) => {
+            if (e.type === "tabPress") {
+              setHomePage(true);
+            }
+          }
+        })}
+        children={props => <HomeScreen isHomePage={homePage} setHomeFalse={setHomePage}  {...props} />}
+      />
       <Tab.Screen name="Like" options={{ title: "สิ่งที่ฉันถูกใจ" }} component={LikeScreen} />
       <Tab.Screen name="Chat" options={{ headerShown: false }} component={ListChat} />
-      <Tab.Screen name="PersonalScreen" options={{ headerShown: false }} component={PersonalScreen} />
+      <Tab.Screen name="PersonalScreen" component={PersonalScreen} />
     </Tab.Navigator>
   );
 }
 
 
 export default function App() {
-  const loadFont = async () => {
-  }
   useEffect(() => {
     API.temp();
   }, []);
@@ -132,7 +141,6 @@ export default function App() {
   // }, []);
   return (
     <SafeAreaProvider initialMetrics={initialWindowMetrics}>
-      {/* <SafeAreaView style={styles.container}> */}
       <NavigationContainer>
         <Stack.Navigator >
           <Stack.Screen component={BottomNav} options={{ headerShown: false }} name="BottomNav" />
@@ -148,7 +156,6 @@ export default function App() {
           <Stack.Screen component={EquipmentSettings} name="EquipmentSettings" options={{ title: "ตั้งค่าอุปกรณ์" }} />
         </Stack.Navigator>
       </NavigationContainer>
-      {/* </SafeAreaView> */}
     </SafeAreaProvider>
   );
 }

@@ -39,16 +39,6 @@ export function PersonalScreen() {
         { name: "RC00000007 - Logitech M350 Mouse" },
     ]);
     const [y, setY] = useState(new Value(0));
-
-    const handlePressEditProfile = () => {
-        navigation.navigate("EditUserProfile", {
-            userId: 10001,
-            name: profile.name
-        });
-    }
-    const handlePressAddItem = () => {
-        navigation.navigate("AddItem");
-    }
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <StickyHeaderProfile items={ownerItems} />

@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, ScrollView, Image, StyleSheet, FlatList, SafeAreaView } from "react-native";
-import { Product } from "../components/Product";
+import Product from "../components/Product";
 
 export function LikeScreen() {
     const post = [

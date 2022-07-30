@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     StyleSheet,
     View,
@@ -10,55 +10,105 @@ import {
 } from 'react-native';
 import Constants from 'expo-constants';
 import Hr from "./Hr";
+import { useNavigation } from '@react-navigation/native';
 const { interpolate, Extrapolate } = Animated;
 const bannerImage = require('../assets/snack-icon.png');
 const BANNER_HEIGHT = 180;
+import Ionicons from '@expo/vector-icons/Ionicons';
 
-export const Profile = (props) => {
-
+export const Profile = ({ isOwnerProfile }) => {
+    const navigation = useNavigation();
     const [profile, setProfile] = useState({
-        name: "สมชายรักดี",
+        userId: 10001,
+        firstName: "สมชาย",
+        lastName: "รักดี",
         email: "6210210000@psu.ac.th",
         Tel: '0800000000'
     });
+    const handlePressEditProfile = () => {
+        navigation.navigate("EditUserProfile", {
+            user: profile
+        });
+    }
+    const handlePressAddItem = () => {
+        navigation.navigate("AddItem");
+    }
+    useEffect(() => {
+        console.log(isOwnerProfile)
+        navigation.setOptions({
+            title: `${profile.firstName} ${profile.lastName}`
+        })
+    }, []);
     return (
-        <View>
-            <View style={styles.row}>
-                <View>
+        <View style={{ width: "100%" }}>
+            <View style={{ flexDirection: 'row', width: "100%", alignItems: "flex-start", justifyContent: 'space-around' }}>
+                <View style={{ width: "20%" }}>
                     <Image
                         style={styles.profileImage}
                         resizeMode="cover"
                         source={{ uri: "https://i.pinimg.com/736x/b1/16/0f/b1160fdd10b71b095c19366845fd6b3e.jpg" }}
                     />
                 </View>
-                <View style={{ justifyContent: 'center' }}>
-                    <Text style={styles.profileName}>{profile.name}</Text>
-                </View>
-            </View>
-            <Hr size={40} />
-            <View style={[styles.personalInfo, styles.row]}>
-                <View>
-                    <Text style={{ fontSize: 18, color: '#464646' }}>ข้อมูลส่วนตัว</Text>
-                </View>
-                <View>
-                    <TouchableOpacity
-                        onPress={() => {
-                            handlePressEditProfile();
-                        }}
-                    >
-                        <Text
-                            style={{ color: '#FF6280', fontSize: 18 }}
-                        >แก้ไข</Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
-            <Hr size={40} />
-            <View style={styles.personalInfoContents}>
-                <View >
-                    <Text> Email : {profile.email}</Text>
-                </View>
-                <View style={{ marginTop: 10 }}>
-                    <Text> Tel : {profile.Tel}</Text>
+                <View style={{ flexDirection: 'column', width: "70%" }}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
+                        <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                            <Text>1</Text>
+                            <Text>สินค้า</Text>
+                        </View>
+                        {isOwnerProfile &&
+                            <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                                <Text>1</Text>
+                                <Text>ใบเสร็จ</Text>
+                            </View>
+                        }
+                        <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                            <Text>1</Text>
+                            <Text>...</Text>
+                        </View>
+                    </View>
+                    {isOwnerProfile &&
+                        <View>
+                            <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 10 }}>
+                                <TouchableOpacity
+                                    style={{
+                                        borderWidth: 1,
+                                        height: 40,
+                                        width: "100%",
+                                        borderRadius: "50%",
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                    }}
+                                    onPress={() => {
+                                        handlePressEditProfile();
+                                    }}
+                                >
+                                    <Text
+                                        style={{ color: '#FF6280', fontSize: 18 }}
+                                    >แก้ไขข้อมูลส่วนตัว</Text>
+                                </TouchableOpacity>
+                            </View>
+                            <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 10 }}>
+                                <TouchableOpacity
+                                    style={{
+                                        borderWidth: 1,
+                                        height: 40,
+                                        width: "100%",
+                                        borderRadius: "50%",
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                    }}
+                                    onPress={() => {
+                                        handlePressAddItem()
+                                    }}
+                                >
+                                    <Text
+                                        style={{ color: '#FF6280', fontSize: 18 }}
+                                    >เพิ่มสินค้า
+                                    </Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    }
                 </View>
             </View>
         </View>
@@ -95,8 +145,8 @@ const styles = StyleSheet.create({
         color: '#fff',
     },
     profileImage: {
-        width: 50,
-        height: 50,
+        width: 80,
+        height: 80,
         borderRadius: 50
     }
 });

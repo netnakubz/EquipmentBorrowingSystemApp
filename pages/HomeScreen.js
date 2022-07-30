@@ -20,8 +20,9 @@ import { FindToBorrowPage } from "./FindToBorrowPage";
 import { FindToLendPage } from './FindToLendPage';
 
 import { FloatingBtn } from '../components/FloatingBtn';
-const RenderHomeScreen = () => {
+const RenderHomeScreen = ({ isHomePage, setHomeFalse }) => {
   const [content, setContent] = useState('All');
+
   return (
     <View
       style={styles.sliderBox}
@@ -29,6 +30,7 @@ const RenderHomeScreen = () => {
       <SafeAreaView
         style={styles.sliderBox}>
         <Swiper
+
           showsPagination={false}
           loop={false}
           scrollEnabled={true}
@@ -36,7 +38,7 @@ const RenderHomeScreen = () => {
           removeClippedSubviews={false}
           containerStyle={{ width: Dimensions.get('window').width, height: Dimensions.get('window').height }}
         >
-          <FindToBorrowPage content={content} setContent={setContent} />
+          <FindToBorrowPage content={content} setContent={setContent} isHomePage={isHomePage} setHomePage={setHomeFalse} />
           <FindToLendPage />
         </Swiper>
         <FloatingBtn />
@@ -46,10 +48,11 @@ const RenderHomeScreen = () => {
   );
 }
 const HomeStack = createNativeStackNavigator();
-export const HomeScreen = () => {
+export const HomeScreen = ({ isHomePage, setHomeFalse }) => {
+
   return (
     <HomeStack.Navigator screenOptions={{ headerShown: false }}>
-      <HomeStack.Screen component={RenderHomeScreen} name="RenderHomeScreen" />
+      <HomeStack.Screen children={props => <RenderHomeScreen {...props} isHomePage={isHomePage} setHomeFalse={setHomeFalse} />} name="RenderHomeScreen" />
     </HomeStack.Navigator>
 
   );

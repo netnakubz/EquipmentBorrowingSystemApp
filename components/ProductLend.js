@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, memo } from 'react';
 import {
     Text,
     View,
@@ -14,7 +14,7 @@ const ProductStack = createNativeStackNavigator();
 
 
 
-export function ProductLend({ item }) {
+const ProductLend = ({ item }) => {
     const [usedColors, setUsedColors] = useState([]);
     const navigation = useNavigation();
     const onClickItem = postId => {
@@ -55,6 +55,8 @@ export function ProductLend({ item }) {
         </TouchableOpacity>
     );
 };
+
+export default memo(ProductLend);
 
 const styles = StyleSheet.create({
     cardCnt: {

@@ -6,11 +6,13 @@ const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Hr from "../components/Hr";
+import API from "../env/API";
 
 export function ProductPage({ navigation, route }) {
-    const [postId, setPostId] = useState(route.params);
+    const { postId } = route.params;
     const [isLiked, setIsLiked] = useState(true);
     const [item, setItem] = useState({
+        id: postId,
         type: "ITEM TYPE",
         name: "ITEM NAME",
         price: 100,
@@ -27,8 +29,18 @@ export function ProductPage({ navigation, route }) {
     const handleLikeClick = () => {
         setIsLiked(!isLiked);
     }
-    const contactBtn = () => {
-        console.log("Contact");
+    const contactBtn = async () => {
+        //if data is null create new room;
+        //if not null redirect to direct message 
+        let tempUser = 10013;
+        let data = await API.searchRoom(tempUser, item.owner);
+        console.log(data);
+        navigation.navigate("DirectMessage", {
+            roomId: data.room_ID,
+            destination: owner.name,
+            user: tempUser,
+            data: item
+        })
     }
     useEffect(() => {
         navigation.setOptions({
@@ -79,7 +91,7 @@ export function ProductPage({ navigation, route }) {
                             <Text style={{ fontSize: 13, color: "#464646" }}>เช่าแล้ว : {item.totalRent} ครั้ง</Text>
                         </View>
                         <View style={{ marginTop: 20 }}>
-                            <Hr size={40}/>
+                            <Hr size={40} />
                         </View>
                     </View>
                 </View>

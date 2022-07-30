@@ -1,16 +1,18 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { View, Text, ScrollView, Button } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import { GiftedChat } from 'react-native-gifted-chat';
 import { Chip } from 'react-native-paper';
 import axios from 'axios';
 import SockJS from 'sockjs-client';
 import Stomp from 'webstomp-client';
 import API from '../env/API';
-
+import { v4 as uuidv4 } from 'uuid';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { Button } from 'react-native-elements';
 export default function DirectMessage({ route, navigation }) {
   const [messages, setMessages] = useState([]);
-  const { destination, roomId, user } = route.params;
-  const SOCKET_URL = 'http://192.168.0.104:8080/ws';
+  const { destination, roomId, user, data } = route.params;
+  const SOCKET_URL = `http://172.20.10.2:8080/ws`;
   var socket = '';
   var stompClient = '';
   var connected = false;
@@ -20,9 +22,52 @@ export default function DirectMessage({ route, navigation }) {
   const contract = () => {
     alert("Generate contract");
   }
-  const getChat = async () => {
-    setMessages(API.getChat());
+  const uuid = () => {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+      var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
+    });
   }
+
+  const getChat = async () => {
+
+    let messages = await API.getChat(roomId, user);
+    if (data !== undefined) {
+      let systemMessage = {
+        _id: uuid(),
+        text: 'ข้อความจากระบบ',
+        createdAt: new Date(),
+        quickReplies: {
+          type: 'radio', // or 'checkbox',
+          keepIt: true,
+          values: [
+            {
+              title: '😋 สนใจสินค้า ',
+              text: '😋 สนใจ ' + data.name,
+              user: {
+                _id: user
+              }
+            },
+            {
+              title: '👋 ต้องกาติดต่อเพิ่มเติม',
+              text: '👋 ต้องกาติดต่อเพิ่มเติม',
+              user: {
+                _id: user
+              }
+            },
+          ],
+        },
+        user: {
+          _id: 10016,
+          name: 'System',
+        },
+      }
+      setMessages([...messages, systemMessage].reverse());
+    } else {
+      setMessages([...messages].reverse());
+    }
+  }
+
   useEffect(() => {
     getChat();
 
@@ -39,7 +84,8 @@ export default function DirectMessage({ route, navigation }) {
             createdAt: newMessage.createdAt,
             text: newMessage.text,
             user: {
-              _id: newMessage.user._id
+              _id: newMessage.user._id,
+              name:'asdasdasdqwe'
             }
           }]
           onReceiveMessage(object);
@@ -50,6 +96,8 @@ export default function DirectMessage({ route, navigation }) {
         connected = false;
       }
     );
+
+
   }, []);
   // Chat pattern
   // Array [
@@ -70,9 +118,6 @@ export default function DirectMessage({ route, navigation }) {
 
   const onSend = useCallback((messages = []) => {
 
-    // setMessages((previousMessages) =>
-    //   GiftedChat.append(previousMessages, messages)
-    // );
     stompClient.send(`/app/send-${roomId}`, JSON.stringify(messages[0]));
   }, []);
 
@@ -80,6 +125,19 @@ export default function DirectMessage({ route, navigation }) {
     <GiftedChat
       messages={messages}
       isTyping={true}
+      onQuickReply={(message) => {
+        let temp = [
+          {
+            _id: uuid(),
+            createdAt: new Date(),
+            user: {
+              _id: user
+            },
+            text: message[0].text,
+          },
+        ]
+        onSend(temp);
+      }}
       onSend={(message) => {
         onSend(message)
       }}

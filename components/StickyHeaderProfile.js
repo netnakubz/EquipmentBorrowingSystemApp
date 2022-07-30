@@ -1,36 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, Image, FlatList } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 import { Card } from "react-native-elements"
 import { StickyHeaderScrollView } from 'react-native-simple-sticky-header';
 import { Profile } from './Profile';
 import DATA from './data';
 import Hr from './Hr';
-const Profile1 = () => {
-    const [profile, setProfile] = useState({
-        name: "สมชายรักดี",
-        email: "6210210000@psu.ac.th",
-        Tel: '0800000000'
-    });
-    return (
-        <View style={{ flex: 1 }}>
-            <View style={{ flexDirection: 'row' }}>
-                <View style={{ alignItems: 'flex-start' }}>
-                    <Image
-                        style={{ width: 70, height: 70, borderRadius: "50%" }}
-                        resizeMode="cover"
-                        source={{ uri: "https://i.pinimg.com/736x/b1/16/0f/b1160fdd10b71b095c19366845fd6b3e.jpg" }}
-                    />
-                </View>
-            </View>
-        </View>
-    );
-}
+
 export default function App(props) {
     const { items } = props;
     const itemHeight = 200 * (items.length / 3);
     const [showPage, setShowPage] = useState("myItems");
-
+    const [isOwnerProfile, setIsOwnerProfile] = useState(true);
     const hadleShowPage = (page) => {
         setShowPage(page);
     }
@@ -51,13 +32,11 @@ export default function App(props) {
                             justifyContent: 'space-between',
                         }}
                     >
-                        <Profile />
+                        <Profile isOwnerProfile={isOwnerProfile} />
                     </View>
-
                 </View>
             )}
             bottom={() => (
-
                 <View
                     style={{
                         display: 'flex',
@@ -91,7 +70,7 @@ export default function App(props) {
             bottomHeight={180}
             scrollViewBackground={'#f7f7f7'}
         >
-            <View style={[styles.container, { top: -150, height: itemHeight + 30 }]}>
+            <View style={[styles.container, { top: isOwnerProfile ? - 65 : -10, height: isOwnerProfile ? itemHeight + 118 : itemHeight + 175 }]}>
                 <View style={[styles.row]}>
                     {showPage === "myItems" &&
                         items.map((item) => (
@@ -110,7 +89,7 @@ export default function App(props) {
                     }
                 </View>
             </View>
-        </StickyHeaderScrollView>
+        </StickyHeaderScrollView >
     );
 }
 const styles = StyleSheet.create({

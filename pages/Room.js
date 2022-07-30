@@ -11,7 +11,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import API from "../env/API";
 export default function Room({ navigation }) {
     const [rooms, setRoom] = useState([]);
-    const [selectedValue, setSelectedValue] = useState(10001);
+    const [selectedValue, setSelectedValue] = useState(10013);
     const deleteBtn = () => {
         console.log("delete")
     }
@@ -82,7 +82,7 @@ export default function Room({ navigation }) {
         );
     }
     const getListChat = async () => {
-        setRoom(API.getListChat(selectedValue));
+        setRoom(await API.getListChat(selectedValue));
     };
     useEffect(() => {
         getListChat();
@@ -90,8 +90,16 @@ export default function Room({ navigation }) {
     return (
         <ScrollView showsVerticalScrollIndicator={false}>
             <View>
-                <TouchableOpacity onPress={() => setSelectedValue(10001)}><Text>10001</Text></TouchableOpacity>
-                <TouchableOpacity onPress={() => setSelectedValue(10002)}><Text>10002</Text></TouchableOpacity>
+                {/* <TouchableOpacity onPress={() => setSelectedValue(10001)}>
+                    <View style={{ width: 300, height: 300 }}>
+                        <Text>10001</Text>
+                    </View>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => setSelectedValue(10002)}>
+                    <View style={{ width: 300, height: 300 }}>
+                        <Text>10002</Text>
+                    </View>
+                </TouchableOpacity> */}
                 <GestureHandlerRootView>
                     {rooms.map((room, index) => (
                         <Swipeable

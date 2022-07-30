@@ -6,12 +6,12 @@ import * as ImagePicker from 'expo-image-picker'
 
 export const EditUserProfile = ({ navigation, route }) => {
     const { name, userId } = route.params;
+    const { user } = route.params;
     const [tel, setTel] = useState("0987654321");
     const handleSaveBtn = () => {
         console.log("saveBtn");
         navigation.goBack();
     }
-
 
     const pickImage = async () => {
         // No permissions request is necessary for launching the image library
@@ -30,7 +30,7 @@ export const EditUserProfile = ({ navigation, route }) => {
     };
     useEffect(() => {
         navigation.setOptions({
-            title: name
+            title: "แก้ไขข้อมูลส่วนตัว"
         })
     }, []);
     return (
@@ -47,7 +47,7 @@ export const EditUserProfile = ({ navigation, route }) => {
                         <View>
                             <Text
                                 style={styles.titleName}
-                            >{name}</Text>
+                            >{user.name}</Text>
                         </View>
                         <View>
                             <TouchableOpacity
@@ -67,7 +67,7 @@ export const EditUserProfile = ({ navigation, route }) => {
                         </View>
                         <View>
                             <Text>
-                                email@helloworld.com
+                                {user.email}
                             </Text>
                         </View>
                     </View>

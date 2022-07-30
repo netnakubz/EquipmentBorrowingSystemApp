@@ -16,7 +16,7 @@ import Swiper from 'react-native-swiper'
 
 import axios from 'axios';
 import { Card, Overlay, SearchBar } from 'react-native-elements';
-import { ProductLend } from '../components/ProductLend';
+import ProductLend from '../components/ProductLend';
 import { ProductPage } from "./ProductPage"
 import { useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
