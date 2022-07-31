@@ -1,22 +1,34 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, Dimensions, Modal } from "react-native";
+import { View, Text, StyleSheet, Dimensions, Modal, TouchableWithoutFeedback, KeyboardAvoidingView } from "react-native";
 import { Input } from "react-native-elements";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { DismissKeyboard } from "../components/DismissKeybord";
 import { Section } from "../components/Section";
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const RentPage = () => {
     const [postDetails, setPostDetails] = useState("");
-    const [modalVisible, setModalVisible] = useState(false);
+    const [itemPrice, setItemPrice] = useState(0);
+    const [itemDate, setItemDate] = useState(0);
+    const [descModalVisible, setDescModalVisible] = useState(false);
+    const [priceModalVisible, setPriceModalVisible] = useState(false);
+    const [dateModalVisible, setDateModalVisible] = useState(false);
+
     const handlePostDetails = (e) => {
         setPostDetails(e);
     }
     const handlePricePerDay = () => { console.log("price") }
     const handlePeriod = () => { console.log("period") }
-    const handleSaveBtn = () => { console.log("save") }
+    const handleSaveBtn = async () => {
+   
+    }
+    const setData = async () => {
 
+    }
+    useEffect(() => {
+        setData();
+    }, []);
     return (
         <DismissKeyboard>
             <View style={styles.container}>
@@ -39,24 +51,24 @@ export const RentPage = () => {
                             <Modal
                                 animationType="slide"
                                 transparent={true}
-                                visible={modalVisible}
+                                visible={descModalVisible}
                                 onRequestClose={() => {
                                     Alert.alert("Modal has been closed.");
-                                    setModalVisible(!modalVisible);
+                                    setDescModalVisible(!descModalVisible);
                                 }}
                             >
                                 <View style={styles.centeredView}>
                                     <View style={styles.modalView}>
                                         <TouchableOpacity
                                             style={[styles.button, styles.buttonClose]}
-                                            onPress={() => setModalVisible(!modalVisible)}
+                                            onPress={() => setDescModalVisible(!descModalVisible)}
                                         >
                                             <Ionicons name="close-outline" size={40} />
                                             {/* <Text style={styles.textStyle}>Hide Modal</Text> */}
                                         </TouchableOpacity>
                                         <View style={{ padding: 20 }}>
                                             <Input
-                                                onPressIn={() => setModalVisible(true)}
+                                                onPressIn={() => setDescModalVisible(true)}
                                                 multiline={true}
                                                 defaultValue={postDetails}
                                                 maxLength={500}
@@ -77,7 +89,7 @@ export const RentPage = () => {
                                 style={[styles.row, { maxHeight: 1000 }]}
                             >
                                 <TouchableOpacity
-                                    onPress={() => setModalVisible(true)}
+                                    onPress={() => setDescModalVisible(true)}
                                 >
                                     <Text style={{ color: '#898989', fontSize: 20, flexWrap: 'wrap' }}>{postDetails ? postDetails : "เพิ่มรายละเอียดอุปกรณ์"}</Text>
                                 </TouchableOpacity>
@@ -86,18 +98,91 @@ export const RentPage = () => {
                         </View>
                     </Section >
                     <Section marginTop={5}>
+                        <Modal
+                            animationType="slide"
+                            transparent={true}
+                            visible={priceModalVisible}
+                            onRequestClose={() => {
+                                Alert.alert("Modal has been closed.");
+                                setPriceModalVisible(!priceModalVisible);
+                            }}
+
+
+                        >
+                            <KeyboardAvoidingView
+                                behavior={Platform.OS === "ios" ? "padding" : "height"}
+                                style={{ flex: 1 }}
+                            >
+                                <TouchableWithoutFeedback
+                                    onPress={() => {
+                                        setPriceModalVisible(!priceModalVisible);
+                                    }}
+                                >
+                                    <View style={styles.centeredView}>
+                                        <View style={{
+                                            width: Dimensions.get('window').width - 50,
+                                            height: Dimensions.get('window').height / 2.5,
+                                            backgroundColor: "white",
+                                            borderRadius: 20,
+                                            shadowColor: "#000",
+                                            shadowOffset: {
+                                                width: 0,
+                                                height: 2
+                                            },
+                                            shadowOpacity: 0.25,
+                                            shadowRadius: 4,
+                                            elevation: 5,
+                                        }}>
+                                            <TouchableOpacity
+                                                style={[styles.button, styles.buttonClose]}
+                                                onPress={() => setPriceModalVisible(!priceModalVisible)}
+                                            >
+                                                <Ionicons name="close-outline" size={40} />
+                                            </TouchableOpacity>
+                                            <View style={{ padding: 20 }}>
+                                                <Input
+                                                    onPressIn={() => {
+                                                        setPriceModalVisible(true)
+                                                    }}
+                                                    multiline={true}
+                                                    defaultValue={itemPrice}
+                                                    keyboardType={"number-pad"}
+
+                                                    maxLength={500}
+                                                    containerStyle={{
+                                                        height: Dimensions.get('window').height,
+                                                    }}
+                                                    placeholder="ราคา"
+                                                    onChangeText={(e) => setItemPrice(e)}
+                                                />
+                                            </View>
+                                        </View>
+                                    </View>
+                                </TouchableWithoutFeedback>
+                            </KeyboardAvoidingView>
+                        </Modal>
                         <TouchableOpacity
-                            onPress={() => { handlePricePerDay() }}
+                            onPress={() => {
+                                handlePricePerDay();
+                                setPriceModalVisible(true);
+                            }}
                         >
                             <View style={[styles.row, { justifyContent: 'space-between' }]}>
                                 <View style={styles.row}>
                                     <View>
                                         <Ionicons name="pricetag-outline" size={30} color="#464646" />
                                     </View>
-                                    <View style={styles.row}>
-                                        <Text> ราคาต่อวัน</Text>
-                                        <Text style={{ color: '#FF6280' }}> * ไม่เกิน</Text>
+                                    <View style={{ flexDirection: 'column', alignItems: 'flex-end' }}>
+                                        <View style={styles.row}>
+                                            <Text> ราคาต่อวัน</Text>
+                                            <Text style={{ color: '#FF6280' }}> * ไม่เกิน</Text>
+                                        </View>
+                                        <View style={styles.row}>
+                                            <Text style={{ fontSize: 20 }}> {itemPrice} </Text>
+                                            <Text style={{ color: '#FF6280' }}>บาท/วัน</Text>
+                                        </View>
                                     </View>
+
                                 </View>
                                 <View>
                                     <Text style={{ color: "#464646" }}>ตั้งค่า</Text>
@@ -106,18 +191,86 @@ export const RentPage = () => {
                         </TouchableOpacity>
                     </Section>
                     <Section marginTop={2}>
+                        <Modal
+                            animationType="slide"
+                            transparent={true}
+                            visible={dateModalVisible}
+                            onRequestClose={() => {
+                                Alert.alert("Modal has been closed.");
+                                setDateModalVisible(!dateModalVisible);
+                            }}
+                        >
+                            <KeyboardAvoidingView
+                                behavior={Platform.OS === "ios" ? "padding" : "height"}
+                                style={{ flex: 1 }}
+                            >
+                                <TouchableWithoutFeedback
+                                    onPress={() => {
+                                        setDateModalVisible(!dateModalVisible);
+                                    }}
+                                >
+                                    <View style={styles.centeredView}>
+                                        <View style={{
+                                            width: Dimensions.get('window').width - 50,
+                                            height: Dimensions.get('window').height / 2.5,
+                                            backgroundColor: "white",
+                                            borderRadius: 20,
+                                            shadowColor: "#000",
+                                            shadowOffset: {
+                                                width: 0,
+                                                height: 2
+                                            },
+                                            shadowOpacity: 0.25,
+                                            shadowRadius: 4,
+                                            elevation: 5,
+                                        }}>
+                                            <TouchableOpacity
+                                                style={[styles.button, styles.buttonClose]}
+                                                onPress={() => setDateModalVisible(!dateModalVisible)}
+                                            >
+                                                <Ionicons name="close-outline" size={40} />
+                                            </TouchableOpacity>
+                                            <View style={{ padding: 20 }}>
+                                                <Input
+                                                    onPressIn={() => setDateModalVisible(true)}
+                                                    multiline={true}
+                                                    defaultValue={itemDate}
+                                                    keyboardType={"number-pad"}
+                                                    maxLength={500}
+                                                    containerStyle={{
+                                                        height: Dimensions.get('window').height,
+                                                    }}
+                                                    placeholder="ราคา"
+                                                    onChangeText={(e) => setItemDate(e)}
+                                                />
+                                            </View>
+                                        </View>
+                                    </View>
+                                </TouchableWithoutFeedback>
+                            </KeyboardAvoidingView>
+                        </Modal>
                         <TouchableOpacity
-                            onPress={() => { handlePeriod() }}
+                            onPress={() => {
+                                handlePeriod()
+                                setDateModalVisible(true);
+                            }}
                         >
                             <View style={[styles.row, { justifyContent: 'space-between' }]}>
                                 <View style={styles.row}>
                                     <View>
                                         <Ionicons name="time-outline" size={30} color="#464646" />
                                     </View>
-                                    <View style={styles.row}>
-                                        <Text> ระยะเวลา(วัน)</Text>
-                                        <Text style={{ color: '#FF6280' }}> * </Text>
+                                    <View style={{ flexDirection: 'column', alignItems: 'flex-end' }}>
+                                        <View style={styles.row}>
+                                            <Text> ระยะเวลา(วัน)</Text>
+                                            <Text style={{ color: '#FF6280' }}> * </Text>
+                                        </View>
+                                        <View style={styles.row}>
+                                            <Text style={{ fontSize: 20 }}> {itemDate} </Text>
+                                            <Text style={{ color: '#FF6280' }}> วัน </Text>
+                                        </View>
                                     </View>
+
                                 </View>
                                 <View>
                                     <Text style={{ color: "#464646" }}>ตั้งค่า</Text>
