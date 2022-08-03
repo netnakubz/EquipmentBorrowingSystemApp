@@ -132,66 +132,26 @@ export default function DirectMessage({ route, navigation }) {
   return (
     <GiftedChat
       // renderSend={(props) => }
-      renderInputToolbar={(props) =>
-        <KeyboardAvoidingView style={{ flex: 1 }}>
-          <InputToolbar
-            {...props}
-            containerStyle={{
-              borderRadius: "40%",
-            }}
-          />
-        </KeyboardAvoidingView>
+      renderInputToolbar={(props) => {
+        return (
+          <KeyboardAvoidingView style={{ flex: 1 }}>
+            <InputToolbar
+              {...props}
+              containerStyle={{
+                borderRadius: "40%",
+              }}
+            />
+          </KeyboardAvoidingView>
+        );
+      }
       }
       renderActions={(props) => {
         return (
-          <View>
-            <Modal
-              animationType="slide"
-              transparent={true}
-              visible={contractModalShow}
-              onRequestClose={() => {
-                Alert.alert("Modal has been closed.");
-                setContractModalShow(!contractModalShow);
-              }}
-            >
-              <KeyboardAvoidingView
-                behavior={Platform.OS === "ios" ? "padding" : "height"}
-                style={{ flex: 1 }}
-              >
-                <TouchableWithoutFeedback
-                  onPress={() => {
-                    setContractModalShow(!contractModalShow);
-                  }}
-                >
-                  <View style={styles.centeredView}>
-                    <View
-                      style={{
-                        width: Dimensions.get('window').width - 20,
-                        height: Dimensions.get('window').height / 2,
-                        backgroundColor: "white",
-                        borderRadius: 20,
-                        shadowColor: "#000",
-                        shadowOffset: {
-                          width: 0,
-                          height: 2
-                        },
-                        shadowOpacity: 0.25,
-                        shadowRadius: 4,
-                        elevation: 5,
-                      }}
-                    >
-                      <Contract />
-                    </View>
-                  </View>
-                </TouchableWithoutFeedback>
-              </KeyboardAvoidingView>
-            </Modal>
-            <Actions {...props} onPressActionButton={() => {
-              navigation.navigate('firstContract', { setNewContract: (contract) => setNewContract(contract) })
-            }}
-            />
-          </View>
 
+          <Actions {...props} onPressActionButton={() => {
+            navigation.navigate('firstContract', { setNewContract: (contract) => setNewContract(contract) })
+          }}
+          />
         );
       }
       }

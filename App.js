@@ -147,8 +147,6 @@ export default function App() {
     <SafeAreaProvider initialMetrics={initialWindowMetrics}>
       <NavigationContainer>
         <Stack.Navigator >
-        <Stack.Screen component={FirstContract} name="firstContract" options={{ title: "ข้อตกลง" }} />
-
           <Stack.Screen component={BottomNav} options={{ headerShown: false }} name="BottomNav" />
           <Stack.Screen component={ProductPage} name="ProductPage" />
           <Stack.Screen component={DirectMessage} name="DirectMessage" />
@@ -159,6 +157,7 @@ export default function App() {
           <Stack.Screen component={MyItem} name="MyItem" options={{ title: "อุปกรณ์ของฉัน" }} />
           <Stack.Screen component={AddItem} name="AddItem" options={{ title: "เพิ่มอุปกรณ์" }} />
           <Stack.Screen component={Category} name="Category" options={{ title: "หมวดหมู่" }} />
+          <Stack.Screen component={FirstContract} name="firstContract" options={{ title: "ข้อตกลง" }} />
           <Stack.Screen component={SecContract} name="secContract" options={{ title: "ข้อตกลง" }} />
           <Stack.Screen component={EquipmentSettings} name="EquipmentSettings" options={{ title: "ตั้งค่าอุปกรณ์" }} />
         </Stack.Navigator>

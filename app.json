@@ -1,5 +1,6 @@
 {
   "expo": {
+    "userInterfaceStyle": "automatic",
     "name": "ChatApp",
     "slug": "ChatApp",
     "version": "1.0.0",

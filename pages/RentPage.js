@@ -152,7 +152,6 @@ export const RentPage = () => {
                                                     multiline={true}
                                                     defaultValue={itemPrice}
                                                     keyboardType={"number-pad"}
-
                                                     maxLength={500}
                                                     containerStyle={{
                                                         height: Dimensions.get('window').height,
