@@ -56,7 +56,6 @@ export const HomePageHeader = ({ content, page }) => {
                     inputSearchStyle={styles.inputSearchStyle}
                     iconStyle={styles.iconStyle}
                     data={data}
-                    search
                     maxHeight={300}
                     labelField="label"
                     valueField="value"

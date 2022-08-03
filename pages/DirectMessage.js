@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { View, Text, ScrollView } from 'react-native';
-import { GiftedChat } from 'react-native-gifted-chat';
+import { View, Text, ScrollView, TextInput, StyleSheet, KeyboardAvoidingView, Modal, Dimensions, TouchableWithoutFeedback } from 'react-native';
+import { GiftedChat, InputToolbar, Send, Actions } from 'react-native-gifted-chat';
 import { Chip } from 'react-native-paper';
 import axios from 'axios';
 import SockJS from 'sockjs-client';
@@ -8,11 +8,17 @@ import Stomp from 'webstomp-client';
 import API from '../env/API';
 import { v4 as uuidv4 } from 'uuid';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { Button } from 'react-native-elements';
+import { Button, Input } from 'react-native-elements';
+import { Ionicons } from '@expo/vector-icons';
+import { Contract } from './FirstContract';
+
 export default function DirectMessage({ route, navigation }) {
   const [messages, setMessages] = useState([]);
+  const [isInputPressed, setIsInputPressed] = useState(false);
+  const [contractModalShow, setContractModalShow] = useState(false);
+  const [newContract, setNewContract] = useState();
   const { destination, roomId, user, data } = route.params;
-  const SOCKET_URL = `http://172.20.10.2:8080/ws`;
+  const SOCKET_URL = `${API.domain}/ws`;
   var socket = '';
   var stompClient = '';
   var connected = false;
@@ -30,7 +36,6 @@ export default function DirectMessage({ route, navigation }) {
   }
 
   const getChat = async () => {
-
     let messages = await API.getChat(roomId, user);
     if (data !== undefined) {
       let systemMessage = {
@@ -67,6 +72,9 @@ export default function DirectMessage({ route, navigation }) {
       setMessages([...messages].reverse());
     }
   }
+  useEffect(() => {
+    console.log(newContract);
+  }, [newContract]);
 
   useEffect(() => {
     getChat();
@@ -85,7 +93,7 @@ export default function DirectMessage({ route, navigation }) {
             text: newMessage.text,
             user: {
               _id: newMessage.user._id,
-              name:'asdasdasdqwe'
+              name: 'asdasdasdqwe'
             }
           }]
           onReceiveMessage(object);
@@ -123,10 +131,74 @@ export default function DirectMessage({ route, navigation }) {
 
   return (
     <GiftedChat
+      // renderSend={(props) => }
+      renderInputToolbar={(props) =>
+        <KeyboardAvoidingView style={{ flex: 1 }}>
+          <InputToolbar
+            {...props}
+            containerStyle={{
+              borderRadius: "40%",
+            }}
+          />
+        </KeyboardAvoidingView>
+      }
+      renderActions={(props) => {
+        return (
+          <View>
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={contractModalShow}
+              onRequestClose={() => {
+                Alert.alert("Modal has been closed.");
+                setContractModalShow(!contractModalShow);
+              }}
+            >
+              <KeyboardAvoidingView
+                behavior={Platform.OS === "ios" ? "padding" : "height"}
+                style={{ flex: 1 }}
+              >
+                <TouchableWithoutFeedback
+                  onPress={() => {
+                    setContractModalShow(!contractModalShow);
+                  }}
+                >
+                  <View style={styles.centeredView}>
+                    <View
+                      style={{
+                        width: Dimensions.get('window').width - 20,
+                        height: Dimensions.get('window').height / 2,
+                        backgroundColor: "white",
+                        borderRadius: 20,
+                        shadowColor: "#000",
+                        shadowOffset: {
+                          width: 0,
+                          height: 2
+                        },
+                        shadowOpacity: 0.25,
+                        shadowRadius: 4,
+                        elevation: 5,
+                      }}
+                    >
+                      <Contract />
+                    </View>
+                  </View>
+                </TouchableWithoutFeedback>
+              </KeyboardAvoidingView>
+            </Modal>
+            <Actions {...props} onPressActionButton={() => {
+              navigation.navigate('firstContract', { setNewContract: (contract) => setNewContract(contract) })
+            }}
+            />
+          </View>
+
+        );
+      }
+      }
       messages={messages}
       isTyping={true}
       onQuickReply={(message) => {
-        let temp = [
+        let newMessage = [
           {
             _id: uuid(),
             createdAt: new Date(),
@@ -136,8 +208,11 @@ export default function DirectMessage({ route, navigation }) {
             text: message[0].text,
           },
         ]
-        onSend(temp);
-      }}
+        onSend(newMessage);
+      }
+      }
+
+      placeholder={"พิมพ์ข้อความ"}
       onSend={(message) => {
         onSend(message)
       }}
@@ -147,3 +222,14 @@ export default function DirectMessage({ route, navigation }) {
     />
   );
 }
+
+
+
+const styles = StyleSheet.create({
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22
+  },
+})

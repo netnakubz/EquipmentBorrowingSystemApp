@@ -18,10 +18,15 @@ export const RentPage = () => {
     const handlePostDetails = (e) => {
         setPostDetails(e);
     }
-    const handlePricePerDay = () => { console.log("price") }
-    const handlePeriod = () => { console.log("period") }
+    const handlePricePerDay = (e) => {
+        let data = parseInt(e);
+        setItemPrice(data);
+    }
+    const handlePeriod = (e) => {
+        let data = parseInt(e);
+        setItemDate(data);
+    }
     const handleSaveBtn = async () => {
-   
     }
     const setData = async () => {
 
@@ -153,7 +158,7 @@ export const RentPage = () => {
                                                         height: Dimensions.get('window').height,
                                                     }}
                                                     placeholder="ราคา"
-                                                    onChangeText={(e) => setItemPrice(e)}
+                                                    onChangeText={(e) => handlePricePerDay(e)}
                                                 />
                                             </View>
                                         </View>
@@ -241,7 +246,7 @@ export const RentPage = () => {
                                                         height: Dimensions.get('window').height,
                                                     }}
                                                     placeholder="ราคา"
-                                                    onChangeText={(e) => setItemDate(e)}
+                                                    onChangeText={(e) => handlePeriod(e)}
                                                 />
                                             </View>
                                         </View>

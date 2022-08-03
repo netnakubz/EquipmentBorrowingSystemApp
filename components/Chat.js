@@ -14,7 +14,7 @@ export default function Chat({ props, navigation, user }) {
     const onPressChat = (roomId) => {
         navigation.navigate('DirectMessage', {
             roomId: roomId,
-            destination: props.name,
+            destination: name,
             user: user
         });
     };

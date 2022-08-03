@@ -7,7 +7,8 @@ import {
   TouchableOpacity,
   useColorScheme,
   ScrollView,
-  Button
+  Button,
+  LogBox
 } from 'react-native';
 // or any pure javascript modules available in npm
 import { Card } from 'react-native-paper';
@@ -46,6 +47,8 @@ import * as ImagePicker from 'expo-image-picker'
 import { useEffect } from 'react';
 import API from './env/API';
 import { SafeAreaProvider, initialWindowMetrics } from 'react-native-safe-area-context';
+import { FirstContract } from './pages/FirstContract';
+import { SecContract } from './pages/SecContract';
 
 const MusicRoute = () => <Text style={{ color: "green" }}>Music</Text>;
 
@@ -125,6 +128,7 @@ const BottomNav = () => {
 
 
 export default function App() {
+  LogBox.ignoreAllLogs()
   useEffect(() => {
     API.temp();
   }, []);
@@ -143,6 +147,8 @@ export default function App() {
     <SafeAreaProvider initialMetrics={initialWindowMetrics}>
       <NavigationContainer>
         <Stack.Navigator >
+        <Stack.Screen component={FirstContract} name="firstContract" options={{ title: "ข้อตกลง" }} />
+
           <Stack.Screen component={BottomNav} options={{ headerShown: false }} name="BottomNav" />
           <Stack.Screen component={ProductPage} name="ProductPage" />
           <Stack.Screen component={DirectMessage} name="DirectMessage" />
@@ -153,6 +159,7 @@ export default function App() {
           <Stack.Screen component={MyItem} name="MyItem" options={{ title: "อุปกรณ์ของฉัน" }} />
           <Stack.Screen component={AddItem} name="AddItem" options={{ title: "เพิ่มอุปกรณ์" }} />
           <Stack.Screen component={Category} name="Category" options={{ title: "หมวดหมู่" }} />
+          <Stack.Screen component={SecContract} name="secContract" options={{ title: "ข้อตกลง" }} />
           <Stack.Screen component={EquipmentSettings} name="EquipmentSettings" options={{ title: "ตั้งค่าอุปกรณ์" }} />
         </Stack.Navigator>
       </NavigationContainer>

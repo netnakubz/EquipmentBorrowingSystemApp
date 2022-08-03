@@ -3189,6 +3189,11 @@
   "resolved" "https://registry.npmjs.org/fs.realpath/-/fs.realpath-1.0.0.tgz"
   "version" "1.0.0"
 
+"fsevents@^2.1.2":
+  "integrity" "sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA=="
+  "resolved" "https://registry.npmjs.org/fsevents/-/fsevents-2.3.2.tgz"
+  "version" "2.3.2"
+
 "function-bind@^1.1.1":
   "integrity" "sha512-yIovAzMX49sF8Yl58fSCWJ5svSLuaibPxXQJFLmBObTuCr0Mf1KiPopGM9NiFjiYBCbfaa2Fh6breQ6ANVTI0A=="
   "resolved" "https://registry.npmjs.org/function-bind/-/function-bind-1.1.1.tgz"
@@ -5035,6 +5040,13 @@
   "version" "0.8.1"
   dependencies:
     "prop-types" "^15.7.2"
+
+"react-native-modal-selector@^2.1.1":
+  "integrity" "sha512-ol5WRL3jrYsH8vPbZiu9xID5SLlv56Pp9b1LBx5DNL+rGq23vInk6uuhxOU8hd1a1C0aAkBmweJFaO55Kwh8iA=="
+  "resolved" "https://registry.npmjs.org/react-native-modal-selector/-/react-native-modal-selector-2.1.1.tgz"
+  "version" "2.1.1"
+  dependencies:
+    "prop-types" "^15.5.10"
 
 "react-native-pager-view@*", "react-native-pager-view@>= 4.0.0":
   "integrity" "sha512-3drrYwaLat2fYszymZe3nHMPASJ4aJMaxiejfA1V5SK3OygYmdtmV2u5prX7TnjueJzGSyyaCYEr2JlrRt4YPg=="
