@@ -72,8 +72,48 @@ export default function DirectMessage({ route, navigation }) {
       setMessages([...messages].reverse());
     }
   }
+  const sendContract = async () => {
+    let contract = {
+      userIdOwner: newContract.userIdOwner.id,
+      userIdBorrower: newContract.userIdBorrower.id,
+      itemId: parseInt(newContract.equipment.id),
+      totalRent: parseInt(newContract.totalRent),
+      price: parseInt(newContract.price),
+      startDate: newContract.startDate,
+      endDate: newContract.endDate,
+      fineLate: parseInt(newContract.fineLate),
+      fineBroken: parseInt(newContract.fineBroken)
+    }
+    let data = await API.createContract(contract);
+    systemMessage()
+  }
+  const systemMessage = async () => {
+    let message = [{
+      _id: uuid(),
+      createAt: new Date(),
+      text: "",
+      user: {
+        _id: 10016,
+        name: "system"
+      },
+      function: JSON.stringify(newContract),
+      system: true
+    }]
+    onSend(message);
+  }
+  // Chat pattern
+  // Array [
+  // Object {
+  //   "_id": "1bceb2f7-4d0f-4c75-9131-d38c2124897e",
+  //   "createdAt": 2022-04-16T14:00:58.791Z,
+  //   "text": "ราร",
+  //   "user": Object {
+  //     "_id": 1,
+  //   },
+  // },
+  // ]
   useEffect(() => {
-    console.log(newContract);
+    sendContract()
   }, [newContract]);
 
   useEffect(() => {
@@ -90,11 +130,19 @@ export default function DirectMessage({ route, navigation }) {
           const object = [{
             _id: newMessage._id,
             createdAt: newMessage.createdAt,
-            text: newMessage.text,
+            text: newMessage.function ? <TouchableOpacity onPress={() => {
+              navigation.navigate('firstContract', {
+                values: newMessage.function,
+                save: false
+              })
+            }}>
+              <Text style={{ color: 'red', fontSize: 18 }}>ตรวจสอบสัญญา</Text>
+            </TouchableOpacity> :
+              newMessage.text,
             user: {
               _id: newMessage.user._id,
-              name: 'asdasdasdqwe'
-            }
+            },
+            system: newMessage.system,
           }]
           onReceiveMessage(object);
         });
@@ -107,17 +155,7 @@ export default function DirectMessage({ route, navigation }) {
 
 
   }, []);
-  // Chat pattern
-  // Array [
-  // Object {
-  //   "_id": "1bceb2f7-4d0f-4c75-9131-d38c2124897e",
-  //   "createdAt": 2022-04-16T14:00:58.791Z,
-  //   "text": "ราร",
-  //   "user": Object {
-  //     "_id": 1,
-  //   },
-  // },
-  // ]
+
   const onReceiveMessage = useCallback((messages = []) => {
     setMessages((previousMessages) =>
       GiftedChat.append(previousMessages, messages)
@@ -149,7 +187,10 @@ export default function DirectMessage({ route, navigation }) {
         return (
 
           <Actions {...props} onPressActionButton={() => {
-            navigation.navigate('firstContract', { setNewContract: (contract) => setNewContract(contract) })
+            navigation.navigate('firstContract', {
+              setNewContract: (contract) => setNewContract(contract),
+              save: true
+            })
           }}
           />
         );

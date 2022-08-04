@@ -16,7 +16,7 @@ export const FirstContract = ({ navigation, route }) => {
     const [totalItem, setTotalItem] = useState(10);
     const [equipment, setEquipment] = useState({});
     const [totalRent, setTotalRent] = useState();
-    const [price, setPrice] = useState("");
+    const [price, setPrice] = useState();
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
     const [fineLate, setFineLate] = useState();
@@ -29,7 +29,7 @@ export const FirstContract = ({ navigation, route }) => {
     const [fineBrokenModalVisible, setFineBrokenModalVisible] = useState(false);
     const [startDateModalVisible, setStartDateModalVisible] = useState(false);
     const [endDateModalVisible, setEndDateModalVisible] = useState(false);
-    const { setNewContract } = route.params;
+    const { setNewContract, newContract, values, save } = route.params;
     const [show, setShow] = useState(false);
     const handleSendContract = () => {
         let contract = {
@@ -44,6 +44,7 @@ export const FirstContract = ({ navigation, route }) => {
             fineBroken: fineBroken
         }
         setNewContract(contract);
+        navigation.goBack();
     }
     const showMode = (currentMode) => {
         if (Platform.OS === 'android') {
@@ -54,35 +55,50 @@ export const FirstContract = ({ navigation, route }) => {
     };
     const getEquipment = () => {
     }
+    const setValues = async () => {
+        if (values) {
+            let temp = JSON.parse(values);
+            console.log(temp);
+
+            setEquipment(temp.equipment)
+            setUserIdOwner(temp.userIdOwner)
+            setUesrIdBorrower(temp.userIdBorrower)
+            setTotalRent(temp.totalRent)
+            setStartDate(new Date(temp.startDate))
+            setEndDate(new Date(temp.endDate))
+            setPrice(temp.price)
+            setFineLate(temp.fineLate)
+            setFineBroken(temp.fineBroken)
+            console.log(equipment);
+        }
+    }
     useEffect(() => {
-        equipments.filter(item => {
-            console.log(item.owner === userIdOwner.index)
-        })
+        setValues();
     }, []);
     const data = [
-        { index: 123, name: "สมชาย รักดี" },
-        { index: 124, name: 'สมศรี สายทอง' },
+        { id: 10001, name: "สมชาย รักดี" },
+        { id: 10002, name: 'สมศรี สายทอง' },
     ];
     const equipments = [
         {
-            id: "12345",
+            id: 1,
             name: "arduino",
-            owner: 123,
+            owner: 10001,
             total: 3
         },
         {
-            id: "12346",
+            id: 2,
             name: "test",
-            owner: 124,
+            owner: 10002,
             total: 5
         }
     ]
 
     const handleSelectOwner = (selector) => {
-        if (selector.index !== userIdOwner.index)
+        if (selector.id !== userIdOwner.id)
             setEquipment({});
         setUserIdOwner(selector)
-        let value = selector.index === data[0].index ? 1 : 0;
+        let value = selector.id === data[0].id ? 1 : 0;
         setUesrIdBorrower(data[value]);
     }
     const handlePrice = (e) => {
@@ -122,7 +138,7 @@ export const FirstContract = ({ navigation, route }) => {
                         }}
                         ref={selector => { selector = selector; }}
                         data={data}
-                        keyExtractor={item => item.index}
+                        keyExtractor={item => item.id}
                         labelExtractor={item => item.name}
                     >
                         <TouchableOpacity>
@@ -159,7 +175,7 @@ export const FirstContract = ({ navigation, route }) => {
                             handleItemPick(selector)
                         }}
                         ref={selector => { selector = selector; }}
-                        data={equipments.filter(item => item.owner === userIdOwner.index)}
+                        data={equipments.filter(item => item.owner === userIdOwner.id)}
                         keyExtractor={item => item.id}
                         labelExtractor={item => item.name}
                     >
@@ -338,22 +354,25 @@ export const FirstContract = ({ navigation, route }) => {
                     </TouchableOpacity>
                 </View >
             </ScrollView>
-            <View style={{ backgroundColor: 'white', height: 70, justifyContent: 'center', alignItems: 'center' }}>
-                <TouchableOpacity
-                    onPress={() => handleSendContract()}
-                >
-                    <View style={{
-                        backgroundColor: "#FF6280",
-                        width: 300,
-                        height: 50,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        borderRadius: 30
-                    }}>
-                        <Text style={{ color: 'white', fontSize: 20 }}>บันทึกและเสนอ</Text>
-                    </View>
-                </TouchableOpacity>
-            </View>
+            {save &&
+                <View style={{ backgroundColor: 'white', height: 70, justifyContent: 'center', alignItems: 'center' }}>
+                    <TouchableOpacity
+                        onPress={() => handleSendContract()}
+                    >
+                        <View style={{
+                            backgroundColor: "#FF6280",
+                            width: 300,
+                            height: 50,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            borderRadius: 30
+                        }}>
+                            <Text style={{ color: 'white', fontSize: 20 }}>บันทึกและเสนอ</Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
+            }
+
         </SafeAreaView >
 
     );

@@ -38,5 +38,9 @@ export default API = {
             `${API.domain}/api/v1/searchRoom?userOne=${userOne}&userTwo=${userTwo}`
         )
         return data.data;
+    },
+    createContract: async (contract) => {
+        const data = await axios.post(`${API.domain}/api/v1/createAgreement`, contract);
+        return data.data;
     }
 }
