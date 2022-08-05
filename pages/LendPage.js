@@ -7,9 +7,23 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 export default function LendPage({ route }) {
     const [textValue, setTextValue] = useState("");
     const [open, setOpen] = useState(false);
+    const [myItems, setMyItems] = useState([
+        {
+            id: 1,
+            name: "arduino",
+            owner: 10001,
+            total: 3
+        },
+        {
+            id: 2,
+            name: "test",
+            owner: 10002,
+            total: 5
+        }
+    ]);
     // const { val } = route.params;
     const { params } = route;
-    const [value, setValue] = useState("Java");
+    const [value, setValue] = useState(myItems[0].name);
     const handleText = (text) => {
         setTextValue(text);
     }
@@ -30,13 +44,13 @@ export default function LendPage({ route }) {
                 />
             )
         })
-        setValue(params ? params.val : "Java");
+        setValue(params ? params.val : value);
     }, [params])
     return (
         <View style={styles.container}>
             <View style={styles.row}>
                 <TouchableOpacity
-                    onPress={() => navigation.navigate("PickerItemLendRent")}
+                    onPress={() => navigation.navigate("PickerItemLendRent", { myItems: myItems })}
                 >
                     <View style={[styles.dropdown]}            >
                         <View>

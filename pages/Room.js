@@ -25,6 +25,7 @@ export default function Room({ navigation }) {
         });
         return (
             <View style={styles.rightBtn}>
+
                 <View>
                     <TouchableOpacity
                         onPress={() => deleteBtn()}
@@ -90,6 +91,18 @@ export default function Room({ navigation }) {
     return (
         <ScrollView showsVerticalScrollIndicator={false}>
             <View>
+                <View style={{ flexDirection: 'row', justifyContent: "space-evenly" }}>
+                    <TouchableOpacity onPress={() => setSelectedValue(10001)} style={{ width: "100%" }}>
+                        <View style={{ backgroundColor: 'green', height: 100, justifyContent: 'center', alignItems: 'center' }}>
+                            <Text>10001</Text>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => setSelectedValue(10002)} style={{ width: "100%" }}>
+                        <View style={{ backgroundColor: 'blue', height: 100, justifyContent: 'center', alignItems: 'center' }}>
+                            <Text>10002</Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
                 {/* <TouchableOpacity onPress={() => setSelectedValue(10001)}>
                     <View style={{ width: 300, height: 300 }}>
                         <Text>10001</Text>

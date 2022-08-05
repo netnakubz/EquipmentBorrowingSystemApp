@@ -2,21 +2,24 @@ import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TextInput, Picker, Button } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 export default function PickerItemLendRent({ route }) {
-    const [val, setValue] = useState("Java");
     const navigation = useNavigation();
-    navigation.setOptions({
-        headerRight: () => (
-            <Button
-                title="เลือก"
-                onPress={() => handleSelectButton()}
-            />
-        )
-    });
+    const { myItems } = route.params;
+    const [val, setValue] = useState(myItems[0].name);
     const handleSelectButton = () => {
-        navigation.navigate("RentPage", {
+        navigation.navigate("LendPage", {
             val: val
         });
     }
+    useEffect(() => {
+        navigation.setOptions({
+            headerRight: () => (
+                <Button
+                    title="เลือก"
+                    onPress={() => handleSelectButton()}
+                />
+            )
+        });
+    }, []);
     return (
         <View style={styles.conatiner}>
             <View style={styles.col}>
@@ -27,8 +30,9 @@ export default function PickerItemLendRent({ route }) {
                     }
                     }
                 >
-                    <Picker.Item label="Java" value="Java" />
-                    <Picker.Item label="JavaScript" value="JavaScript" />
+                    {myItems.map(item => (
+                        <Picker.Item label={item.name} value={item.name} />
+                    ))}
                 </Picker >
             </View>
         </View>

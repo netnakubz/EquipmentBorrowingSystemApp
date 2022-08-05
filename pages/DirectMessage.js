@@ -1,12 +1,9 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { View, Text, ScrollView, TextInput, StyleSheet, KeyboardAvoidingView, Modal, Dimensions, TouchableWithoutFeedback } from 'react-native';
-import { GiftedChat, InputToolbar, Send, Actions } from 'react-native-gifted-chat';
-import { Chip } from 'react-native-paper';
-import axios from 'axios';
+import { GiftedChat, InputToolbar, Send, Actions, Bubble } from 'react-native-gifted-chat';
 import SockJS from 'sockjs-client';
 import Stomp from 'webstomp-client';
 import API from '../env/API';
-import { v4 as uuidv4 } from 'uuid';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Button, Input } from 'react-native-elements';
 import { Ionicons } from '@expo/vector-icons';
@@ -34,9 +31,21 @@ export default function DirectMessage({ route, navigation }) {
       return v.toString(16);
     });
   }
-
   const getChat = async () => {
     let messages = await API.getChat(roomId, user);
+    messages.filter(message => {
+      if (message.function) {
+        message.text = <TouchableOpacity onPress={() => {
+          navigation.navigate('firstContract', {
+            values: message.function,
+            save: false
+          })
+        }}>
+          <Text style={{ color: 'red', fontSize: 18 }}>ตรวจสอบสัญญา</Text>
+        </TouchableOpacity>
+      }
+    });
+    console.log(messages);
     if (data !== undefined) {
       let systemMessage = {
         _id: uuid(),
@@ -90,7 +99,7 @@ export default function DirectMessage({ route, navigation }) {
   const systemMessage = async () => {
     let message = [{
       _id: uuid(),
-      createAt: new Date(),
+      createdAt: new Date(),
       text: "",
       user: {
         _id: 10016,
@@ -99,6 +108,10 @@ export default function DirectMessage({ route, navigation }) {
       function: JSON.stringify(newContract),
       system: true
     }]
+    if (message[0].createdAt === null) {
+      message[0].createdAt = new Date();
+    }
+    // console.log(message);
     onSend(message);
   }
   // Chat pattern
@@ -183,9 +196,9 @@ export default function DirectMessage({ route, navigation }) {
         );
       }
       }
+
       renderActions={(props) => {
         return (
-
           <Actions {...props} onPressActionButton={() => {
             navigation.navigate('firstContract', {
               setNewContract: (contract) => setNewContract(contract),
