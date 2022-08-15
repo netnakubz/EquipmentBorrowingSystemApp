@@ -43,8 +43,50 @@ let API = {
         const data = await axios.post(`${API.domain}/api/v1/createAgreement`, contract);
         return data.data;
     },
-    getPostFindToBorrow: async (limit) => {
-
+    getPostFindToBorrow: (pageParam) => {
+        const data = [
+            {
+                postId: '1',
+                details: 'Post details',
+                img: 'https://i.pinimg.com/736x/b1/16/0f/b1160fdd10b71b095c19366845fd6b3e.jpg',
+                price: 123,
+                suggestions: ["New Arrivals"]
+            },
+            {
+                postId: '2',
+                details: 'Post details',
+                img: 'https://i.pinimg.com/736x/b1/16/0f/b1160fdd10b71b095c19366845fd6b3e.jpg',
+                price: 123,
+                suggestions: ["New Arrivals"]
+            },
+            {
+                postId: '3',
+                details: 'Post details',
+                img: 'https://i.pinimg.com/736x/b1/16/0f/b1160fdd10b71b095c19366845fd6b3e.jpg',
+                price: 123,
+                suggestions: ["New Arrivals"]
+            },
+            {
+                postId: '4',
+                details: 'Post details',
+                img: 'https://i.pinimg.com/736x/b1/16/0f/b1160fdd10b71b095c19366845fd6b3e.jpg',
+                price: 123,
+                suggestions: ["New Arrivals","Popular"]
+            },
+            {
+                postId: '5',
+                details: 'Post details',
+                img: 'https://i.pinimg.com/736x/b1/16/0f/b1160fdd10b71b095c19366845fd6b3e.jpg',
+                price: 123,
+                suggestions: ["New Arrivals"]
+            },
+        ]
+        let result = [];
+        let size = pageParam > data.length ? data.length : pageParam;
+        for (let i = 0; i < size; i++) {
+            result.push(data[i]);
+        }
+        return result;
         // const data = await  axios.get(`${API.domain}/api/v1/getPost?limit=${limit}`);
         // return data.data;
     }

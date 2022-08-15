@@ -22,6 +22,7 @@
     "@react-navigation/native-stack": "^6.6.2",
     "@react-navigation/stack": "^6.2.1",
     "@stomp/stompjs": "6.1.2",
+    "@tanstack/react-query": "^4.0.10",
     "axios": "^0.26.1",
     "dayjs": "*",
     "expo": "~44.0.0",

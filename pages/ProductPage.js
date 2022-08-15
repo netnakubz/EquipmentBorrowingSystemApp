@@ -30,6 +30,7 @@ export function ProductPage({ navigation, route }) {
         setIsLiked(!isLiked);
     }
     const contactBtn = async () => {
+        console.log("asdfasdf")
         //if data is null create new room;
         //if not null redirect to direct message 
         let tempUser = 10013;

@@ -244,7 +244,7 @@ export const RentPage = () => {
                                                     containerStyle={{
                                                         height: Dimensions.get('window').height,
                                                     }}
-                                                    placeholder="ราคา"
+                                                    placeholder="วัน"
                                                     onChangeText={(e) => handlePeriod(e)}
                                                 />
                                             </View>
