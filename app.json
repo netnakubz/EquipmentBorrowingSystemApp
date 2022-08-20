@@ -18,9 +18,11 @@
       "**/*"
     ],
     "ios": {
+      "bundleIdentifier": "equipment.borrowing.app",
       "supportsTablet": true
     },
     "android": {
+      "package": "equipment.borrowing.app",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"

@@ -11,6 +11,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { ProductPage } from '../pages/ProductPage';
 import { useNavigation } from '@react-navigation/native';
 const ProductStack = createNativeStackNavigator();
+import API from '../env/API';
 const Product = ({ item }) => {
     const navigation = useNavigation();
     const onClickItem = postId => {
@@ -21,17 +22,20 @@ const Product = ({ item }) => {
     };
     return (
         <TouchableOpacity onPress={() => onClickItem(item.postId)}>
-            <Card containerStyle={styles.cardCnt}>
+            <Card containerStyle={[styles.cardCnt, {
+            }]}>
                 <Card.Image
-                    style={{ borderRadius: 30 }}
-                    // source={{ uri: `http://192.168.0.104:8080/getImg?imgUrl=${item.img}` }} />
-                    source={{ uri: `${item.img}` }}
+                    style={{
+                        borderRadius: 30,
+                    }}
+                    resizeMode="cover"
+                    source={{ uri: `${API.domain}/files/${item.equipment?.itemImg[0]?.location}` }}
                 />
                 <View>
                     <Text style={styles.cardText}>{item.details}</Text>
                 </View>
-                <View>
-                    <Text>{item.price}฿ / วัน</Text>
+                <View style={{ flex: 1 }}>
+                    <Text style={{ flexWrap: 'wrap' }}>{item.equipment?.price} ฿ / วัน</Text>
                 </View>
             </Card>
         </TouchableOpacity>

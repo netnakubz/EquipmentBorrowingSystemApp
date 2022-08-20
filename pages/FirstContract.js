@@ -8,7 +8,8 @@ import ModalSelector from 'react-native-modal-selector'
 import { Input } from "react-native-elements";
 import { ContractModal } from "../components/ContractModal";
 import DateTimePicker from '@react-native-community/datetimepicker';
-
+import * as Print from 'expo-print';
+import * as Sharing from 'expo-sharing';
 export const FirstContract = ({ navigation, route }) => {
     const [userItem, setUserItem] = useState("");
     const [userIdOwner, setUserIdOwner] = useState({});
@@ -31,6 +32,35 @@ export const FirstContract = ({ navigation, route }) => {
     const [endDateModalVisible, setEndDateModalVisible] = useState(false);
     const { setNewContract, newContract, values, save } = route.params;
     const [show, setShow] = useState(false);
+    const createPDF = async () => {
+        const html = `
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <style>
+            #header{
+                display:flex;
+                justify-content: center;
+            }
+            </style>
+        </head>
+        <body>
+        <div class="contract">
+            <h1 id="header">
+            สัญญาการยืม
+            </h1>
+        </div>
+        เนื่องจาก คุณ ${userIdBorrower.name} ได้ทำการยืม ${equipment.name} จาก ${userIdOwner.name} จำนวน ${totalRent} ราคาชิ้นละ ${price}
+        ซึ่งมีค่าปรับล่าช้า ${fineLate} และค่าปรับเสียหาย ${fineBroken} เริ่มต้นวันที่ ${startDate} จนถึง ${endDate}
+        <script src="src/script.js"></script>
+        </body>
+        </html>
+        `;
+        const { uri } = await Print.printToFileAsync({ html });
+        Sharing.shareAsync(uri);
+    }
     const handleSendContract = () => {
         let contract = {
             userIdOwner: userIdOwner,
@@ -354,7 +384,7 @@ export const FirstContract = ({ navigation, route }) => {
                     </TouchableOpacity>
                 </View >
             </ScrollView>
-            {save &&
+            {save ?
                 <View style={{ backgroundColor: 'white', height: 70, justifyContent: 'center', alignItems: 'center' }}>
                     <TouchableOpacity
                         onPress={() => handleSendContract()}
@@ -368,6 +398,23 @@ export const FirstContract = ({ navigation, route }) => {
                             borderRadius: 30
                         }}>
                             <Text style={{ color: 'white', fontSize: 20 }}>บันทึกและเสนอ</Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
+                :
+                <View style={{ backgroundColor: 'white', height: 70, justifyContent: 'center', alignItems: 'center' }}>
+                    <TouchableOpacity
+                        onPress={() => createPDF()}
+                    >
+                        <View style={{
+                            backgroundColor: "#FF6280",
+                            width: 300,
+                            height: 50,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            borderRadius: 30
+                        }}>
+                            <Text style={{ color: 'white', fontSize: 20 }}>พิมพ์</Text>
                         </View>
                     </TouchableOpacity>
                 </View>

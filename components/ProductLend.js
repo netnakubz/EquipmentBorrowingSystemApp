@@ -28,28 +28,31 @@ const ProductLend = ({ item }) => {
         const randNumber = Math.floor(Math.random() * colors.length);
         return colors[randNumber];
     }
+    useEffect(() => {
+        console.log(item);
+    }, [])
     return (
         <TouchableOpacity onPress={() => onClickItem(item.postId)}>
             <Card containerStyle={[styles.cardCnt, { backgroundColor: generateRandomColor() }]}>
                 <Card.Title
                 >
-                    <Text style={{ color: "white" }}>หาเมาส์ไร้สาย</Text>
+                    <Text style={{ color: "white" }}>{item.details}</Text>
                 </Card.Title>
                 <View>
-                    <Text>50 THB ต่อวัน</Text>
+                    <Text>ราคา {item.price}</Text>
                 </View>
                 <View>
                     <Text>
-                        โพสต์เมื่อ ...
+                        {item.create_date.split("T")[0]}
                     </Text>
                 </View>
                 <View>
                     <Text>
-                        รายละเอียด
+                        {item.details}
                     </Text>
                 </View>
                 <View>
-                    <Text style={{ textAlign: 'right' }}>เช่า 2 วัน</Text>
+                    <Text style={{ textAlign: 'right' }}>เช่า {item.period} วัน</Text>
                 </View>
             </Card>
         </TouchableOpacity>

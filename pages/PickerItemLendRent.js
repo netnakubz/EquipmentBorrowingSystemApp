@@ -20,6 +20,7 @@ export default function PickerItemLendRent({ route }) {
             )
         });
     }, []);
+
     return (
         <View style={styles.conatiner}>
             <View style={styles.col}>
@@ -30,8 +31,8 @@ export default function PickerItemLendRent({ route }) {
                     }
                     }
                 >
-                    {myItems.map(item => (
-                        <Picker.Item label={item.name} value={item.name} />
+                    {myItems?.map(item => (
+                        <Picker.Item label={item.name} value={item.name} key={item.itemId} />
                     ))}
                 </Picker >
             </View>

@@ -1,52 +1,23 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, ScrollView, Image, StyleSheet, FlatList, SafeAreaView } from "react-native";
 import Product from "../components/Product";
+import API from "../env/API";
 
 export function LikeScreen() {
-    const post = [
-        {
-            postId: 1,
-            details: 'Post details',
-            img: 'https://i.pinimg.com/736x/b1/16/0f/b1160fdd10b71b095c19366845fd6b3e.jpg',
-            price: 50,
-        },
-        {
-            postId: 2,
-            details: 'Post details',
-            img: 'https://i.pinimg.com/736x/b1/16/0f/b1160fdd10b71b095c19366845fd6b3e.jpg',
-            price: 50,
-        },
-        {
-            postId: 3,
-            details: 'Post details',
-            img: 'https://i.pinimg.com/736x/b1/16/0f/b1160fdd10b71b095c19366845fd6b3e.jpg',
-            price: 50,
-        },
-        {
-            postId: 4,
-            details: 'Post details',
-            img: 'https://i.pinimg.com/736x/b1/16/0f/b1160fdd10b71b095c19366845fd6b3e.jpg',
-            price: 50,
-        },
-        {
-            postId: 5,
-            details: 'Post details',
-            img: 'https://i.pinimg.com/736x/b1/16/0f/b1160fdd10b71b095c19366845fd6b3e.jpg',
-            price: 50,
-        },
-        {
-            postId: 6,
-            details: 'Post details',
-            img: 'https://i.pinimg.com/736x/b1/16/0f/b1160fdd10b71b095c19366845fd6b3e.jpg',
-            price: 50,
-        },
-    ];
+    const [post, setPost] = useState();
+    const getLikePost = async () => {
+        const data = await API.getLikePost();
+        setPost(data);
+    }
+    useEffect(() => {
+        getLikePost();
+    }, []);
     return (
         <FlatList
             data={post}
             renderItem={({ item }) => (
                 <View style={{ width: '50%' }} >
-                    <Product item={item} />
+                    <Product item={item.postRentModel} />
                 </View>
             )}
             numColumns={2}

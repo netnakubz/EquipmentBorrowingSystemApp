@@ -11,16 +11,7 @@ import API from "../env/API";
 export function ProductPage({ navigation, route }) {
     const { postId } = route.params;
     const [isLiked, setIsLiked] = useState(true);
-    const [item, setItem] = useState({
-        id: postId,
-        type: "ITEM TYPE",
-        name: "ITEM NAME",
-        price: 100,
-        desc: "สภาพ 100 % เพิ่งซื้อมาเมื่อวาน",
-        totalStock: 3,
-        totalRent: 2,
-        owner: 10001
-    });
+    const [item, setItem] = useState();
     const [owner, setOwner] = useState({
         photo: "https://i.pinimg.com/736x/b1/16/0f/b1160fdd10b71b095c19366845fd6b3e.jpg",
         name: "สมชาย รักดี",
@@ -30,24 +21,28 @@ export function ProductPage({ navigation, route }) {
         setIsLiked(!isLiked);
     }
     const contactBtn = async () => {
-        console.log("asdfasdf")
         //if data is null create new room;
         //if not null redirect to direct message 
-        let tempUser = 10013;
-        let data = await API.searchRoom(tempUser, item.owner);
+        let tempUser = 10003;
+        let data = await API.searchRoom(tempUser, item?.equipment.user.userId);
         console.log(data);
         navigation.navigate("DirectMessage", {
             roomId: data.room_ID,
-            destination: owner.name,
+            destination: item?.equipment.user.name + " " + item?.equipment.user.surname,
             user: tempUser,
             data: item
         })
+    }
+    const getPost = async () => {
+        const data = await API.getPostById(postId);
+        setItem(data);
     }
     useEffect(() => {
         navigation.setOptions({
             title: '',
             headerTransparent: true,
         });
+        getPost();
     }, []);
     return (
         <View>
@@ -58,38 +53,66 @@ export function ProductPage({ navigation, route }) {
                     <Image
                         style={styles.postImage}
                         resizeMode="cover"
-                        source={{ uri: "https://i.pinimg.com/736x/b1/16/0f/b1160fdd10b71b095c19366845fd6b3e.jpg" }}
+                        source={{ uri: `${API.domain}/files/${item?.equipment?.itemImg[0]?.location}` }}
                     />
                 </View>
                 <View style={styles.postDetails}>
                     <View style={styles.postContents}>
                         <View style={styles.row}>
-                            <View>
-                                <Text style={{ color: "#464646" }}>{item.type}</Text>
+                            <View style={{ flex: 0.9 }}>
+                                <View style={{ flexDirection: 'row', flexWrap: "wrap" }}>
+                                    {item?.equipment.equipmentTypes.map(item =>
+                                        <TouchableOpacity>
+                                            <View key={item.typeModel.typeId}
+                                                style={{
+                                                    flexDirection: 'row',
+                                                    justifyContent: 'space-between',
+                                                    margin: 2
+                                                }}
+                                            >
+                                                <View style={{
+                                                    borderWidth: 1,
+                                                    backgroundColor: '#FFFAFA',
+                                                    borderRadius: 10,
+                                                    padding: 4,
+                                                }}>
+                                                    <Text
+                                                        style={{ color: "#43BFF5" }}
+                                                    >
+                                                        #{item.typeModel.name}
+                                                    </Text>
+                                                </View>
+                                            </View>
+                                        </TouchableOpacity>
+                                    )}
+                                </View>
                             </View>
-                            <View>
-                                <TouchableOpacity
-                                    onPress={() => { handleLikeClick() }}
-                                >
-                                    <Ionicons name={isLiked ? "heart" : "heart-outline"} size={30} color={isLiked ? "#FF6280" : "black"} />
-                                </TouchableOpacity>
-                            </View></View>
-                        <View>
-                            <Text style={[styles.itemName, { color: "#464646" }]}>{item.name}</Text>
+                            <View style={{ flex: 0.1 }}>
+                                <View>
+                                    <TouchableOpacity
+                                        onPress={() => { handleLikeClick() }}
+                                    >
+                                        <Ionicons name={isLiked ? "heart" : "heart-outline"} size={30} color={isLiked ? "#FF6280" : "black"} />
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
                         </View>
-                        <View style={{ flexDirection: 'row', marginTop: 20 }}>
+                        <View>
+                            <Text style={[styles.itemName, { color: "#464646" }]}>{item?.equipment?.name}</Text>
+                        </View>
+                        <View style={{ flexDirection: 'row' }}>
                             <Text style={{ fontSize: 20, color: "#464646" }}>ราคาที่เสนอ</Text>
-                            <Text style={{ fontSize: 20, marginLeft: 10, color: "#FF6280" }}>{item.price} THB</Text>
+                            <Text style={{ fontSize: 20, marginLeft: 10, color: "#FF6280" }}>{item?.equipment?.price} THB</Text>
                         </View>
                         <View style={{ marginTop: 20 }}>
                             <Text style={{ color: "#464646" }}>
-                                {item.desc}
+                                {item?.details}
                             </Text>
                         </View>
                         <View style={{ marginTop: 20 }}>
                             <Text style={{ color: "#464646", fontWeight: "bold" }}>รายละเอียด</Text>
-                            <Text style={{ color: "#464646" }}>คลัง : {item.totalStock}</Text>
-                            <Text style={{ fontSize: 13, color: "#464646" }}>เช่าแล้ว : {item.totalRent} ครั้ง</Text>
+                            <Text style={{ color: "#464646" }}>คลัง : {item?.equipment?.quantity}</Text>
+                            <Text style={{ fontSize: 13, color: "#464646" }}>เช่าแล้ว : {item?.equipment?.totalRent} ครั้ง</Text>
                         </View>
                         <View style={{ marginTop: 20 }}>
                             <Hr size={40} />
@@ -99,6 +122,7 @@ export function ProductPage({ navigation, route }) {
             </ScrollView>
             <View style={[styles.row,
             {
+                backgroundColor: 'white',
                 bottom: 10,
                 position: 'absolute',
                 justifyContent: "space-evenly",
@@ -112,8 +136,8 @@ export function ProductPage({ navigation, route }) {
                         source={{ uri: owner.photo }} />
                 </View>
                 <View>
-                    <Text style={{ fontWeight: "bold", color: "#464646", fontSize: 16 }}>{owner.name}</Text>
-                    <Text>{owner.email}</Text>
+                    <Text style={{ fontWeight: "bold", color: "#464646", fontSize: 16 }}>{item?.equipment.user.name} {item?.equipment.user.surname}</Text>
+                    <Text>{item?.equipment.user?.email}</Text>
                 </View>
                 <View>
                     <TouchableOpacity

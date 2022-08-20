@@ -20,11 +20,6 @@ export default function DirectMessage({ route, navigation }) {
   var stompClient = '';
   var connected = false;
   socket = new SockJS(SOCKET_URL);
-
-  let i = 5;
-  const contract = () => {
-    alert("Generate contract");
-  }
   const uuid = () => {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
       var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
@@ -57,7 +52,7 @@ export default function DirectMessage({ route, navigation }) {
           values: [
             {
               title: '😋 สนใจสินค้า ',
-              text: '😋 สนใจ ' + data.name,
+              text: '😋 สนใจ ' + data.equipment.name,
               user: {
                 _id: user
               }
@@ -72,7 +67,7 @@ export default function DirectMessage({ route, navigation }) {
           ],
         },
         user: {
-          _id: 10016,
+          _id: 1,
           name: 'System',
         },
       }
@@ -94,15 +89,17 @@ export default function DirectMessage({ route, navigation }) {
       fineBroken: parseInt(newContract.fineBroken)
     }
     let data = await API.createContract(contract);
+    console.log(data);
     systemMessage()
   }
+
   const systemMessage = async () => {
     let message = [{
       _id: uuid(),
       createdAt: new Date(),
       text: "",
       user: {
-        _id: 10016,
+        _id: 1,
         name: "system"
       },
       function: JSON.stringify(newContract),

@@ -9,28 +9,26 @@ import {
 import { Dropdown } from 'react-native-element-dropdown';
 import { UnderHeader } from "./UnderHeader";
 import { Card, Overlay, SearchBar } from 'react-native-elements';
+import API from "../env/API";
 
-export const HomePageHeader = ({ content, page }) => {
+export const HomePageHeader = ({ content, page, value, setValue, selectedType, setSelectedType }) => {
     const [searchText, setSearchText] = useState('');
-    const [value, setValue] = useState(null);
     const [typeOfItem, setTypeOfItem] = useState([]);
-    const [selectedType, setSelectedType] = useState('all');
-
-    const data = [
-        { label: 'Item 1', value: '1' },
-        { label: 'Item 2', value: '2' },
-        { label: 'Item 3', value: '3' },
-        { label: 'Item 4', value: '4' },
-        { label: 'Item 5', value: '5' },
-        { label: 'Item 6', value: '6' },
-        { label: 'Item 7', value: '7' },
-        { label: 'Item 8', value: '8' },
-    ];
-
+    const [itemType, setItemType] = useState([]);
     const handleSearchText = e => {
         setSearchText(e);
     };
-
+    const getItemType = async () => {
+        const data = await API.getItemType();
+        let tempData = [{ label: "ทั้งหมด", value: 0 }]
+        data.forEach(e => {
+            tempData.push({ label: e.name, value: e.typeId })
+        })
+        setItemType(tempData);
+    }
+    useEffect(() => {
+        getItemType();
+    }, []);
     return (
         <View>
             <View>
@@ -48,25 +46,29 @@ export const HomePageHeader = ({ content, page }) => {
                     value={searchText}
                 />
             </View>
-            <View>
-                <Dropdown
-                    style={styles.dropdown}
-                    placeholderStyle={styles.placeholderStyle}
-                    selectedTextStyle={styles.selectedTextStyle}
-                    inputSearchStyle={styles.inputSearchStyle}
-                    iconStyle={styles.iconStyle}
-                    data={data}
-                    maxHeight={300}
-                    labelField="label"
-                    valueField="value"
-                    placeholder={selectedType}
-                    searchPlaceholder="Search..."
-                    value={value}
-                    onChange={item => {
-                        setValue(item.value);
-                    }}
-                />
-            </View>
+            {page === "FindToBorrow" &&
+                <View>
+                    <Dropdown
+                        style={styles.dropdown}
+                        placeholderStyle={styles.placeholderStyle}
+                        selectedTextStyle={styles.selectedTextStyle}
+                        inputSearchStyle={styles.inputSearchStyle}
+                        iconStyle={styles.iconStyle}
+                        data={itemType}
+                        maxHeight={300}
+                        labelField="label"
+                        valueField="value"
+                        placeholder={selectedType}
+                        searchPlaceholder="Search..."
+                        value={value}
+                        onChange={item => {
+                            setSelectedType(item.label)
+                            setValue(item.value);
+                        }}
+                    />
+                </View>
+            }
+
         </View >
     );
 }
@@ -77,7 +79,8 @@ const styles = StyleSheet.create({
         fontSize: 30,
     },
     dropdown: {
-        width: 70,
+
+        width: 100,
         textAlign: 'center',
         margin: 16,
         height: 50,
@@ -88,4 +91,8 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
     },
+    selectedTextStyle: {
+        justifyContent: "center",
+        alignItems: 'center',
+    }
 });

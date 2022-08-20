@@ -13,6 +13,7 @@ import {FloatingBtn} from '../components/FloatingBtn';
 
 const RenderHomeScreen = ({isHomePage, setHomeFalse}) => {
     const [content, setContent] = useState('All');
+
     return (
         <View
             style={styles.sliderBox}

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 let API = {
-    domain: "http://172.20.10.2:8080",
+    domain: "http://172.20.10.4:8080",
     temp: () => {
         console.log(API.domain);
     },
@@ -43,53 +43,45 @@ let API = {
         const data = await axios.post(`${API.domain}/api/v1/createAgreement`, contract);
         return data.data;
     },
-    getPostFindToBorrow: (pageParam) => {
-        const data = [
-            {
-                postId: '1',
-                details: 'Post details',
-                img: 'https://i.pinimg.com/736x/b1/16/0f/b1160fdd10b71b095c19366845fd6b3e.jpg',
-                price: 123,
-                suggestions: ["New Arrivals"]
-            },
-            {
-                postId: '2',
-                details: 'Post details',
-                img: 'https://i.pinimg.com/736x/b1/16/0f/b1160fdd10b71b095c19366845fd6b3e.jpg',
-                price: 123,
-                suggestions: ["New Arrivals"]
-            },
-            {
-                postId: '3',
-                details: 'Post details',
-                img: 'https://i.pinimg.com/736x/b1/16/0f/b1160fdd10b71b095c19366845fd6b3e.jpg',
-                price: 123,
-                suggestions: ["New Arrivals"]
-            },
-            {
-                postId: '4',
-                details: 'Post details',
-                img: 'https://i.pinimg.com/736x/b1/16/0f/b1160fdd10b71b095c19366845fd6b3e.jpg',
-                price: 123,
-                suggestions: ["New Arrivals","Popular"]
-            },
-            {
-                postId: '5',
-                details: 'Post details',
-                img: 'https://i.pinimg.com/736x/b1/16/0f/b1160fdd10b71b095c19366845fd6b3e.jpg',
-                price: 123,
-                suggestions: ["New Arrivals"]
-            },
-        ]
-        let result = [];
-        let size = pageParam > data.length ? data.length : pageParam;
-        for (let i = 0; i < size; i++) {
-            result.push(data[i]);
-        }
-        return result;
-        // const data = await  axios.get(`${API.domain}/api/v1/getPost?limit=${limit}`);
-        // return data.data;
+    getPostFindToBorrow: async (pageNo = 0, pageSize = 10) => {
+        const data = await axios.get(`${API.domain}/api/v1/get/post?pageNo=${pageNo}&pageSize=${pageSize}`);
+        return data.data;
+    },
+    getPostFindToLend: async (pageNo = 0, pageSize = 10) => {
+        const data = await axios.get(`${API.domain}/api/v1/get/lendPost?pageNo=${pageNo}&pageSize=${pageSize}`);
+        return data.data;
+    },
+    lendPost: async (post) => {
+        const data = await axios.post(`${API.domain}/api/v1/post/rent`, {
+            details: post.details,
+            itemId: post.itemId,
+            userId: post.userId
+        });
+    },
+    getPostById: async (postId) => {
+        const data = await axios.get(`${API.domain}/api/v1/get/post/by?postId=${postId}`);
+        return data.data;
+    },
+    getEquipmentByUserId: async () => {
+        const data = await axios.get(`${API.domain}/api/v1/get/equipment/by?userId=10001`);
+        return data.data;
+    },
+    borrowPost: async (post) => {
+        const data = await axios.post(`${API.domain}/api/v1/post/borrow`, {
+            "details": post.details,
+            "userId": 10001,
+            "price": post.price,
+            "period": post.period
+        })
+        console.log(data.data);
+    },
+    getLikePost: async () => {
+        const data = await axios.get(`${API.domain}/api/v1/getLikePost`);
+        return data.data;
+    },
+    getItemType: async () => {
+        const data = await axios.get(`${API.domain}/api/v1/get/itemType`);
+        return data.data;
     }
-
 };
 export default API;
