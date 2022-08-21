@@ -20,7 +20,6 @@ const Type = () => {
 
 export const MyItem = ({ navigation }) => {
     const handleSearch = () => {
-        console.log("Search btn"); 
     }
     useEffect(() => {
         navigation.setOptions({

@@ -88,7 +88,6 @@ export const FirstContract = ({ navigation, route }) => {
     const setValues = async () => {
         if (values) {
             let temp = JSON.parse(values);
-            console.log(temp);
 
             setEquipment(temp.equipment)
             setUserIdOwner(temp.userIdOwner)
@@ -99,7 +98,6 @@ export const FirstContract = ({ navigation, route }) => {
             setPrice(temp.price)
             setFineLate(temp.fineLate)
             setFineBroken(temp.fineBroken)
-            console.log(equipment);
         }
     }
     useEffect(() => {

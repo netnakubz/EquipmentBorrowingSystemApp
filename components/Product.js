@@ -15,7 +15,6 @@ import API from '../env/API';
 const Product = ({ item }) => {
     const navigation = useNavigation();
     const onClickItem = postId => {
-        // console.log(postId);
         navigation.navigate('ProductPage', {
             postId: postId
         });
@@ -28,7 +27,7 @@ const Product = ({ item }) => {
                     style={{
                         borderRadius: 30,
                     }}
-                    resizeMode="cover"
+                    resizeMode="contain"
                     source={{ uri: `${API.domain}/files/${item.equipment?.itemImg[0]?.location}` }}
                 />
                 <View>
@@ -50,7 +49,8 @@ const styles = StyleSheet.create({
         shadowOpacity: 0,
         shadowRadius: 0,
         elevation: 0, // Remove Shadow for Android
-        backgroundColor: 'transparent',
+        backgroundColor: 'white',
+        borderRadius: 30
     },
     cardText: {
         textAlign: 'left',

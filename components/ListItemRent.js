@@ -25,7 +25,7 @@ export default function ListItemRent(props) {
                     :
                     <View >
                         <TouchableOpacity
-                            onPress={() => { console.log("item") }}
+                            onPress={() => {  }}
                         >
                             <View style={styles.item}>
                                 <View style={styles.itemBorder}>

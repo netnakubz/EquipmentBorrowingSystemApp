@@ -25,7 +25,6 @@ export const AddItem = ({ navigation }) => {
             quality: 1,
             allowsMultipleSelection: true
         });
-        // console.log(result);
         let key = (Math.random() + 1).toString(36).substring(2);
         if (!result.cancelled) {
             setImages(prev => [...prev, { key: key, uri: result.uri }]);

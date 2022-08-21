@@ -8,7 +8,6 @@ export default function Hr({ size }) {
             temp += "_";
         }
         setHr(temp);
-        console.log(size)
     }, []);
     return <Text style={{ textAlign: "center" }}>{hr}</Text>
 }

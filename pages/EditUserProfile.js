@@ -9,7 +9,6 @@ export const EditUserProfile = ({ navigation, route }) => {
     const { user } = route.params;
     const [tel, setTel] = useState("0987654321");
     const handleSaveBtn = () => {
-        console.log("saveBtn");
         navigation.goBack();
     }
 
@@ -22,7 +21,6 @@ export const EditUserProfile = ({ navigation, route }) => {
             quality: 1,
             allowsMultipleSelection: true
         });
-        // console.log(result);
         let key = (Math.random() + 1).toString(36).substring(2);
         if (!result.cancelled) {
             setImages(prev => [...prev, { key: key, uri: result.uri }]);

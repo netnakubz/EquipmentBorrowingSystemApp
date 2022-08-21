@@ -34,7 +34,6 @@ export const FindToLendPage = () => {
     const [totalData, setTotalData] = useState(10);
     const getPost = async () => {
         const data = await API.getPostFindToLend(0, 10);
-        console.log(data);
         setPost(data.content);
     }
     useEffect(() => {
@@ -45,7 +44,6 @@ export const FindToLendPage = () => {
     };
     const handlePressAddButton = () => {
         setVisible(!visible);
-        console.log('Hello Floting button');
     };
     const handleContent = type => {
         if (content === type) return;

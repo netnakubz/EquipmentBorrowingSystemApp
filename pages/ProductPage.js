@@ -7,11 +7,12 @@ const windowHeight = Dimensions.get('window').height;
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Hr from "../components/Hr";
 import API from "../env/API";
-
+import { SliderBox } from "react-native-image-slider-box";
 export function ProductPage({ navigation, route }) {
     const { postId } = route.params;
     const [isLiked, setIsLiked] = useState(true);
     const [item, setItem] = useState();
+    const [itemImg, setItemImg] = useState([]);
     const [owner, setOwner] = useState({
         photo: "https://i.pinimg.com/736x/b1/16/0f/b1160fdd10b71b095c19366845fd6b3e.jpg",
         name: "สมชาย รักดี",
@@ -25,7 +26,6 @@ export function ProductPage({ navigation, route }) {
         //if not null redirect to direct message 
         let tempUser = 10003;
         let data = await API.searchRoom(tempUser, item?.equipment.user.userId);
-        console.log(data);
         navigation.navigate("DirectMessage", {
             roomId: data.room_ID,
             destination: item?.equipment.user.name + " " + item?.equipment.user.surname,
@@ -36,6 +36,12 @@ export function ProductPage({ navigation, route }) {
     const getPost = async () => {
         const data = await API.getPostById(postId);
         setItem(data);
+        let temp = [];
+        data?.equipment?.itemImg.forEach(img => {
+            temp.push(`${API.domain}/files/${img.location}`);
+        })
+        setItemImg(temp);
+
     }
     useEffect(() => {
         navigation.setOptions({
@@ -44,18 +50,37 @@ export function ProductPage({ navigation, route }) {
         });
         getPost();
     }, []);
+
     return (
         <View>
             <ScrollView
                 style={{ backgroundColor: "white" }}
             >
-                <View style={styles.imageZone}>
-                    <Image
-                        style={styles.postImage}
-                        resizeMode="cover"
-                        source={{ uri: `${API.domain}/files/${item?.equipment?.itemImg[0]?.location}` }}
-                    />
-                </View>
+                {item &&
+                    <View style={styles.imageZone}>
+                        <SliderBox
+                            images={itemImg}
+                            sliderBoxHeight={"100%"}
+                            paginationBoxStyle={{
+                                position: "absolute",
+                                bottom: 0,
+                                padding: 0,
+                                alignItems: "center",
+                                alignSelf: "center",
+                                justifyContent: "center",
+                                paddingVertical: 10
+                            }}
+                            ImageComponentStyle={{ padding: 50 }}
+                        />
+                        {/* <Image
+                            style={styles.postImage}
+                            resizeMode="center"
+                            source={{
+                                uri: `${API.domain}/files/${item?.equipment?.itemImg[0]?.location}`
+                            }}
+                        /> */}
+                    </View>
+                }
                 <View style={styles.postDetails}>
                     <View style={styles.postContents}>
                         <View style={styles.row}>
@@ -133,7 +158,10 @@ export function ProductPage({ navigation, route }) {
                 <View>
                     <Image
                         style={{ width: 50, height: 50, borderRadius: 50 }}
-                        source={{ uri: owner.photo }} />
+                        source={{
+                            uri: owner.photo
+                        }}
+                    />
                 </View>
                 <View>
                     <Text style={{ fontWeight: "bold", color: "#464646", fontSize: 16 }}>{item?.equipment.user.name} {item?.equipment.user.surname}</Text>

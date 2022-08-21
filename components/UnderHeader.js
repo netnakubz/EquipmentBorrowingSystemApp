@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet } from "react-native";
 
 export const UnderHeader = ({ page }) => {
-    console.log(page);
     return (
         <View style={styles.container}>
             <View style={styles.row}>

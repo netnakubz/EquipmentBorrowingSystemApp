@@ -34,7 +34,6 @@ export const Profile = ({ isOwnerProfile }) => {
         navigation.navigate("AddItem");
     }
     useEffect(() => {
-        console.log(isOwnerProfile)
         navigation.setOptions({
             title: `${profile.firstName} ${profile.lastName}`
         })

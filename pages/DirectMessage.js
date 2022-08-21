@@ -40,7 +40,6 @@ export default function DirectMessage({ route, navigation }) {
         </TouchableOpacity>
       }
     });
-    console.log(messages);
     if (data !== undefined) {
       let systemMessage = {
         _id: uuid(),
@@ -89,7 +88,6 @@ export default function DirectMessage({ route, navigation }) {
       fineBroken: parseInt(newContract.fineBroken)
     }
     let data = await API.createContract(contract);
-    console.log(data);
     systemMessage()
   }
 
@@ -108,7 +106,6 @@ export default function DirectMessage({ route, navigation }) {
     if (message[0].createdAt === null) {
       message[0].createdAt = new Date();
     }
-    // console.log(message);
     onSend(message);
   }
   // Chat pattern
