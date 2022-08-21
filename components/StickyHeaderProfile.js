@@ -78,7 +78,9 @@ export default function App(props) {
                                 <Image
                                     style={{ width: "100%", height: "100%" }}
                                     resizeMode='cover'
-                                    source={{ uri: 'https://i.pinimg.com/736x/b1/16/0f/b1160fdd10b71b095c19366845fd6b3e.jpg' }}
+                                    source={{
+                                        uri: 'https://i.pinimg.com/736x/b1/16/0f/b1160fdd10b71b095c19366845fd6b3e.jpg'
+                                    }}
                                 />
                             </View>
                         )) ||

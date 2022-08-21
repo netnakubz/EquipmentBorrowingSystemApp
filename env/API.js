@@ -82,6 +82,10 @@ let API = {
     getItemType: async () => {
         const data = await axios.get(`${API.domain}/api/v1/get/itemType`);
         return data.data;
+    },
+    getMyItems:async()=>{
+        const data = await axios.get(`${API.domain}/api/v1/get/all/equipment`);
+        return data.data;
     }
 };
 export default API;

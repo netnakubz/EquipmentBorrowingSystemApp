@@ -27,7 +27,7 @@ const ProductLend = ({ item }) => {
         const randNumber = Math.floor(Math.random() * colors.length);
         return colors[randNumber];
     }
- 
+
     return (
         <TouchableOpacity onPress={() => onClickItem(item.postId)}>
             <Card containerStyle={[styles.cardCnt, { backgroundColor: generateRandomColor() }]}>
