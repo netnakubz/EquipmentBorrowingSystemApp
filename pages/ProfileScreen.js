@@ -12,6 +12,7 @@ import DATA from '../components/data';
 const { Value } = Animated;
 import StickyHeaderProfile from '../components/StickyHeaderProfile';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import API from '../env/API';
 const Tab = createMaterialTopTabNavigator();
 
 const RenderItem = ({ item }) => {
@@ -29,15 +30,16 @@ export function PersonalScreen() {
     const [tabHeight, setTabHeight] = useState(0);
     const [activeTab, setActiveTab] = useState("tab1");
     const screenHeight = Dimensions.get('window').height
-    const [ownerItems, setOwnerItems] = useState([
-        { name: "RC00000001 - Logitech M350 Mouse" },
-        { name: "RC00000002 - Logitech M350 Mouse" },
-        { name: "RC00000003 - Logitech M350 Mouse" },
-        { name: "RC00000004 - Logitech M350 Mouse" },
-        { name: "RC00000005 - Logitech M350 Mouse" },
-        { name: "RC00000006- Logitech M350 Mouse" },
-        { name: "RC00000007 - Logitech M350 Mouse" },
-    ]);
+    const [ownerItems, setOwnerItems] = useState();
+    const getMyItems = async()=>{
+        const data = await API.getMyItems();
+        console.log(data.content.length)
+        // setOwnerItems(data);
+    }
+    useEffect(()=>{
+        getMyItems();
+    },[]);
+
     const [y, setY] = useState(new Value(0));
     return (
         <SafeAreaView style={{ flex: 1 }}>

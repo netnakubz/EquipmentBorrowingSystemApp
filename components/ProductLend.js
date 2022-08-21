@@ -18,7 +18,6 @@ const ProductLend = ({ item }) => {
     const [usedColors, setUsedColors] = useState([]);
     const navigation = useNavigation();
     const onClickItem = postId => {
-        // console.log(postId);
         navigation.navigate('DirectMessage', {
             postId: postId
         });
@@ -28,9 +27,7 @@ const ProductLend = ({ item }) => {
         const randNumber = Math.floor(Math.random() * colors.length);
         return colors[randNumber];
     }
-    useEffect(() => {
-        console.log(item);
-    }, [])
+
     return (
         <TouchableOpacity onPress={() => onClickItem(item.postId)}>
             <Card containerStyle={[styles.cardCnt, { backgroundColor: generateRandomColor() }]}>
