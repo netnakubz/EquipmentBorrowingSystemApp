@@ -31,19 +31,20 @@ export function PersonalScreen() {
     const [activeTab, setActiveTab] = useState("tab1");
     const screenHeight = Dimensions.get('window').height
     const [ownerItems, setOwnerItems] = useState();
-    const getMyItems = async()=>{
+    const getMyItems = async () => {
         const data = await API.getMyItems();
-        console.log(data.content.length)
-        // setOwnerItems(data);
+        setOwnerItems(data);
     }
-    useEffect(()=>{
+    useEffect(() => {
         getMyItems();
-    },[]);
+    }, []);
 
     const [y, setY] = useState(new Value(0));
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <StickyHeaderProfile items={ownerItems} />
+            {
+                ownerItems && <StickyHeaderProfile items={ownerItems} />
+            }
         </SafeAreaView>
     );
 }

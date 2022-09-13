@@ -4,11 +4,14 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { Section } from "../components/Section";
 import { DismissKeyboard } from "../components/DismissKeybord";
 import * as ImagePicker from 'expo-image-picker'
+import API from "../env/API";
 
 export const AddItem = ({ navigation }) => {
     const [lenName, setLenName] = useState(0);
     const [itemName, setItemName] = useState("");
     const [images, setImages] = useState([]);
+    const [itemType, setItemType] = useState([]);
+    const [selectedType, setSelectedType] = useState([]);
     const getTotalLength = useMemo(() => {
         return lenName;
     }, [lenName]);
@@ -16,6 +19,7 @@ export const AddItem = ({ navigation }) => {
         setItemName(e);
         setLenName(e.length);
     }
+
     const pickImage = async () => {
         // No permissions request is necessary for launching the image library
         let result = await ImagePicker.launchImageLibraryAsync({
@@ -37,13 +41,23 @@ export const AddItem = ({ navigation }) => {
         setImages(prev => [...prev]);
 
     }
-    const handleSaveBtn = () => {
 
+    const handleSaveBtn = () => {
+        API.saveItem(images);
     }
 
     const handlePressCategory = () => {
-        navigation.navigate("Category");
+        navigation.navigate("Category",
+            {
+                selectedType: selectedType,
+                setSelectedType: setSelectedType,
+                itemType: itemType
+            }
+        );
     }
+    useEffect(() => {
+        console.log(selectedType);
+    }, [selectedType]);
     const handlePressEquipmentSettings = () => {
         navigation.navigate("EquipmentSettings");
     }
@@ -73,6 +87,19 @@ export const AddItem = ({ navigation }) => {
         ))
     }, [images]);
 
+    useEffect(() => {
+        console.log(images);
+    }, [images]);
+
+    const getItemType = async () => {
+        const data = await API.getItemType();
+        setItemType(data);
+    }
+
+    useEffect(() => {
+        console.log("Called");
+        getItemType();
+    }, []);
     return (
         <DismissKeyboard>
             <View style={styles.container}>
@@ -134,7 +161,11 @@ export const AddItem = ({ navigation }) => {
                                             <Text style={{ color: "#FF6820" }}> *</Text>
                                         </View>
                                     </View>
-                                    <View>
+                                    <View style={{
+                                        flexDirection: 'row',
+                                        alignItems: 'center'
+                                    }}>
+                                        <Text>เลือกแล้ว {selectedType.length} หมวดหมู่</Text>
                                         <View>
                                             <Ionicons name="chevron-forward" size={30} color={"#B4B4B4"} />
                                         </View>

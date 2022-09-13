@@ -83,9 +83,52 @@ let API = {
         const data = await axios.get(`${API.domain}/api/v1/get/itemType`);
         return data.data;
     },
-    getMyItems:async()=>{
+    getMyItems: async () => {
         const data = await axios.get(`${API.domain}/api/v1/get/all/equipment`);
         return data.data;
+    },
+    getItemType: async () => {
+        const data = await axios.get(`${API.domain}/api/v1/getItemType`);
+        return data.data;
+    },
+    saveItem: async (images = []) => {
+        const formData = new FormData();
+        let temp = [];
+        images.forEach(image => {
+            let uriParts = image.uri.split('.');
+            let fileType = uriParts[uriParts.length - 1];
+            formData.append("file", {
+                uri: image.uri,
+                name: `photo.${uriParts}`,
+                type: `image/${fileType}`
+            });
+        })
+        let options = {
+            method: 'POST',
+            body: formData,
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'multipart/form-data',
+            },
+        };
+        console.log(fetch(`${API.domain}/api/v1/uploadEquipment`), options)
+        // const data = await axios.post(
+        //     `${API.domain}/api/v1/uploadEquipment`,
+        //     formData,
+        //     {
+        //         data: formData,
+        //         headers: {
+        //             Accept: "application/json",
+        //             "Content-Type": `multipart/form-data;`,
+        //         },
+        //         transformRequest: (data) => {
+        //             return data;
+        //         },
+        //     }).then(req => {
+        //         console.log("req", req);
+        //     }).catch(err => {
+        //         console.log(err)
+        //     })
     }
 };
 export default API;

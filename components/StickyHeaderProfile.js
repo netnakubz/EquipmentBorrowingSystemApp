@@ -6,6 +6,7 @@ import { StickyHeaderScrollView } from 'react-native-simple-sticky-header';
 import { Profile } from './Profile';
 import DATA from './data';
 import Hr from './Hr';
+import API from '../env/API';
 
 export default function App(props) {
     const { items } = props;
@@ -32,7 +33,7 @@ export default function App(props) {
                             justifyContent: 'space-between',
                         }}
                     >
-                        <Profile isOwnerProfile={isOwnerProfile} />
+                        <Profile isOwnerProfile={isOwnerProfile} items={items}/>
                     </View>
                 </View>
             )}
@@ -70,16 +71,16 @@ export default function App(props) {
             bottomHeight={180}
             scrollViewBackground={'#f7f7f7'}
         >
-            <View style={[styles.container, { top: isOwnerProfile ? - 65 : -10, height: isOwnerProfile ? itemHeight + 118 : itemHeight + 175 }]}>
+            <View style={[styles.container, { top: isOwnerProfile ? - 65 : -10, height: "10%" }]}>
                 <View style={[styles.row]}>
                     {showPage === "myItems" &&
                         items.map((item) => (
-                            <View style={[styles.col]} key={item.name}>
+                            <View style={[styles.col]} key={item.itemId}>
                                 <Image
                                     style={{ width: "100%", height: "100%" }}
                                     resizeMode='cover'
                                     source={{
-                                        uri: 'https://i.pinimg.com/736x/b1/16/0f/b1160fdd10b71b095c19366845fd6b3e.jpg'
+                                        uri: `${API.domain}/files/${item?.itemImg[0]?.location}`
                                     }}
                                 />
                             </View>
