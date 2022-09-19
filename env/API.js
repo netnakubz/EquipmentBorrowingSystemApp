@@ -97,38 +97,35 @@ let API = {
         images.forEach(image => {
             let uriParts = image.uri.split('.');
             let fileType = uriParts[uriParts.length - 1];
-            formData.append("file", {
+            formData.append("files", {
                 uri: image.uri,
                 name: `photo.${uriParts}`,
                 type: `image/${fileType}`
             });
+
         })
-        let options = {
-            method: 'POST',
-            body: formData,
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'multipart/form-data',
-            },
-        };
-        console.log(fetch(`${API.domain}/api/v1/uploadEquipment`), options)
-        // const data = await axios.post(
-        //     `${API.domain}/api/v1/uploadEquipment`,
-        //     formData,
-        //     {
-        //         data: formData,
-        //         headers: {
-        //             Accept: "application/json",
-        //             "Content-Type": `multipart/form-data;`,
-        //         },
-        //         transformRequest: (data) => {
-        //             return data;
-        //         },
-        //     }).then(req => {
-        //         console.log("req", req);
-        //     }).catch(err => {
-        //         console.log(err)
-        //     })
+        let body = ["quantity", "price", "name", "userId"];
+        body.forEach(b => {
+            formData.append(b, 10001);
+        });
+        formData.append("types", 1);
+        axios.post(
+            `${API.domain}/api/v1/uploadEquipment`,
+            formData,
+            {
+                data: formData,
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": `multipart/form-data;`,
+                },
+                transformRequest: (data) => {
+                    return data;
+                },
+            }).then(req => {
+                console.log("req", req);
+            }).catch(err => {
+                console.log(err)
+            })
     }
 };
 export default API;
