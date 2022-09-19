@@ -1,7 +1,7 @@
 import axios from "axios";
 
 let API = {
-    domain: "http://172.20.10.4:8080",
+    domain: "http://172.20.10.2:8080",
     temp: () => {
         console.log(API.domain);
     },

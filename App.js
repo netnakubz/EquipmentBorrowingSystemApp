@@ -49,7 +49,9 @@ import API from './env/API';
 import { SafeAreaProvider, initialWindowMetrics } from 'react-native-safe-area-context';
 import { FirstContract } from './pages/FirstContract';
 import { SecContract } from './pages/SecContract';
-
+import { Receipt } from './pages/Receipt';
+import { FirstPage } from './pages/FirstPage';
+import { SaveReceipt } from './pages/SaveReceipt';
 const MusicRoute = () => <Text style={{ color: "green" }}>Music</Text>;
 
 const AlbumsRoute = () => <Text style={{ color: "green" }}>Albums</Text>;
@@ -78,7 +80,6 @@ const BottomNav = () => {
   //   />
   // );
   const [homePage, setHomePage] = useState(true);
-
   return (
     <Tab.Navigator
       initialRouteName='Home'
@@ -136,6 +137,7 @@ export default function App() {
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
+
   // React.useEffect(() => {
   //   const getPermission = async () => {
   //     let result = await ImagePicker.getCameraPermissionsAsync();
@@ -147,6 +149,9 @@ export default function App() {
     <SafeAreaProvider initialMetrics={initialWindowMetrics}>
       <NavigationContainer>
         <Stack.Navigator >
+          <Stack.Screen component={SaveReceipt} name="SaveReceipt" />
+          <Stack.Screen component={FirstPage} name="firstPage" options={{ headerShown: false }} />
+          <Stack.Screen component={Receipt} name="ใบเสร็จ" />
           <Stack.Screen component={BottomNav} options={{ headerShown: false }} name="BottomNav" />
           <Stack.Screen component={ProductPage} name="ProductPage" />
           <Stack.Screen component={DirectMessage} name="DirectMessage" />
