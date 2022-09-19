@@ -4,16 +4,17 @@ import DropDownPicker from "react-native-dropdown-picker";
 import { useNavigation } from "@react-navigation/native";
 import Ionicons from '@expo/vector-icons/Ionicons';
 import ModalSelector from 'react-native-modal-selector'
-
+import { Section } from "../components/Section";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import API from "../env/API";
+import { DismissKeyboard } from "../components/DismissKeybord";
 export default function LendPage({ route }) {
     const [textValue, setTextValue] = useState("");
     const [open, setOpen] = useState(false);
     const [myItems, setMyItems] = useState();
     // const { val } = route.params;
     const { params } = route;
-    const [value, setValue] = useState();
+    const [value, setValue] = useState({});
     const handleText = (text) => {
         setTextValue(text);
     }
@@ -23,18 +24,18 @@ export default function LendPage({ route }) {
         setValue(val);
     }
     const handlePostBtn = async () => {
-        API.lendPost({
-            details: 'asdfasdf',
+        await API.lendPost({
+            details: textValue,
             itemId: value.itemId,
             userId: value.userId
-        }).then(() => {
-            navigation.goBack();
         })
+        navigation.goBack();
     }
     const getEquipment = async () => {
-        const data = await API.getEquipmentByUserId();
-        setMyItems(data);
-        setValue(data[0])
+        API.getEquipmentByUserId().then(data => {
+            setMyItems(data);
+            setValue(prev => data[0]);
+        });
     }
     const handleSelectItem = (selector) => {
         setValue(selector);
@@ -42,61 +43,82 @@ export default function LendPage({ route }) {
     useEffect(() => {
         getEquipment();
     }, []);
-
     useEffect(() => {
-        navigation.setOptions({
-            headerRight: () => (
-                <Button
-                    title="โพสต์"
-                    onPress={() => handlePostBtn()}
-                />
-            )
-        })
         setValue(params ? params.val : value);
     }, [params])
     return (
-        <View style={styles.container}>
-            <View style={styles.row}>
-                <ModalSelector
-                    onChange={(selector) => {
-                        handleSelectItem(selector);
-                    }}
-                    ref={selector => { selector = selector; }}
-                    data={myItems}
-                    keyExtractor={item => item.itemId}
-                    labelExtractor={item => item.name}
-                >
-                    <TouchableOpacity>
-                        <View style={[styles.dropdown]}>
-                            <View>
-                                <Text style={{ textAlign: 'center', color: "#777777" }}>{value?.name}</Text>
+        <DismissKeyboard>
+            <View style={styles.container}>
+                {value &&
+                    <View style={{ flex: 0.9 }}>
+                        <ModalSelector
+                            onChange={(selector) => {
+                                handleSelectItem(selector);
+                            }}
+                            ref={selector => { selector = selector; }}
+                            data={myItems}
+                            keyExtractor={item => item.item_ID}
+                            labelExtractor={item => item.name}
+                        >
+                            <Section marginTop={5}>
+                                <View style={[styles.row, { justifyContent: 'space-between', alignContent: 'center' }]}>
+                                    <View>
+                                        <Text style={{ color: "#464646" }}>อุปกรณ์*</Text>
+                                    </View>
+                                    <TouchableOpacity>
+                                        <View style={[styles.row, { alignContent: 'center', justifyContent: 'center' }]}>
+                                            <View>
+                                                <Text style={{ color: "#777777" }}>{value?.name}</Text>
+                                            </View>
+                                            <View>
+                                                <Ionicons name="chevron-forward-outline" size={20} />
+                                            </View>
+                                        </View>
+                                    </TouchableOpacity>
+                                </View>
+                            </Section>
+                        </ModalSelector>
+                        <Section marginTop={5}>
+                            <View style={styles.column}>
+                                <View style={[styles.row, { justifyContent: 'space-between' }]}>
+                                    <View>
+                                        <Text>รายละเอียดอุปกรณ์*</Text>
+                                    </View>
+                                    <View>
+                                        <Text>{textValue.length}/500</Text>
+                                    </View>
+                                </View>
+                                <View>
+                                    <TextInput
+                                        placeholder="Type text..."
+                                        multiline
+                                        numberOfLines={4}
+                                        onChangeText={(text) => handleText(text)}
+                                        value={textValue}
+                                        style={styles.textInput}
+                                        maxLength={500}
+                                        editable
+                                    />
+                                </View>
                             </View>
-                            <View style={{ right: 0, position: 'absolute' }}>
-                                <Ionicons size={20} name="chevron-down-circle-outline" />
-                            </View>
+                        </Section>
+                    </View>
+                }
+                <View style={{ flex: 0.1 }}>
+                    <View style={[styles.saveBtn, styles.row]}>
+                        <View style={{ width: '90%', height: '100%', justifyContent: 'center' }}>
+                            <TouchableOpacity
+                                style={styles.btnStyle}
+                                onPress={() => handlePostBtn()}
+                            >
+                                <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}>โพสต์</Text>
+                            </TouchableOpacity>
                         </View>
-                    </TouchableOpacity>
-                </ModalSelector>
 
-            </View>
-            <View style={styles.row}>
-                <View>
-                    <TextInput
-                        placeholder="Type text..."
-                        multiline
-                        numberOfLines={4}
-                        onChangeText={(text) => handleText(text)}
-                        value={textValue}
-                        style={styles.textInput}
-                        maxLength={500}
-                        editable
-                    />
+                    </View>
                 </View>
-                <View style={{ position: "absolute", bottom: 20, right: 50 }}>
-                    <Text>{textValue.length}/500</Text>
-                </View>
-            </View>
-        </View >
+            </View >
+        </DismissKeyboard>
     );
 }
 
@@ -116,7 +138,6 @@ const styles = StyleSheet.create({
     },
     row: {
         flexDirection: 'row',
-        justifyContent: 'center'
     },
     textInput: {
         height: 40,
@@ -126,6 +147,18 @@ const styles = StyleSheet.create({
         margin: 12,
         borderWidth: 1,
         padding: 10,
-    }
-
+    },
+    btnStyle: {
+        backgroundColor: "#FF6280",
+        borderRadius: 40,
+        height: 44,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    saveBtn: {
+        position: "absolute",
+        justifyContent: "center",
+        bottom: 10,
+        width: '100%',
+    },
 });

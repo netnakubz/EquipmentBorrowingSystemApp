@@ -87,8 +87,8 @@ export function ProductPage({ navigation, route }) {
                             <View style={{ flex: 0.9 }}>
                                 <View style={{ flexDirection: 'row', flexWrap: "wrap" }}>
                                     {item?.equipment.equipmentTypes.map(item =>
-                                        <TouchableOpacity>
-                                            <View key={item.typeModel.typeId}
+                                        <TouchableOpacity key={item.typeModel.typeId}>
+                                            <View
                                                 style={{
                                                     flexDirection: 'row',
                                                     justifyContent: 'space-between',

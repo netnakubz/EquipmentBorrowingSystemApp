@@ -43,7 +43,15 @@ export const AddItem = ({ navigation }) => {
     }
 
     const handleSaveBtn = () => {
-        API.saveItem(images);
+        API.saveItem(images, {
+            quantity: 3,
+            price: 20,
+            name: itemName,
+            userId: 10001,
+            types: selectedType
+        }).then(() => {
+            navigation.goBack()
+        });
     }
 
     const handlePressCategory = () => {
