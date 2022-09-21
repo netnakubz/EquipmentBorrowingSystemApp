@@ -9,7 +9,7 @@ import Hr from './Hr';
 import API from '../env/API';
 
 export default function App(props) {
-    const { items } = props;
+    const { items, setIsRefresh } = props;
     const itemHeight = 200 * (items.length / 3);
     const [showPage, setShowPage] = useState("myItems");
     const [isOwnerProfile, setIsOwnerProfile] = useState(true);
@@ -18,6 +18,9 @@ export default function App(props) {
     }
     return (
         <StickyHeaderScrollView
+            onRefresh={() => {
+                setIsRefresh(true);
+            }}
             top={() => (
                 <View
                     style={{
@@ -33,7 +36,7 @@ export default function App(props) {
                             justifyContent: 'space-between',
                         }}
                     >
-                        <Profile isOwnerProfile={isOwnerProfile} items={items}/>
+                        <Profile isOwnerProfile={isOwnerProfile} items={items} />
                     </View>
                 </View>
             )}

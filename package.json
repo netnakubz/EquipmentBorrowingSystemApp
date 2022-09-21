@@ -25,6 +25,7 @@
     "@tanstack/react-query": "^4.0.10",
     "axios": "^0.24.0",
     "dayjs": "*",
+    "eventemitter3": "^4.0.7",
     "expo": "~44.0.0",
     "expo-camera": "^12.2.0",
     "expo-constants": "~12.1.3",

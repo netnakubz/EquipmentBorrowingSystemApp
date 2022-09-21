@@ -1,7 +1,8 @@
 import axios from "axios";
+import { DeviceEventEmitter } from "react-native";
 
 let API = {
-    domain: "http://172.20.10.4:8080",
+    domain: "http://172.20.10.2:8080",
     temp: () => {
         console.log(API.domain);
     },
@@ -91,9 +92,8 @@ let API = {
         const data = await axios.get(`${API.domain}/api/v1/getItemType`);
         return data.data;
     },
-    saveItem: async (images = []) => {
+    saveItem: async (images = [], item) => {
         const formData = new FormData();
-        let temp = [];
         images.forEach(image => {
             let uriParts = image.uri.split('.');
             let fileType = uriParts[uriParts.length - 1];
@@ -102,13 +102,15 @@ let API = {
                 name: `photo.${uriParts}`,
                 type: `image/${fileType}`
             });
-
         })
         let body = ["quantity", "price", "name", "userId"];
         body.forEach(b => {
-            formData.append(b, 10001);
+            formData.append(b, item[b]);
         });
-        formData.append("types", 1);
+        formData.append("types", item.types);
+        item.serials.forEach(serial => {
+            formData.append("serials", serial);
+        });
         axios.post(
             `${API.domain}/api/v1/uploadEquipment`,
             formData,
@@ -122,9 +124,7 @@ let API = {
                     return data;
                 },
             }).then(req => {
-                console.log("req", req);
             }).catch(err => {
-                console.log(err)
             })
     }
 };

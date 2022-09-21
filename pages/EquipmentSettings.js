@@ -1,6 +1,6 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import React, { useState, useEffect, useRef } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, DeviceEventEmitter } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { TextInput } from "react-native-paper";
 import { Section } from "../components/Section";
@@ -10,11 +10,21 @@ export const EquipmentSettings = ({ navigation }) => {
     const [objects, setObjects] = useState([]);
     const scrollViewRef = useRef();
     const handleSaveBtn = () => {
+        let serials = [];
+
+        objects.forEach(o => serials.push(o.serial));
+        let object = {
+            quantity: countItem,
+            price: objects[0].price,
+            serials: serials
+        }
+        DeviceEventEmitter.emit("itemSettings", object);
+        navigation.goBack();
     }
-    const handlePressDelete = (key) => {
+    const handlePressDelete = (id) => {
         if (countItem > 1) {
             setCountItem(prev => --prev);
-            objects.splice(findIndexByKey(key), 1);
+            objects.splice(findIndexByKey(id), 1);
             setObjects(prev => [...prev]);
         }
     }
@@ -23,23 +33,23 @@ export const EquipmentSettings = ({ navigation }) => {
     }
     const handlePressAddItem = () => {
         setCountItem(prev => ++prev);
-        setObjects(prev => [...prev, { key: getKey(), serial: "", price: 0 }]);
+        setObjects(prev => [...prev, { id: getKey(), serial: "", price: 0 }]);
     }
-    const findIndexByKey = (key) => {
-        return objects.findIndex(item => item.key === key);
+    const findIndexByKey = (id) => {
+        return objects.findIndex(item => item.id === id);
     }
-    const handleSerialChange = (key, e) => {
+    const handleSerialChange = (id, e) => {
         let tempObjects = objects;
-        tempObjects[findIndexByKey(key)].serial = e;
+        tempObjects[findIndexByKey(id)].serial = e;
         setObjects(tempObjects);
     }
-    const handlePriceChange = (key, e) => {
+    const handlePriceChange = (id, e) => {
         let tempObjects = objects;
-        tempObjects[findIndexByKey(key)].price = e;
+        tempObjects[findIndexByKey(id)].price = e;
         setObjects(tempObjects);
     }
     useEffect(() => {
-        setObjects(prev => [...prev, { key: getKey(), serials: "", price: 0 }]);
+        setObjects(prev => [...prev, { id: getKey(), serial: "", price: 0 }]);
     }, []);
 
     return (
@@ -74,11 +84,11 @@ export const EquipmentSettings = ({ navigation }) => {
                     </View>
                     {
                         countItem && objects.map((el, i) => (
-                            <Section marginTop={3} key={el.key}>
+                            <Section marginTop={3} key={el.id}>
                                 <View style={[styles.row, { justifyContent: 'space-between', maxHeight: 20, alignItems: 'center' }]}>
                                     <View style={{ flex: 0.6, marginTop: 10 }}>
                                         <Input
-                                            onChangeText={(e) => handleSerialChange(el.key, e)}
+                                            onChangeText={(e) => handleSerialChange(el.id, e)}
                                             placeholder="HX1234ER"
                                             inputContainerStyle={{
                                                 borderBottomColor: "#00000000"
@@ -87,7 +97,7 @@ export const EquipmentSettings = ({ navigation }) => {
                                     </View>
                                     <View style={{ flex: 0.4, marginTop: 10 }}>
                                         <Input
-                                            onChangeText={(e) => handlePriceChange(el.key, e)}
+                                            onChangeText={(e) => handlePriceChange(el.id, e)}
                                             placeholder="20"
                                             keyboardType="numeric"
                                             containerStyle={{
@@ -102,7 +112,7 @@ export const EquipmentSettings = ({ navigation }) => {
                                     </View>
                                     <View>
                                         <TouchableOpacity
-                                            onPress={() => handlePressDelete(el.key)}
+                                            onPress={() => handlePressDelete(el.id)}
                                         >
                                             <Ionicons
                                                 name="remove"

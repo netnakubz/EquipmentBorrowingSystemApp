@@ -1,36 +1,14 @@
-import Ionicons from '@expo/vector-icons/Ionicons';
 import React, { useEffect, useRef, useState } from "react";
-import { View, Text, StyleSheet, Dimensions, TouchableOpacity, FlatList, RefreshControl, Animated, SafeAreaView, ScrollView } from "react-native";
-import Hr from '../components/Hr';
-import ListItemRent from "../components/ListItemRent";
+import { View, Text, StyleSheet, FlatList, Animated, SafeAreaView } from "react-native";
 import { useNavigation } from '@react-navigation/native';
-import { MyItem } from "./MyItem";
-import ProfileListItem from '../components/ProfileListItem';
-import { Profile } from '../components/Profile';
-import { AnimatedHeader } from '../components/AnimatedHeader';
-import DATA from '../components/data';
 const { Value } = Animated;
 import StickyHeaderProfile from '../components/StickyHeaderProfile';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import API from '../env/API';
-const Tab = createMaterialTopTabNavigator();
 
-const RenderItem = ({ item }) => {
-    return (
-        <View>
-            <Text>
-                {item.name}
-            </Text>
-        </View>
-    );
-}
 export function PersonalScreen() {
-    const offset = useRef(new Animated.Value(0)).current;
-    const navigation = useNavigation();
-    const [tabHeight, setTabHeight] = useState(0);
-    const [activeTab, setActiveTab] = useState("tab1");
-    const screenHeight = Dimensions.get('window').height
-    const [ownerItems, setOwnerItems] = useState();
+    const [ownerItems, setOwnerItems] = useState([]);
+    const [isRefresh, setIsRefresh] = useState(false);
     const getMyItems = async () => {
         const data = await API.getMyItems();
         setOwnerItems(data);
@@ -38,12 +16,17 @@ export function PersonalScreen() {
     useEffect(() => {
         getMyItems();
     }, []);
-
-    const [y, setY] = useState(new Value(0));
+    const wait = (timeout) => {
+        return new Promise(resolve => setTimeout(resolve, timeout));
+    }
+    useEffect(() => {
+        getMyItems();
+        wait(2000).then(() => setIsRefresh(false));
+    }, [isRefresh]);
     return (
         <SafeAreaView style={{ flex: 1 }}>
             {
-                ownerItems && <StickyHeaderProfile items={ownerItems} />
+                ownerItems && <StickyHeaderProfile items={ownerItems} setIsRefresh={setIsRefresh} />
             }
         </SafeAreaView>
     );

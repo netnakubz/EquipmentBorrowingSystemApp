@@ -1,17 +1,17 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { View, Text, StyleSheet, Image, Button, TouchableOpacity, TextInput, ScrollView } from "react-native";
+import { View, Text, StyleSheet, Image, Button, TouchableOpacity, TextInput, ScrollView, DeviceEventEmitter } from "react-native";
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { Section } from "../components/Section";
 import { DismissKeyboard } from "../components/DismissKeybord";
 import * as ImagePicker from 'expo-image-picker'
 import API from "../env/API";
-
 export const AddItem = ({ navigation }) => {
     const [lenName, setLenName] = useState(0);
     const [itemName, setItemName] = useState("");
     const [images, setImages] = useState([]);
     const [itemType, setItemType] = useState([]);
     const [selectedType, setSelectedType] = useState([]);
+    const [itemSettings, setItemSettings] = useState({});
     const getTotalLength = useMemo(() => {
         return lenName;
     }, [lenName]);
@@ -44,13 +44,14 @@ export const AddItem = ({ navigation }) => {
 
     const handleSaveBtn = () => {
         API.saveItem(images, {
-            quantity: 3,
-            price: 20,
+            quantity: parseInt(itemSettings.quantity),
+            price: parseInt(itemSettings.price),
+            serials: itemSettings.serials,
             name: itemName,
             userId: 10001,
-            types: selectedType
+            types: selectedType,
         }).then(() => {
-            navigation.goBack()
+            // navigation.goBack()
         });
     }
 
@@ -64,11 +65,16 @@ export const AddItem = ({ navigation }) => {
         );
     }
     useEffect(() => {
-        console.log(selectedType);
     }, [selectedType]);
     const handlePressEquipmentSettings = () => {
         navigation.navigate("EquipmentSettings");
     }
+    const itemSetting = () => {
+        DeviceEventEmitter.addListener("itemSettings", (event) => setItemSettings(event));
+    }
+    useEffect(() => {
+        itemSetting();
+    }, []);
     const getImages = useMemo(() => {
         return images.map((e, index) => (
             <View key={e.key} style={{ padding: 3 }}>
@@ -96,7 +102,6 @@ export const AddItem = ({ navigation }) => {
     }, [images]);
 
     useEffect(() => {
-        console.log(images);
     }, [images]);
 
     const getItemType = async () => {
@@ -105,7 +110,6 @@ export const AddItem = ({ navigation }) => {
     }
 
     useEffect(() => {
-        console.log("Called");
         getItemType();
     }, []);
     return (

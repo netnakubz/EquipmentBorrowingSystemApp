@@ -16,7 +16,7 @@ const bannerImage = require('../assets/snack-icon.png');
 const BANNER_HEIGHT = 180;
 import Ionicons from '@expo/vector-icons/Ionicons';
 
-export const Profile = ({ isOwnerProfile,items }) => {
+export const Profile = ({ isOwnerProfile, items }) => {
     const navigation = useNavigation();
     const [profile, setProfile] = useState({
         userId: 10001,
