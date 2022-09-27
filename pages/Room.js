@@ -11,7 +11,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import API from "../env/API";
 export default function Room({ navigation }) {
     const [rooms, setRoom] = useState([]);
-    const [selectedValue, setSelectedValue] = useState(10013);
+    const [selectedValue, setSelectedValue] = useState(10002);
     const deleteBtn = () => {
         console.log("delete")
     }
@@ -91,7 +91,7 @@ export default function Room({ navigation }) {
     return (
         <ScrollView showsVerticalScrollIndicator={false}>
             <View>
-                <View style={{ flexDirection: 'row', justifyContent: "space-evenly" }}>
+                {/* <View style={{ flexDirection: 'row', justifyContent: "space-evenly" }}>
                     <TouchableOpacity onPress={() => setSelectedValue(10001)} style={{ width: "100%" }}>
                         <View style={{ backgroundColor: 'green', height: 100, justifyContent: 'center', alignItems: 'center' }}>
                             <Text>10001</Text>
@@ -102,7 +102,7 @@ export default function Room({ navigation }) {
                             <Text>10002</Text>
                         </View>
                     </TouchableOpacity>
-                </View>
+                </View> */}
                 {/* <TouchableOpacity onPress={() => setSelectedValue(10001)}>
                     <View style={{ width: 300, height: 300 }}>
                         <Text>10001</Text>

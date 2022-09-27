@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, TextInput, Dimensions, SafeAreaView, ScrollView, KeyboardAvoidingView, TouchableWithoutFeedback, Modal, Touchable } from "react-native";
+import { View, Text, StyleSheet, TextInput, Dimensions, SafeAreaView, ScrollView, KeyboardAvoidingView, TouchableWithoutFeedback, Modal, Touchable, Alert } from "react-native";
 import { Button } from "react-native-elements";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Section } from "../components/Section";
@@ -8,6 +8,9 @@ import ModalSelector from 'react-native-modal-selector'
 import { Input } from "react-native-elements";
 import { ContractModal } from "../components/ContractModal";
 import DateTimePicker from '@react-native-community/datetimepicker';
+import API from "../env/API";
+import { v4 as uuidv4 } from "uuid";
+import 'react-native-get-random-values';
 import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
 export const FirstContract = ({ navigation, route }) => {
@@ -22,7 +25,7 @@ export const FirstContract = ({ navigation, route }) => {
     const [endDate, setEndDate] = useState(new Date());
     const [fineLate, setFineLate] = useState();
     const [fineBroken, setFineBroken] = useState();
-    const [editStatus, setEditStatus] = useState("");
+    const [editStatus, setEditStatus] = useState(false);
     const [itemId, setItemId] = useState("");
     const [totalRentModalVisible, setTotalRentModalVisible] = useState(false);
     const [priceModalVisible, setPriceModalVisible] = useState(false);
@@ -30,7 +33,12 @@ export const FirstContract = ({ navigation, route }) => {
     const [fineBrokenModalVisible, setFineBrokenModalVisible] = useState(false);
     const [startDateModalVisible, setStartDateModalVisible] = useState(false);
     const [endDateModalVisible, setEndDateModalVisible] = useState(false);
-    const { setNewContract, newContract, values, save } = route.params;
+    const [editAble, setEditAble] = useState(false);
+    const [room, setRoom] = useState([]);
+    const [roomNumber, setRoomNumber] = useState(null);
+    const [contract, setContract] = useState(null);
+    const [equipments, setEquipments] = useState([]);
+    const { setNewContract, newContract, values, save, roomId } = route.params;
     const [show, setShow] = useState(false);
     const createPDF = async () => {
         const html = `
@@ -63,18 +71,20 @@ export const FirstContract = ({ navigation, route }) => {
     }
     const handleSendContract = () => {
         let contract = {
-            userIdOwner: userIdOwner,
-            userIdBorrower: userIdBorrower,
-            equipment: equipment,
+            room: roomNumber,
+            item: equipment.itemId,
             totalRent: totalRent,
             price: price,
             startDate: startDate,
             endDate: endDate,
             fineLate: fineLate,
-            fineBroken: fineBroken
+            fineBroken: fineBroken,
+            creator: userIdOwner.userId,
+            editStatus: false,
+            editAble: null,
         }
         setNewContract(contract);
-        navigation.goBack();
+        // navigation.goBack();
     }
     const showMode = (currentMode) => {
         if (Platform.OS === 'android') {
@@ -84,50 +94,53 @@ export const FirstContract = ({ navigation, route }) => {
         setMode(currentMode);
     };
     const getEquipment = () => {
+
     }
     const setValues = async () => {
-        if (values) {
-            let temp = JSON.parse(values);
-
-            setEquipment(temp.equipment)
-            setUserIdOwner(temp.userIdOwner)
-            setUesrIdBorrower(temp.userIdBorrower)
-            setTotalRent(temp.totalRent)
-            setStartDate(new Date(temp.startDate))
-            setEndDate(new Date(temp.endDate))
-            setPrice(temp.price)
-            setFineLate(temp.fineLate)
-            setFineBroken(temp.fineBroken)
+        const contract = await API.getContract(values);
+        const owner = contract.room.userOne.userId === contract.equipmentModel.userId ? contract.room.userOne : contract.room.userTwo;
+        const borrower = contract.room.userOne.userId !== contract.equipmentModel.userId ? contract.room.userOne : contract.room.userTwo;
+        if (contract) {
+            setContract(contract);
+            setEquipment(contract.equipmentModel);
+            setUserIdOwner(owner);
+            setUesrIdBorrower(borrower);
+            setTotalRent(contract.totalRent)
+            setStartDate(new Date(contract.startDate))
+            setEndDate(new Date(contract.endDate))
+            setPrice(contract.price)
+            setFineLate(contract.fineLate)
+            setFineBroken(contract.fineBroken)
+            setEditAble(contract.editAble);
+            setEditStatus(contract.editStatus);
         }
+        console.log(contract.editStatus);
+    }
+    //get within room model
+    const getRoom = async (roomId) => {
+        const data = await API.getRoom(roomId);
+        const temp = [];
+        temp.push(data.userOne);
+        temp.push(data.userTwo);
+        setRoom(prev => [...temp]);
     }
     useEffect(() => {
-        setValues();
-    }, []);
-    const data = [
-        { id: 10001, name: "สมชาย รักดี" },
-        { id: 10002, name: 'สมศรี สายทอง' },
-    ];
-    const equipments = [
-        {
-            id: 1,
-            name: "arduino",
-            owner: 10001,
-            total: 3
-        },
-        {
-            id: 2,
-            name: "test",
-            owner: 10002,
-            total: 5
+        if (values)
+            setValues();
+        else {
+            getRoom(roomId);
+            setRoomNumber(roomId);
         }
-    ]
+    }, []);
 
-    const handleSelectOwner = (selector) => {
-        if (selector.id !== userIdOwner.id)
+    const handleSelectOwner = async (selector) => {
+        if (selector.userId !== userIdOwner.userId)
             setEquipment({});
         setUserIdOwner(selector)
-        let value = selector.id === data[0].id ? 1 : 0;
-        setUesrIdBorrower(data[value]);
+        let value = selector.userId === room[0].userId ? 1 : 0;
+        setUesrIdBorrower(room[value]);
+        const e = await API.getEquipmentByUserId(selector.userId);
+        setEquipments(e);
     }
     const handlePrice = (e) => {
         setPrice(e);
@@ -136,7 +149,7 @@ export const FirstContract = ({ navigation, route }) => {
         setEquipment(e);
     }
     const handleTotalRent = (e) => {
-        if (e <= equipment.total)
+        if (e <= equipment.quantity)
             setTotalRent(e);
     }
     const handleFineLate = (e) => {
@@ -147,11 +160,28 @@ export const FirstContract = ({ navigation, route }) => {
     }
     const handleStartDate = (event, selectedDate) => {
         const currentDate = selectedDate;
-        setStartDate(currentDate);
+        if (currentDate < new Date()) {
+            Alert.alert("ข้อมูลไม่ถูกต้อง");
+            setStartDate(new Date());
+        } else {
+            setStartDate(currentDate);
+            if (startDate > endDate) {
+                setEndDate(startDate);
+            }
+        }
     }
+
     const handleEndDate = (event, selectedDate) => {
         const currentDate = selectedDate;
-        setEndDate(currentDate);
+        if (currentDate < startDate) {
+            Alert.alert("ข้อมูลไม่ถูกต้อง")
+            setEndDate(startDate);
+        } else {
+            setEndDate(currentDate);
+        }
+    }
+    const acceptTheContract = () => {
+        API.acceptTheContract(contract.contractId);
     }
     return (
         <SafeAreaView style={{ flex: 1 }}>
@@ -160,30 +190,35 @@ export const FirstContract = ({ navigation, route }) => {
                     flexGrow: 1,
                 }} >
                 <View style={{ flex: 1 }}>
-                    <ModalSelector
-                        onChange={(selector) => {
-                            handleSelectOwner(selector)
-                        }}
-                        ref={selector => { selector = selector; }}
-                        data={data}
-                        keyExtractor={item => item.id}
-                        labelExtractor={item => item.name}
-                    >
-                        <TouchableOpacity>
-                            <Section marginTop={10}>
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                        <Text style={{ fontSize: 16 }}>เจ้าของ</Text>
-                                        <Text style={{ color: "#FF6820" }}> *</Text>
+                    {room &&
+                        <ModalSelector
+                            disabled={save ? false : true}
+                            onChange={(selector) => {
+                                handleSelectOwner(selector)
+                            }}
+                            ref={selector => { selector = selector; }}
+                            data={room}
+                            keyExtractor={item => uuidv4()}
+                            labelExtractor={item => item.name}
+                        >
+                            <TouchableOpacity>
+                                <Section marginTop={10}>
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                            <Text style={{ fontSize: 16 }}>เจ้าของ</Text>
+                                            <Text style={{ color: "#FF6820" }}> *</Text>
+                                        </View>
+                                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                            <Text>{userIdOwner.name}</Text>
+                                            {save &&
+                                                <Ionicons name="chevron-forward" size={30} color={"#B4B4B4"} />
+                                            }
+                                        </View>
                                     </View>
-                                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                        <Text>{userIdOwner.name}</Text>
-                                        <Ionicons name="chevron-forward" size={30} color={"#B4B4B4"} />
-                                    </View>
-                                </View>
-                            </Section>
-                        </TouchableOpacity>
-                    </ModalSelector>
+                                </Section>
+                            </TouchableOpacity>
+                        </ModalSelector>
+                    }
                     <Section marginTop={2}>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -199,12 +234,13 @@ export const FirstContract = ({ navigation, route }) => {
                         <Text style={{ textAlignVertical: 'center' }}>การเช่า</Text>
                     </View>
                     <ModalSelector
+                        disabled={save ? false : true}
                         onChange={(selector) => {
                             handleItemPick(selector)
                         }}
                         ref={selector => { selector = selector; }}
-                        data={equipments.filter(item => item.owner === userIdOwner.id)}
-                        keyExtractor={item => item.id}
+                        data={equipments.filter(item => item.userId === userIdOwner.userId)}
+                        keyExtractor={item => uuidv4()}
                         labelExtractor={item => item.name}
                     >
                         <TouchableOpacity>
@@ -216,25 +252,27 @@ export const FirstContract = ({ navigation, route }) => {
                                     </View>
                                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                         <Text style={{ fontSize: 16 }}>{equipment.name}</Text>
-                                        <Ionicons name="chevron-forward" size={30} color={"#B4B4B4"} />
+                                        {save &&
+                                            <Ionicons name="chevron-forward" size={30} color={"#B4B4B4"} />
+                                        }
                                     </View>
                                 </View>
                             </Section>
                         </TouchableOpacity>
                     </ModalSelector>
-                    {equipment.total &&
+                    {equipment &&
                         <ContractModal
                             visible={totalRentModalVisible}
                             setVisible={setTotalRentModalVisible}
                             defaultValue={totalRent}
                             placeholder={"จำนวนที่เช่า"}
                             handleItem={handleTotalRent}
-                            totalItem={equipment.total}
+                            totalItem={equipment.quantity}
                         />
                     }
                     <TouchableOpacity
                         onPress={() => {
-                            setTotalRentModalVisible(true);
+                            setTotalRentModalVisible(save ? true : false);
                         }}
                     >
                         <Section >
@@ -245,7 +283,9 @@ export const FirstContract = ({ navigation, route }) => {
                                 </View>
                                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                     <Text style={{ fontSize: 16 }}>{totalRent}</Text>
-                                    <Ionicons name="chevron-forward" size={30} color={"#B4B4B4"} />
+                                    {save &&
+                                        <Ionicons name="chevron-forward" size={30} color={"#B4B4B4"} />
+                                    }
                                 </View>
                             </View>
                         </Section>
@@ -258,7 +298,7 @@ export const FirstContract = ({ navigation, route }) => {
                         handleItem={handlePrice}
                     />
                     <TouchableOpacity
-                        onPress={() => setPriceModalVisible(true)}
+                        onPress={() => setPriceModalVisible(save ? true : false)}
                     >
                         <Section >
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -268,7 +308,9 @@ export const FirstContract = ({ navigation, route }) => {
                                 </View>
                                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                     <Text style={{ fontSize: 16 }}>{price}</Text>
-                                    <Ionicons name="chevron-forward" size={30} color={"#B4B4B4"} />
+                                    {save &&
+                                        <Ionicons name="chevron-forward" size={30} color={"#B4B4B4"} />
+                                    }
                                 </View>
                             </View>
                         </Section>
@@ -284,7 +326,7 @@ export const FirstContract = ({ navigation, route }) => {
                         handleItem={handleFineLate}
                     />
                     <TouchableOpacity
-                        onPress={() => setFineLateModalVisible(true)}
+                        onPress={() => setFineLateModalVisible(save ? true : false)}
                     >
                         <Section >
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -294,7 +336,9 @@ export const FirstContract = ({ navigation, route }) => {
                                 </View>
                                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                     <Text style={{ fontSize: 16 }}>{fineLate}</Text>
-                                    <Ionicons name="chevron-forward" size={30} color={"#B4B4B4"} />
+                                    {save &&
+                                        <Ionicons name="chevron-forward" size={30} color={"#B4B4B4"} />
+                                    }
                                 </View>
                             </View>
                         </Section>
@@ -307,7 +351,7 @@ export const FirstContract = ({ navigation, route }) => {
                         handleItem={handleFineBroken}
                     />
                     <TouchableOpacity
-                        onPress={() => setFineBrokenModalVisible(true)}
+                        onPress={() => setFineBrokenModalVisible(save ? true : false)}
                     >
                         <Section >
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -317,7 +361,9 @@ export const FirstContract = ({ navigation, route }) => {
                                 </View>
                                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                     <Text style={{ fontSize: 16 }}>{fineBroken}</Text>
-                                    <Ionicons name="chevron-forward" size={30} color={"#B4B4B4"} />
+                                    {save &&
+                                        <Ionicons name="chevron-forward" size={30} color={"#B4B4B4"} />
+                                    }
                                 </View>
                             </View>
                         </Section>
@@ -325,7 +371,6 @@ export const FirstContract = ({ navigation, route }) => {
                     <View style={{ flexDirection: 'row', height: 30, alignItems: 'center' }}>
                         <Text style={{ textAlignVertical: 'center' }}>ระยะเวลา</Text>
                     </View>
-
                     <ContractModal
                         visible={startDateModalVisible}
                         setVisible={setStartDateModalVisible}
@@ -343,20 +388,25 @@ export const FirstContract = ({ navigation, route }) => {
                                     <Text style={{ color: "#FF6820" }}> *</Text>
                                 </View>
                                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                    <DateTimePicker
-                                        style={{ width: 100 }}
-                                        testID="dateTimePicker"
-                                        value={startDate}
-                                        mode={"date"}
-                                        is24Hour={true}
-                                        onChange={handleStartDate}
-                                    />
-                                    <Ionicons name="chevron-forward" size={30} color={"#B4B4B4"} />
+                                    {!save ?
+                                        <Text>{startDate.getDate() + "/" + startDate.getMonth() + "/" + startDate.getFullYear()}</Text>
+                                        :
+                                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                            <DateTimePicker
+                                                style={{ width: 100 }}
+                                                testID="dateTimePicker"
+                                                value={startDate}
+                                                mode={"date"}
+                                                is24Hour={true}
+                                                onChange={handleStartDate}
+                                            />
+                                            <Ionicons name="chevron-forward" size={30} color={"#B4B4B4"} />
+                                        </View>
+                                    }
                                 </View>
                             </View>
                         </Section>
                     </TouchableOpacity>
-
                     <TouchableOpacity
 
                     >
@@ -367,55 +417,86 @@ export const FirstContract = ({ navigation, route }) => {
                                     <Text style={{ color: "#FF6820" }}> *</Text>
                                 </View>
                                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                    <DateTimePicker
-                                        style={{ width: 100 }}
-                                        testID="dateTimePicker"
-                                        value={endDate}
-                                        mode={"date"}
-                                        is24Hour={true}
-                                        onChange={handleEndDate}
-                                    />
-                                    <Ionicons name="chevron-forward" size={30} color={"#B4B4B4"} />
+                                    {!save ?
+                                        <Text>{endDate.getDate() + "/" + endDate.getMonth() + "/" + endDate.getFullYear()}</Text>
+                                        :
+                                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                            <DateTimePicker
+                                                style={{ width: 100 }}
+                                                testID="dateTimePicker"
+                                                value={endDate}
+                                                mode={"date"}
+                                                is24Hour={true}
+                                                onChange={handleEndDate}
+                                            />
+                                            <Ionicons name="chevron-forward" size={30} color={"#B4B4B4"} />
+                                        </View>
+
+                                    }
+
                                 </View>
                             </View>
                         </Section>
                     </TouchableOpacity>
                 </View >
             </ScrollView>
-            {save ?
-                <View style={{ backgroundColor: 'white', height: 70, justifyContent: 'center', alignItems: 'center' }}>
-                    <TouchableOpacity
-                        onPress={() => handleSendContract()}
-                    >
-                        <View style={{
-                            backgroundColor: "#FF6280",
-                            width: 300,
-                            height: 50,
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            borderRadius: 30
-                        }}>
-                            <Text style={{ color: 'white', fontSize: 20 }}>บันทึกและเสนอ</Text>
+            {
+                save ?
+                    <View style={{ backgroundColor: 'white', height: 70, justifyContent: 'center', alignItems: 'center' }}>
+                        <TouchableOpacity
+                            onPress={() => handleSendContract()}
+                        >
+                            <View style={{
+                                backgroundColor: "#FF6280",
+                                width: 300,
+                                height: 50,
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                borderRadius: 30
+                            }}>
+                                <Text style={{ color: 'white', fontSize: 20 }}>บันทึกและเสนอ</Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                    :
+                    editAble ?
+                        <View style={{ backgroundColor: 'white', height: 70, justifyContent: 'center', alignItems: 'center' }}>
+                            <TouchableOpacity
+                                onPress={() => acceptTheContract()}
+                            >
+                                <View style={{
+                                    backgroundColor: "#FF6280",
+                                    width: 300,
+                                    height: 50,
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    borderRadius: 30
+                                }}>
+                                    <Text style={{ color: 'white', fontSize: 20 }}>เห็นชอบสัญญานี้</Text>
+                                </View>
+                            </TouchableOpacity>
                         </View>
-                    </TouchableOpacity>
-                </View>
-                :
-                <View style={{ backgroundColor: 'white', height: 70, justifyContent: 'center', alignItems: 'center' }}>
-                    <TouchableOpacity
-                        onPress={() => createPDF()}
-                    >
-                        <View style={{
-                            backgroundColor: "#FF6280",
-                            width: 300,
-                            height: 50,
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            borderRadius: 30
-                        }}>
-                            <Text style={{ color: 'white', fontSize: 20 }}>พิมพ์</Text>
-                        </View>
-                    </TouchableOpacity>
-                </View>
+                        :
+                        editStatus ?
+                            <View style={{ backgroundColor: 'white', height: 70, justifyContent: 'center', alignItems: 'center' }}>
+                                <TouchableOpacity
+                                    onPress={() => createPDF()}
+                                >
+                                    <View style={{
+                                        backgroundColor: "#FF6280",
+                                        width: 300,
+                                        height: 50,
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                        borderRadius: 30
+                                    }}>
+                                        <Text style={{ color: 'white', fontSize: 20 }}>พิมพ์</Text>
+                                    </View>
+                                </TouchableOpacity>
+                            </View>
+                            :
+                            <View>
+                            </View>
             }
 
         </SafeAreaView >

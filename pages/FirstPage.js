@@ -1,12 +1,31 @@
 import React, { useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import * as Google from "expo-google-app-auth";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import API from '../env/API';
 export const FirstPage = ({ navigation }) => {
-    useEffect(() => {
-        if (!true) {
-            navigation.navigate("BottomNav");
+    const signInWithGoogleAsync = async () => {
+        try {
+            const result = await Google.logInAsync({
+                iosClientId: '777537428201-gtom0i1vt6d6ji3prin6nr7qfrkt6bp7.apps.googleusercontent.com',
+                scopes: ['profile', 'email'],
+                responseType: "code",
+                shouldAutoExchangeCode: false,
+                extraParams: {
+                    access_type: "offline"
+                },
+                
+            });
+            if (result.type === 'success') {
+                AsyncStorage.setItem("token", result.idToken);
+                console.log(result)
+            }
+        } catch (e) {
+            console.log(e);
         }
-    }, []);
+    }
+
     return (
         <View style={styles.container}>
             <View style={[styles.column, { justifyContent: 'center' }]}>
@@ -50,7 +69,9 @@ export const FirstPage = ({ navigation }) => {
                             </Text>
                         </View>
                         <View style={[styles.row, { justifyContent: 'center', marginTop: 15 }]}>
-                            <TouchableOpacity>
+                            <TouchableOpacity
+                                onPress={() => signInWithGoogleAsync()}
+                            >
                                 <View style={[styles.google]}>
                                     <Text style={{
                                         textAlign: 'center',

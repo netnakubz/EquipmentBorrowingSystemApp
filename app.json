@@ -19,7 +19,7 @@
     ],
     "ios": {
       "bundleIdentifier": "equipment.borrowing.app",
-      "supportsTablet": true
+      "googleServicesFile": "./env/GoogleService-Info.plist"
     },
     "android": {
       "package": "equipment.borrowing.app",
@@ -32,6 +32,7 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
+      "@react-native-google-signin/google-signin",
       [
         "expo-image-picker",
         {

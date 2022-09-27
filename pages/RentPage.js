@@ -11,8 +11,8 @@ import { useNavigation } from '@react-navigation/native';
 
 export const RentPage = () => {
     const [postDetails, setPostDetails] = useState("");
-    const [itemPrice, setItemPrice] = useState("");
-    const [itemDate, setItemDate] = useState("");
+    const [itemPrice, setItemPrice] = useState(0);
+    const [itemDate, setItemDate] = useState(0);
     const [descModalVisible, setDescModalVisible] = useState(false);
     const [priceModalVisible, setPriceModalVisible] = useState(false);
     const [dateModalVisible, setDateModalVisible] = useState(false);

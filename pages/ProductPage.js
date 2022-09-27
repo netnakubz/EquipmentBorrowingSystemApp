@@ -18,7 +18,8 @@ export function ProductPage({ navigation, route }) {
         name: "สมชาย รักดี",
         email: "6210210000@psu.ac.th"
     })
-    const handleLikeClick = () => {
+    const handleLikeClick = (postId) => {
+        API.like(postId);
         setIsLiked(!isLiked);
     }
     const contactBtn = async () => {
@@ -33,6 +34,10 @@ export function ProductPage({ navigation, route }) {
             data: item
         })
     }
+    const liked = async (post) => {
+        const data = await API.isLiked(post.postId);
+        setIsLiked(data);
+    }
     const getPost = async () => {
         const data = await API.getPostById(postId);
         setItem(data);
@@ -41,7 +46,7 @@ export function ProductPage({ navigation, route }) {
             temp.push(`${API.domain}/files/${img.location}`);
         })
         setItemImg(temp);
-
+        await liked(data);
     }
     useEffect(() => {
         navigation.setOptions({
@@ -115,7 +120,7 @@ export function ProductPage({ navigation, route }) {
                             <View style={{ flex: 0.1 }}>
                                 <View>
                                     <TouchableOpacity
-                                        onPress={() => { handleLikeClick() }}
+                                        onPress={() => { handleLikeClick(item.postId) }}
                                     >
                                         <Ionicons name={isLiked ? "heart" : "heart-outline"} size={30} color={isLiked ? "#FF6280" : "black"} />
                                     </TouchableOpacity>

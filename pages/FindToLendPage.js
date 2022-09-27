@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import {
     View,
     StyleSheet,
-    FlatList
+    FlatList,
+    RefreshControl
 } from 'react-native';
 
 import { Dropdown } from 'react-native-element-dropdown';
@@ -23,11 +24,9 @@ import { FloatingBtn } from '../components/FloatingBtn';
 import API from '../env/API';
 
 export const FindToLendPage = () => {
-    const insets = useSafeAreaInsets();
     const [searchText, setSearchText] = useState('');
-    const [typeOfItem, setTypeOfItem] = useState([]);
-    const [value, setValue] = useState(null);
-    const [selectedType, setSelectedType] = useState('all');
+    const [reFreshing, setRefreshing] = useState(false);
+    const [fetching, setFetching] = useState(false);
     const [visible, setVisible] = useState(false);
     const [content, setContent] = useState('All');
     const [post, setPost] = useState();
@@ -53,7 +52,6 @@ export const FindToLendPage = () => {
     const handleLendBtn = () => {
         navigation.navigate("RentPage");
         setVisible(false);
-
     }
     const handleRentBtn = () => {
         navigation.navigate("RentPage");
@@ -62,15 +60,19 @@ export const FindToLendPage = () => {
     const wait = (timeout) => {
         return new Promise(resolve => setTimeout(resolve, timeout));
     }
-    const _onReFresh = () => {
-        setFetchingData(true);
-        wait(1000).then(() => setFetchingData(false));
+    const _onReFresh = async () => {
+        reFreshing(true);
+        const data = await API.getPostFindToLend(0, totalData);
+        if (data !== post)
+            setPost(data.content);
+        wait(1000).then(() => setRefreshing(false));
     }
     const _NewData = async () => {
         setFetching(true);
         setTotalData(totalData + 10);
         const data = await API.getPostFindToLend(0, totalData);
-        setPost(data);
+        if (data !== post)
+            setPost(data.content);
         wait(1000).then(() => setFetching(false));
     }
     return (
@@ -84,15 +86,27 @@ export const FindToLendPage = () => {
                     contentContainerStyle={{
                         flexGrow: 1
                     }}
+                    onMomentumScrollEnd={async () => {
+                        await _NewData();
+                    }}
+                    initialNumToRender={10}
                     columnWrapperStyle={{ flexWrap: 'wrap' }}
                     numColumns={2}
                     renderItem={({ item }) => {
                         return (
-                            <View style={{ width: '50%', flex: 1 }} key={item.postId} >
+                            <View
+                                style={{ width: '50%' }}
+                                key={item.postId} >
                                 <ProductLend item={item} />
                             </View>
                         );
                     }}
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={reFreshing}
+                            onRefresh={_onReFresh}
+                        />
+                    }
                     keyExtractor={(item) => item.postId}
                     ListFooterComponent={<View style={{ height: 50 }} />}
                 />

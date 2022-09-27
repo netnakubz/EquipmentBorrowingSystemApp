@@ -48,16 +48,16 @@ export const FindToBorrowPage = ({ content, setContent, isHomePage, setHomePage 
     const wait = (timeout) => {
         return new Promise(resolve => setTimeout(resolve, timeout));
     }
-    const _onReFresh = () => {
+    const _onReFresh = async () => {
         setFetchingData(true);
+        const data = await API.getPostFindToBorrow(0, 10);
+        setPost(data);
         wait(1000).then(() => setFetchingData(false));
     }
     const _NewData = async () => {
-        setFetching(true);
         setTotalData(totalData + 10);
         const data = await API.getPostFindToBorrow(0, totalData);
         setPost(data);
-        wait(1000).then(() => setFetching(false));
     }
 
     const navigation = useNavigation();
@@ -65,26 +65,28 @@ export const FindToBorrowPage = ({ content, setContent, isHomePage, setHomePage 
         <View style={styles.container} containerStyle={{ background: 'transparent' }}>
             {post ?
                 <FlatList
-                    ListHeaderComponent={<View>
-                        <HomePageHeader
-                            content={content}
-                            setValue={setValue}
-                            value={value}
-                            selectedType={selectedType}
-                            setSelectedType={setSelectedType}
-                            page="FindToBorrow"
-                        />
-                        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-                            {contentType.map((item, index) => (<TouchableOpacity
-                                key={index}
-                                onPress={() => handleContent(item.type)}>
-                                <View
-                                    style={[styles.contentType, { backgroundColor: item.color }]}>
-                                    <Text style={styles.contentText}>{item.type}</Text>
-                                </View>
-                            </TouchableOpacity>))}
-                        </ScrollView>
-                    </View>}
+                    ListHeaderComponent={
+                        <View>
+                            <HomePageHeader
+                                content={content}
+                                setValue={setValue}
+                                value={value}
+                                selectedType={selectedType}
+                                setSelectedType={setSelectedType}
+                                page="FindToBorrow"
+                            />
+                            <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+                                {contentType.map((item, index) => (<TouchableOpacity
+                                    key={index}
+                                    onPress={() => handleContent(item.type)}>
+                                    <View
+                                        style={[styles.contentType, { backgroundColor: item.color }]}>
+                                        <Text style={styles.contentText}>{item.type}</Text>
+                                    </View>
+                                </TouchableOpacity>))}
+                            </ScrollView>
+                        </View>
+                    }
                     ref={flatListRef}
                     showsVerticalScrollIndicator={false}
                     nestedScrollEnabled={true}
@@ -118,26 +120,16 @@ export const FindToBorrowPage = ({ content, setContent, isHomePage, setHomePage 
                     keyExtractor={(item) => item.postId}
                     numColumns={2}
                     initialNumToRender={10}
-                    // refreshControl={<RefreshControl
-                    //     style={{ bottom: 0 }}
-                    //     refreshing={fetchingData}
-                    //     onRefresh={_onReFresh}
-                    // />}
+                    refreshControl={<RefreshControl
+                        refreshing={fetchingData}
+                        onRefresh={_onReFresh}
+                    />}
                     onMomentumScrollEnd={async () => {
                         await _NewData()
                     }}
                     ListFooterComponent={() => {
                         return (<View>
-                            {fetching ? (<View style={{ height: 100, flexDirection: 'row', justifyContent: 'center' }}>
-                                <LottieView
-                                    autoPlay
-                                    style={{
-                                        width: 30, backgroundColor: '#eee',
-                                    }}
-                                    // Find more Lottie files at https://lottiefiles.com/featured
-                                    source={require('../assets/loader.json')}
-                                />
-                            </View>) : (<View style={{ height: 50 }} />)}
+                            <View style={{ height: 50 }} />
                         </View>);
                     }}
                 />

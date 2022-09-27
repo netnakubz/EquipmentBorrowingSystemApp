@@ -33,7 +33,8 @@ export default function DirectMessage({ route, navigation }) {
         message.text = <TouchableOpacity onPress={() => {
           navigation.navigate('firstContract', {
             values: message.function,
-            save: false
+            save: false,
+            roomId: roomId
           })
         }}>
           <Text style={{ color: 'red', fontSize: 18 }}>ตรวจสอบสัญญา</Text>
@@ -77,21 +78,25 @@ export default function DirectMessage({ route, navigation }) {
   }
   const sendContract = async () => {
     let contract = {
-      userIdOwner: newContract.userIdOwner.id,
-      userIdBorrower: newContract.userIdBorrower.id,
-      itemId: parseInt(newContract.equipment.id),
-      totalRent: parseInt(newContract.totalRent),
-      price: parseInt(newContract.price),
+      room: {
+        id: newContract.room,
+      },
+      equipmentModel: {
+        itemId: newContract.item,
+      },
+      totalRent: newContract.totalRent,
+      price: newContract.price,
       startDate: newContract.startDate,
       endDate: newContract.endDate,
-      fineLate: parseInt(newContract.fineLate),
-      fineBroken: parseInt(newContract.fineBroken)
+      fineLate: newContract.fineLate,
+      fineBroken: newContract.fineBroken,
+      creator: newContract.creator,
     }
     let data = await API.createContract(contract);
-    systemMessage()
+    systemMessage(data.contractId)
   }
 
-  const systemMessage = async () => {
+  const systemMessage = async (contractId) => {
     let message = [{
       _id: uuid(),
       createdAt: new Date(),
@@ -100,7 +105,7 @@ export default function DirectMessage({ route, navigation }) {
         _id: 1,
         name: "system"
       },
-      function: JSON.stringify(newContract),
+      function: JSON.stringify(contractId),
       system: true
     }]
     if (message[0].createdAt === null) {
@@ -140,7 +145,8 @@ export default function DirectMessage({ route, navigation }) {
             text: newMessage.function ? <TouchableOpacity onPress={() => {
               navigation.navigate('firstContract', {
                 values: newMessage.function,
-                save: false
+                save: false,
+                roomId: roomId
               })
             }}>
               <Text style={{ color: 'red', fontSize: 18 }}>ตรวจสอบสัญญา</Text>
@@ -196,7 +202,8 @@ export default function DirectMessage({ route, navigation }) {
           <Actions {...props} onPressActionButton={() => {
             navigation.navigate('firstContract', {
               setNewContract: (contract) => setNewContract(contract),
-              save: true
+              save: true,
+              roomId: roomId
             })
           }}
           />

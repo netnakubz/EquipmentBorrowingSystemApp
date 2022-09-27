@@ -7,7 +7,8 @@ import { Profile } from './Profile';
 import DATA from './data';
 import Hr from './Hr';
 import API from '../env/API';
-
+import { Section } from './Section';
+import { ListReceipt } from './ListReceipt';
 export default function App(props) {
     const { items, setIsRefresh } = props;
     const itemHeight = 200 * (items.length / 3);
@@ -16,6 +17,30 @@ export default function App(props) {
     const hadleShowPage = (page) => {
         setShowPage(page);
     }
+    const receipt = [
+        {
+            invoiceId: "RC00000001",
+            date: new Date(),
+            ownerName: "สมสมร ขยันยิ่ง",
+            borrowerName: "สมชาย รักดี",
+            quantity: 2,
+            name: "Logitech M350 Mouse",
+            period: 3,
+            price: 60.00,
+            serial: "123445"
+        },
+        {
+            invoiceId: "RC00000002",
+            date: new Date(),
+            ownerName: "สมสมร ขยันยิ่ง",
+            borrowerName: "สมชาย รักดี",
+            quantity: 2,
+            name: "Logitech M350 Mouse 350",
+            period: 3,
+            price: 60.00,
+            serial: "123447"
+        }
+    ]
     return (
         <StickyHeaderScrollView
             onRefresh={() => {
@@ -36,7 +61,7 @@ export default function App(props) {
                             justifyContent: 'space-between',
                         }}
                     >
-                        <Profile isOwnerProfile={isOwnerProfile} items={items} />
+                        <Profile isOwnerProfile={isOwnerProfile} items={items} receipts={receipt} />
                     </View>
                 </View>
             )}
@@ -61,8 +86,6 @@ export default function App(props) {
                     >
                         <Feather size={25} name="file-text" />
                     </TouchableOpacity>
-
-
                     <TouchableOpacity
                         onPress={() => hadleShowPage("myItems")}
                     >
@@ -76,7 +99,8 @@ export default function App(props) {
         >
             <View style={[styles.container, { top: isOwnerProfile ? - 65 : -10, height: "10%" }]}>
                 <View style={[styles.row]}>
-                    {showPage === "myItems" &&
+                    {
+                        showPage === "myItems" &&
                         items.map((item) => (
                             <View style={[styles.col]} key={item.itemId}>
                                 <Image
@@ -89,9 +113,7 @@ export default function App(props) {
                             </View>
                         )) ||
                         showPage === "receipt" &&
-                        <View>
-                            <Text>Hello</Text>
-                        </View>
+                        <ListReceipt receipt={receipt} />
                     }
                 </View>
             </View>

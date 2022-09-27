@@ -16,7 +16,7 @@ const bannerImage = require('../assets/snack-icon.png');
 const BANNER_HEIGHT = 180;
 import Ionicons from '@expo/vector-icons/Ionicons';
 
-export const Profile = ({ isOwnerProfile, items }) => {
+export const Profile = ({ isOwnerProfile, items, receipts }) => {
     const navigation = useNavigation();
     const [profile, setProfile] = useState({
         userId: 10001,
@@ -56,7 +56,7 @@ export const Profile = ({ isOwnerProfile, items }) => {
                         </View>
                         {isOwnerProfile &&
                             <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                                <Text>1</Text>
+                                <Text>{receipts.length}</Text>
                                 <Text>ใบเสร็จ</Text>
                             </View>
                         }

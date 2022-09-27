@@ -24,17 +24,8 @@ const Hr = ({ size }) => {
     }, []);
     return <Text style={{ textAlign: "center" }}>{hr}</Text>
 }
-export const SaveReceipt = () => {
-    const [receipt, setReceipt] = useState({
-        invoiceId: "RC00000001",
-        date: new Date(),
-        ownerName: "สมสมร ขยันยิ่ง",
-        borrowerName: "สมชาย รักดี",
-        quantity: 2,
-        name: "Logitech M350 Mouse",
-        period: 3,
-        price: 60.00
-    });
+export const SaveReceipt = ({ route }) => {
+    const { receipt } = route.params;
     const ref = useRef();
     const saveImg = async () => {
         ref.current.capture().then(uri => {

@@ -51,7 +51,7 @@ export const AddItem = ({ navigation }) => {
             userId: 10001,
             types: selectedType,
         }).then(() => {
-            // navigation.goBack()
+            navigation.goBack();
         });
     }
 

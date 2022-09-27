@@ -8,6 +8,7 @@ import { Section } from "../components/Section";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import API from "../env/API";
 import { DismissKeyboard } from "../components/DismissKeybord";
+import { v4 as uuidv4 } from "uuid";
 export default function LendPage({ route }) {
     const [textValue, setTextValue] = useState("");
     const [open, setOpen] = useState(false);
@@ -32,7 +33,8 @@ export default function LendPage({ route }) {
         navigation.goBack();
     }
     const getEquipment = async () => {
-        API.getEquipmentByUserId().then(data => {
+        API.getEquipmentByUserId(10001).then(data => {
+            console.log(data);
             setMyItems(data);
             setValue(prev => data[0]);
         });
@@ -57,7 +59,7 @@ export default function LendPage({ route }) {
                             }}
                             ref={selector => { selector = selector; }}
                             data={myItems}
-                            keyExtractor={item => item.item_ID}
+                            keyExtractor={item => uuidv4()}
                             labelExtractor={item => item.name}
                         >
                             <Section marginTop={5}>
