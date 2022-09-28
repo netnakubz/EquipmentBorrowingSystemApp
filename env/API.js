@@ -1,15 +1,16 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { DeviceEventEmitter } from "react-native";
-
 let API = {
     domain: "http://172.20.10.4:8080",
     config: {
         headers: { Authorization: `Bearer ${AsyncStorage.getItem("token")}` }
     },
+    status: 200,
     getToken: async (from) => {
         console.log("call from " + from);
         let token = await AsyncStorage.getItem("token");
+        console.log(token)
         return token;
     },
     temp: () => {
@@ -74,7 +75,7 @@ let API = {
     },
     getContract: async (contractId) => {
         let token = await API.getToken("getContract");
-        const data = await axios.get(`${API.domain}/api/v1/getAgreement?contractId=${contractId}`, 
+        const data = await axios.get(`${API.domain}/api/v1/getAgreement?contractId=${contractId}`,
             {
                 headers:
                     { Authorization: `Bearer ${token}` }
@@ -88,8 +89,7 @@ let API = {
                 headers:
                     { Authorization: `Bearer ${token}` }
             }
-        );
-        console.log(data.data);
+        )
         return data.data;
     },
     getPostFindToLend: async (pageNo = 0, pageSize = 10) => {
@@ -119,7 +119,7 @@ let API = {
     getPostById: async (postId) => {
         let token = await API.getToken("getPostById");
 
-        const data = await axios.get(`${API.domain}/api/v1/get/post/by?postId=${postId}`, 
+        const data = await axios.get(`${API.domain}/api/v1/get/post/by?postId=${postId}`,
             {
                 headers:
                     { Authorization: `Bearer ${token}` }
@@ -138,7 +138,7 @@ let API = {
     },
     getEquipmentById: async (itemId) => {
         let token = await API.getToken("getEquipmentById");
-        const data = await axios.get(`${API.domain}/api/v1/equipment?itemId=${itemId}`, 
+        const data = await axios.get(`${API.domain}/api/v1/equipment?itemId=${itemId}`,
             {
                 headers:
                     { Authorization: `Bearer ${token}` }
@@ -147,7 +147,7 @@ let API = {
     },
     getRoom: async (roomId) => {
         let token = await API.getToken("getRoom");
-        const data = await axios.get(`${API.domain}/api/v1/getRoom/by?roomId=${roomId}`, 
+        const data = await axios.get(`${API.domain}/api/v1/getRoom/by?roomId=${roomId}`,
             {
                 headers:
                     { Authorization: `Bearer ${token}` }
@@ -180,7 +180,7 @@ let API = {
     getItemType: async () => {
         let token = await API.getToken("getItemType");
 
-        const data = await axios.get(`${API.domain}/api/v1/get/itemType`, 
+        const data = await axios.get(`${API.domain}/api/v1/get/itemType`,
             {
                 headers:
                     { Authorization: `Bearer ${token}` }
@@ -199,7 +199,7 @@ let API = {
     getItemType: async () => {
         let token = await API.getToken("getItemType");
 
-        const data = await axios.get(`${API.domain}/api/v1/getItemType`, 
+        const data = await axios.get(`${API.domain}/api/v1/getItemType`,
             {
                 headers:
                     { Authorization: `Bearer ${token}` }
@@ -248,7 +248,7 @@ let API = {
     },
     isLiked: async (postId) => {
         let token = await API.getToken("isLiked");
-        const data = await axios.get(`${API.domain}/api/v1/isLiked?postId=${postId}`, 
+        const data = await axios.get(`${API.domain}/api/v1/isLiked?postId=${postId}`,
             {
                 headers:
                     { Authorization: `Bearer ${token}` }

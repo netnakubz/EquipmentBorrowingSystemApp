@@ -53,41 +53,21 @@ import { Receipt } from './pages/Receipt';
 import { FirstPage } from './pages/FirstPage';
 import { SaveReceipt } from './pages/SaveReceipt';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { SignUp } from './pages/SignUp';
 const MusicRoute = () => <Text style={{ color: "green" }}>Music</Text>;
 
 const AlbumsRoute = () => <Text style={{ color: "green" }}>Albums</Text>;
 
 const RecentsRoute = () => <Text style={{ color: "green" }}>Recents</Text>;
 const BottomNav = () => {
-  // const [index, setIndex] = React.useState(0);
-  // const [routes] = React.useState([
-  //   { key: 'music', title: 'Favorites', focusedIcon: 'heart', unfocusedIcon: 'heart-outline' },
-  //   { key: 'albums', title: 'Albums', focusedIcon: 'album' },
-  //   { key: 'recents', title: 'Recents', focusedIcon: 'history' },
-  //   { key: 'notifications', title: 'Notifications', focusedIcon: 'bell', unfocusedIcon: 'bell-outline' },
-  // ]);
-
-  // const renderScene = BottomNavigation.SceneMap({
-  //   music: MusicRoute,
-  //   albums: AlbumsRoute,
-  //   recents: RecentsRoute,
-  // });
-
-  // return (
-  //   <BottomNavigation
-  //     navigationState={{ index, routes }}
-  //     onIndexChange={setIndex}
-  //     renderScene={renderScene}
-  //   />
-  // );
   const [homePage, setHomePage] = useState(true);
   const navigation = useNavigation();
   const checktoken = async () => {
     let token = await AsyncStorage.getItem("token");
-    if (token !== null) {
-      navigation.navigate("firstPage");
-      // isLogin(true);
-    }
+    // if (token === null) {
+    //   navigation.navigate("firstPage");
+    //   // isLogin(true);
+    // }
   }
   useEffect(() => {
     checktoken();
@@ -164,6 +144,9 @@ export default function App() {
     <SafeAreaProvider initialMetrics={initialWindowMetrics}>
       <NavigationContainer>
         <Stack.Navigator >
+        {/* <Stack.Screen component={FirstPage} name="firstPage" options={{ headerShown: false }} /> */}
+
+          {/* <Stack.Screen component={SignUp} options={{ headerShown: false }} name="SignUp" /> */}
           <Stack.Screen component={BottomNav} options={{ headerShown: false }} name="BottomNav" />
           <Stack.Screen component={ProductPage} name="ProductPage" />
           <Stack.Screen component={DirectMessage} name="DirectMessage" />
@@ -179,8 +162,6 @@ export default function App() {
           <Stack.Screen component={EquipmentSettings} name="EquipmentSettings" options={{ title: "ตั้งค่าอุปกรณ์" }} />
           <Stack.Screen component={SaveReceipt} name="SaveReceipt" />
           <Stack.Screen component={Receipt} name="ใบเสร็จ" />
-          <Stack.Screen component={FirstPage} name="firstPage" options={{ headerShown: false }} />
-
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>
