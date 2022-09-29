@@ -40,6 +40,7 @@ export function ProductPage({ navigation, route }) {
     }
     const getPost = async () => {
         const data = await API.getPostById(postId);
+        console.log(data);
         setItem(data);
         let temp = [];
         data?.equipment?.itemImg.forEach(img => {

@@ -51,8 +51,8 @@ export const FindToBorrowPage = ({ content, setContent, isHomePage, setHomePage 
     const _onReFresh = async () => {
         setFetchingData(true);
         const data = await API.getPostFindToBorrow(0, 10);
-       
-        setPost(data);
+
+        // setPost(data);
         wait(1000).then(() => setFetchingData(false));
     }
     const _NewData = async () => {

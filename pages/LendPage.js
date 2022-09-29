@@ -33,11 +33,12 @@ export default function LendPage({ route }) {
         navigation.goBack();
     }
     const getEquipment = async () => {
-        API.getEquipmentByUserId(10001).then(data => {
-            console.log(data);
-            setMyItems(data);
-            setValue(prev => data[0]);
-        });
+        API.getEquipmentByUserId()
+            .then(data => {
+                console.log(data);
+                setMyItems(data);
+                setValue(prev => data[0]);
+            });
     }
     const handleSelectItem = (selector) => {
         setValue(selector);

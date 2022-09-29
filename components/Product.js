@@ -19,6 +19,9 @@ const Product = ({ item }) => {
             postId: postId
         });
     };
+    useEffect(()=>{
+        console.log(item);
+    })
     return (
         <TouchableOpacity onPress={() => onClickItem(item.postId)}>
             <Card containerStyle={[styles.cardCnt, {
@@ -28,7 +31,7 @@ const Product = ({ item }) => {
                         borderRadius: 30,
                     }}
                     resizeMode="contain"
-                    source={{ uri: `${API.domain}/files/${item.equipment?.itemImg[0]?.location}` }}
+                    source={{ uri: `${API.domain}/files/${item?.equipment?.itemImg[0]?.location}` }}
                 />
                 <View>
                     <Text style={styles.cardText}>{item.details}</Text>

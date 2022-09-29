@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { DeviceEventEmitter } from "react-native";
 let API = {
-    domain: "http://172.20.10.4:8080",
+    domain: "http://172.20.10.2:8080",
     config: {
         headers: { Authorization: `Bearer ${AsyncStorage.getItem("token")}` }
     },
@@ -11,6 +11,7 @@ let API = {
         console.log("call from " + from);
         let token = await AsyncStorage.getItem("token");
         console.log(token)
+
         return token;
     },
     temp: () => {
@@ -106,7 +107,7 @@ let API = {
         let token = await API.getToken("lendPost");
         const data = await axios.post(`${API.domain}/api/v1/post/rent`, {
             details: post.details,
-            itemId: post.itemId,
+            equipment: { itemId: post.itemId },
             userId: post.userId
         },
             {
@@ -126,10 +127,10 @@ let API = {
             });
         return data.data;
     },
-    getEquipmentByUserId: async (userId) => {
+    getEquipmentByUserId: async () => {
         let token = await API.getToken("getEquipmentByUserId");
 
-        const data = await axios.get(`${API.domain}/api/v1/get/equipment/by?userId=${userId}`,
+        const data = await axios.get(`${API.domain}/api/v1/get/equipment/by`,
             {
                 headers:
                     { Authorization: `Bearer ${token}` }
