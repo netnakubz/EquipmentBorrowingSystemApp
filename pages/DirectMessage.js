@@ -27,7 +27,7 @@ export default function DirectMessage({ route, navigation }) {
     });
   }
   const getChat = async () => {
-    let messages = await API.getChat(roomId, user);
+    let messages = await API.getChat(roomId);
     messages.filter(message => {
       if (message.function) {
         message.text = <TouchableOpacity onPress={() => {
@@ -78,8 +78,8 @@ export default function DirectMessage({ route, navigation }) {
   }
   const sendContract = async () => {
     let contract = {
-      room: {
-        id: newContract.room,
+      roomModel: {
+        roomId: newContract.room,
       },
       equipmentModel: {
         itemId: newContract.item,
@@ -91,6 +91,7 @@ export default function DirectMessage({ route, navigation }) {
       fineLate: newContract.fineLate,
       fineBroken: newContract.fineBroken,
       creator: newContract.creator,
+      editStatus: false
     }
     let data = await API.createContract(contract);
     systemMessage(data.contractId)

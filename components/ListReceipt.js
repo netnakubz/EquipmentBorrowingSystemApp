@@ -4,11 +4,14 @@ import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 export const ListReceipt = ({ receipt }) => {
     const naviation = useNavigation();
     const handleOnPressReceipt = (item) => {
-        naviation.navigate("SaveReceipt", { receipt:item });
+        naviation.navigate("SaveReceipt", { receipt: item });
     }
+    useEffect(() => {
+        console.log(receipt[0].contractModel.roomModel.userOne);
+    }, []);
     return (
         receipt.map((item) => (
-            <TouchableOpacity key={item.invoiceId}
+            <TouchableOpacity key={item.receiptId}
                 style={[styles.col, {
                     backgroundColor: 'white',
                     justifyContent: 'center',
@@ -18,14 +21,14 @@ export const ListReceipt = ({ receipt }) => {
             >
                 <View>
                     <Text style={{ fontSize: 18, textAlign: 'center' }}>
-                        Invoice ID  {item.invoiceId}
+                        Invoice ID  {item.receiptId}
                     </Text>
                 </View>
                 <Text style={{ textAlign: 'left' }}>
-                    item : {item.name}
+                    item : {item.contractModel.equipmentModel.name}
                 </Text>
                 <Text style={{ textAlign: 'left' }}>
-                    serial : {item.serial}
+                    Borrower : {item.contractModel.equipmentModel.user.userId === item.contractModel.roomModel.userOne.userId ? item.contractModel.roomModel.userTwo.name : item.contractModel.roomModel.userOne.name}
                 </Text>
             </TouchableOpacity>
         ))

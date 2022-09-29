@@ -3,7 +3,6 @@ import { View, StyleSheet, ScrollView, Image, Button, Text, TouchableOpacity, Di
 import Chat from "../components/Chat";
 import axios from "axios";
 import { Card } from 'react-native-paper';
-
 const screenWidth = Dimensions.get('window').width;
 
 import { GestureHandlerRootView, Swipeable } from 'react-native-gesture-handler';
@@ -11,7 +10,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import API from "../env/API";
 export default function Room({ navigation }) {
     const [rooms, setRoom] = useState([]);
-    const [selectedValue, setSelectedValue] = useState(10002);
+    const [userProfile, setUserProfile] = useState([]);
     const deleteBtn = () => {
         console.log("delete")
     }
@@ -83,36 +82,19 @@ export default function Room({ navigation }) {
         );
     }
     const getListChat = async () => {
-        setRoom(await API.getListChat(selectedValue));
+        setRoom(await API.getListChat());
     };
+    const getUserProfile = async () => {
+        const data = await API.getUserProfile();
+        setUserProfile(data);
+    }
     useEffect(() => {
         getListChat();
-    }, [selectedValue]);
+        getUserProfile();
+    }, []);
     return (
         <ScrollView showsVerticalScrollIndicator={false}>
             <View>
-                {/* <View style={{ flexDirection: 'row', justifyContent: "space-evenly" }}>
-                    <TouchableOpacity onPress={() => setSelectedValue(10001)} style={{ width: "100%" }}>
-                        <View style={{ backgroundColor: 'green', height: 100, justifyContent: 'center', alignItems: 'center' }}>
-                            <Text>10001</Text>
-                        </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => setSelectedValue(10002)} style={{ width: "100%" }}>
-                        <View style={{ backgroundColor: 'blue', height: 100, justifyContent: 'center', alignItems: 'center' }}>
-                            <Text>10002</Text>
-                        </View>
-                    </TouchableOpacity>
-                </View> */}
-                {/* <TouchableOpacity onPress={() => setSelectedValue(10001)}>
-                    <View style={{ width: 300, height: 300 }}>
-                        <Text>10001</Text>
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => setSelectedValue(10002)}>
-                    <View style={{ width: 300, height: 300 }}>
-                        <Text>10002</Text>
-                    </View>
-                </TouchableOpacity> */}
                 <GestureHandlerRootView>
                     {rooms.map((room, index) => (
                         <Swipeable
@@ -121,7 +103,7 @@ export default function Room({ navigation }) {
                         >
                             <Chat
                                 props={room}
-                                user={selectedValue}
+                                user={userProfile}
                                 navigation={navigation}
                             />
                         </Swipeable>

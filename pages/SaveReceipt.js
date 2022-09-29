@@ -13,6 +13,7 @@ import {
 import ViewShot from 'react-native-view-shot';
 import * as MediaLibrary from "expo-media-library";
 import { Ionicons } from '@expo/vector-icons';
+import API from '../env/API';
 const Hr = ({ size }) => {
     const [hr, setHr] = useState();
     useEffect(() => {
@@ -34,7 +35,7 @@ export const SaveReceipt = ({ route }) => {
             });
         });
     }
-
+    
     return (
         <View style={styles.container}>
             <ViewShot ref={ref}

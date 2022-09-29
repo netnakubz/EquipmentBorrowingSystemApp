@@ -35,7 +35,6 @@ export default function LendPage({ route }) {
     const getEquipment = async () => {
         API.getEquipmentByUserId()
             .then(data => {
-                console.log(data);
                 setMyItems(data);
                 setValue(prev => data[0]);
             });

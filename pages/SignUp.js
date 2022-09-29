@@ -1,8 +1,10 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useState, useEffect } from "react";
 import { SafeAreaView } from "react-native";
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, KeyboardAvoidingView } from "react-native";
 import { DismissKeyboard } from "../components/DismissKeybord";
 import { Section } from "../components/Section";
+import API from "../env/API";
 
 const InputField = (props) => {
     const { value, onChange, type, name, placeholder } = props;
@@ -27,7 +29,7 @@ const InputField = (props) => {
     );
 }
 
-export const SignUp = (props) => {
+export const SignUp = ({ route }) => {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
@@ -44,10 +46,25 @@ export const SignUp = (props) => {
     const handlePhoneNumber = (e) => {
         setPhoneNumber(e);
     }
+    const updateInfo = async () => {
+        const user = {
+            name: firstName,
+            surname: lastName,
+            email: email,
+            tel: phoneNumber,
+        }
+        await API.addOrUpdateUser(user);
+    }
+    useState(() => {
+        const { userInfo } = route.params;
+        setFirstName(userInfo.givenName);
+        setLastName(userInfo.familyName);
+        setEmail(userInfo.email);
+    }, []);
     return (
         <SafeAreaView style={styles.container}>
             <DismissKeyboard>
-                <View>
+                <View style={{height:"100%"}}>
                     <KeyboardAvoidingView>
                         <View style={{ marginTop: 30 }}>
                             <Text>กรอกข้อมูลเพื่อลงชื่อเข้าใจงาน</Text>
@@ -89,7 +106,7 @@ export const SignUp = (props) => {
                         width: "100%"
                     }}>
                         <TouchableOpacity
-                            onPress={() => updateUser()}
+                            onPress={() => updateInfo()}
                         >
                             <View style={{
                                 backgroundColor: "#FF6280",

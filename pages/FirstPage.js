@@ -15,11 +15,19 @@ export const FirstPage = ({ navigation }) => {
                 extraParams: {
                     access_type: "offline"
                 },
-                
+
             });
             if (result.type === 'success') {
-                AsyncStorage.setItem("token", result.idToken);
-                console.log(result)
+                await AsyncStorage.setItem("token", result.idToken);
+                const isExist = await API.auth();
+                console.log(isExist);
+                if (!isExist) {
+                    navigation.navigate("SignUp", {
+                        userInfo: result.user
+                    });
+                } else {
+                    navigation.navigate("BottomNav");
+                }
             }
         } catch (e) {
             console.log(e);

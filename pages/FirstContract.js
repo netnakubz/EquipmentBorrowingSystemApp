@@ -84,7 +84,7 @@ export const FirstContract = ({ navigation, route }) => {
             editAble: null,
         }
         setNewContract(contract);
-        // navigation.goBack();
+        navigation.goBack();
     }
     const showMode = (currentMode) => {
         if (Platform.OS === 'android') {
@@ -98,8 +98,8 @@ export const FirstContract = ({ navigation, route }) => {
     }
     const setValues = async () => {
         const contract = await API.getContract(values);
-        const owner = contract.room.userOne.userId === contract.equipmentModel.userId ? contract.room.userOne : contract.room.userTwo;
-        const borrower = contract.room.userOne.userId !== contract.equipmentModel.userId ? contract.room.userOne : contract.room.userTwo;
+        const owner = contract.roomModel.userOne.userId === contract.equipmentModel.userId ? contract.roomModel.userOne : contract.roomModel.userTwo;
+        const borrower = contract.roomModel.userOne.userId !== contract.equipmentModel.userId ? contract.roomModel.userOne : contract.roomModel.userTwo;
         if (contract) {
             setContract(contract);
             setEquipment(contract.equipmentModel);
@@ -114,7 +114,6 @@ export const FirstContract = ({ navigation, route }) => {
             setEditAble(contract.editAble);
             setEditStatus(contract.editStatus);
         }
-        console.log(contract.editStatus);
     }
     //get within room model
     const getRoom = async (roomId) => {
@@ -239,7 +238,7 @@ export const FirstContract = ({ navigation, route }) => {
                             handleItemPick(selector)
                         }}
                         ref={selector => { selector = selector; }}
-                        data={equipments.filter(item => item.userId === userIdOwner.userId)}
+                        data={equipments}
                         keyExtractor={item => uuidv4()}
                         labelExtractor={item => item.name}
                     >

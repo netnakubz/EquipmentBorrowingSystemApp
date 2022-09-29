@@ -19,9 +19,6 @@ const Product = ({ item }) => {
             postId: postId
         });
     };
-    useEffect(()=>{
-        console.log(item);
-    })
     return (
         <TouchableOpacity onPress={() => onClickItem(item.postId)}>
             <Card containerStyle={[styles.cardCnt, {

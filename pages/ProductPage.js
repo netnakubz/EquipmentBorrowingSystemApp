@@ -25,10 +25,10 @@ export function ProductPage({ navigation, route }) {
     const contactBtn = async () => {
         //if data is null create new room;
         //if not null redirect to direct message 
-        let tempUser = 10003;
-        let data = await API.searchRoom(tempUser, item?.equipment.user.userId);
+        let data = await API.searchRoom(item?.equipment.user.userId);
+        let tempUser = data.userOne.userId === item.equipment.user.userId ? data.userTwo.userId : data.userOne.userId;
         navigation.navigate("DirectMessage", {
-            roomId: data.room_ID,
+            roomId: data.roomId,
             destination: item?.equipment.user.name + " " + item?.equipment.user.surname,
             user: tempUser,
             data: item
@@ -40,7 +40,6 @@ export function ProductPage({ navigation, route }) {
     }
     const getPost = async () => {
         const data = await API.getPostById(postId);
-        console.log(data);
         setItem(data);
         let temp = [];
         data?.equipment?.itemImg.forEach(img => {

@@ -2,16 +2,14 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { DeviceEventEmitter } from "react-native";
 let API = {
-    domain: "http://172.20.10.2:8080",
+    domain: "http://172.20.10.4:8080",
     config: {
         headers: { Authorization: `Bearer ${AsyncStorage.getItem("token")}` }
     },
-    status: 200,
     getToken: async (from) => {
         console.log("call from " + from);
         let token = await AsyncStorage.getItem("token");
-        console.log(token)
-
+        // console.log(token)
         return token;
     },
     temp: () => {
@@ -26,7 +24,7 @@ let API = {
     getChat: async (roomId, user) => {
         let token = await API.getToken("getChat");
         const data = await axios.get(
-            `${API.domain}/api/v1/getMessage?roomId=${roomId}&userId=${user}`,
+            `${API.domain}/api/v1/getMessage?roomId=${roomId}`,
             {
                 headers:
                     { Authorization: `Bearer ${token}` }
@@ -39,10 +37,10 @@ let API = {
      * @param {Number} selectedValue
      * @returns
      */
-    getListChat: async (selectedValue) => {
+    getListChat: async () => {
         let token = await API.getToken("getListChat");
         const data = await axios.get(
-            `${API.domain}/api/v1/getListChat?userId=${selectedValue}`,
+            `${API.domain}/api/v1/getListChat`,
             {
                 headers:
                     { Authorization: `Bearer ${token}` }
@@ -55,10 +53,10 @@ let API = {
      * @param {Number} userOne
      * @param {Number} userTwo
      */
-    searchRoom: async (userOne, userTwo) => {
+    searchRoom: async (userTwo) => {
         let token = await API.getToken("searchRoom");
         const data = await axios.get(
-            `${API.domain}/api/v1/searchRoom?userOne=${userOne}&userTwo=${userTwo}`,
+            `${API.domain}/api/v1/searchRoom?userTwo=${userTwo}`,
             {
                 headers:
                     { Authorization: `Bearer ${token}` }
@@ -115,7 +113,6 @@ let API = {
                     { Authorization: `Bearer ${token}` }
             }
         );
-        console.log(data.statusText);
     },
     getPostById: async (postId) => {
         let token = await API.getToken("getPostById");
@@ -127,10 +124,9 @@ let API = {
             });
         return data.data;
     },
-    getEquipmentByUserId: async () => {
+    getEquipmentByUserId: async (userId) => {
         let token = await API.getToken("getEquipmentByUserId");
-
-        const data = await axios.get(`${API.domain}/api/v1/get/equipment/by`,
+        const data = await axios.get(`${API.domain}/api/v1/get/equipment/by?userId=${userId}`,
             {
                 headers:
                     { Authorization: `Bearer ${token}` }
@@ -175,7 +171,6 @@ let API = {
             headers:
                 { Authorization: `Bearer ${token}` }
         });
-        console.log(data.data);
         return data.data;
     },
     getItemType: async () => {
@@ -274,13 +269,40 @@ let API = {
     },
     auth: async () => {
         let token = await API.getToken("auth");
-        const data = await axios.put(`${API.domain}/api/v1/test`, {},
+        const data = await axios.put(`${API.domain}/api/v1/isAuthed`, {},
             {
                 headers:
                     { Authorization: `Bearer ${token}` }
             }
         );
+        return data.data;
     },
+    addOrUpdateUser: async (user) => {
+        let token = await API.getToken("auth");
+        const data = await axios.get(`${API.domain}/api/v1/updateUserInformation`,
+            user
+            , {
+                headers:
+                    { Authorization: `Bearer ${token}` }
+            });
+        return data === null;
+    },
+    getUserProfile: async () => {
+        let token = await API.getToken("auth");
+        const data = await axios.get(`${API.domain}/api/v1/profile`, {
+            headers:
+                { Authorization: `Bearer ${token}` }
+        });
+        return data.data;
+    },
+    getReceipt: async () => {
+        let token = await API.getToken("auth");
+        const data = await axios.get(`${API.domain}/api/v1/get/receipt`, {
+            headers:
+                { Authorization: `Bearer ${token}` }
+        });
+        return data.data;
+    }
 
 };
 export default API;

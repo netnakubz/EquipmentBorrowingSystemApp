@@ -14,33 +14,18 @@ export default function App(props) {
     const itemHeight = 200 * (items.length / 3);
     const [showPage, setShowPage] = useState("myItems");
     const [isOwnerProfile, setIsOwnerProfile] = useState(true);
+    const [receipt, setReceipt] = useState([]);
     const hadleShowPage = (page) => {
         setShowPage(page);
     }
-    const receipt = [
-        {
-            invoiceId: "RC00000001",
-            date: new Date(),
-            ownerName: "สมสมร ขยันยิ่ง",
-            borrowerName: "สมชาย รักดี",
-            quantity: 2,
-            name: "Logitech M350 Mouse",
-            period: 3,
-            price: 60.00,
-            serial: "123445"
-        },
-        {
-            invoiceId: "RC00000002",
-            date: new Date(),
-            ownerName: "สมสมร ขยันยิ่ง",
-            borrowerName: "สมชาย รักดี",
-            quantity: 2,
-            name: "Logitech M350 Mouse 350",
-            period: 3,
-            price: 60.00,
-            serial: "123447"
-        }
-    ]
+    const getReceipt = async () => {
+        const data = await API.getReceipt();
+        setReceipt(data);
+    }
+    useEffect(() => {
+        getReceipt();
+    }, []);
+
     return (
         <StickyHeaderScrollView
             onRefresh={() => {
