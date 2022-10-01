@@ -54,17 +54,13 @@ import { FirstPage } from './pages/FirstPage';
 import { SaveReceipt } from './pages/SaveReceipt';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SignUp } from './pages/SignUp';
-const MusicRoute = () => <Text style={{ color: "green" }}>Music</Text>;
-
-const AlbumsRoute = () => <Text style={{ color: "green" }}>Albums</Text>;
-
-const RecentsRoute = () => <Text style={{ color: "green" }}>Recents</Text>;
 const BottomNav = () => {
   const [homePage, setHomePage] = useState(true);
+  const [isSuccess, setisSuccess] = useState(false);
   const navigation = useNavigation();
   const checktoken = async () => {
-    let token = await AsyncStorage.getItem("token");
-    // await AsyncStorage.clear("token")
+    let token = await API.getToken("From app");
+    // await AsyncStorage.clear("token")  
     if (token === null) {
       navigation.navigate("firstPage");
     }
@@ -110,7 +106,9 @@ const BottomNav = () => {
             }
           }
         })}
-        children={props => <HomeScreen isHomePage={homePage} setHomeFalse={setHomePage}  {...props} />}
+        children={props =>
+          <HomeScreen isHomePage={isSuccess ? homePage : <View></View>} setHomeFalse={setHomePage}  {...props} />
+        }
       />
       <Tab.Screen name="Like" options={{ title: "สิ่งที่ฉันถูกใจ" }} component={LikeScreen} />
       <Tab.Screen name="Chat" options={{ headerShown: false }} component={ListChat} />

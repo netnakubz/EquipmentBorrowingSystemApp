@@ -7,10 +7,13 @@ let API = {
         headers: { Authorization: `Bearer ${AsyncStorage.getItem("token")}` }
     },
     getToken: async (from) => {
-        console.log("call from " + from);
-        let token = await AsyncStorage.getItem("token");
+        try {
+            let token = await AsyncStorage.getItem("token");
+            return token;
+        }catch(e){
+            return null;
+        }
         // console.log(token)
-        return token;
     },
     temp: () => {
         console.log(API.domain);
@@ -89,6 +92,7 @@ let API = {
                     { Authorization: `Bearer ${token}` }
             }
         )
+
         return data.data;
     },
     getPostFindToLend: async (pageNo = 0, pageSize = 10) => {
@@ -269,7 +273,7 @@ let API = {
     },
     auth: async () => {
         let token = await API.getToken("auth");
-        const data = await axios.put(`${API.domain}/api/v1/isAuthed`, {},
+        const data = await axios.get(`${API.domain}/api/v1/isAuthed`,
             {
                 headers:
                     { Authorization: `Bearer ${token}` }

@@ -101,13 +101,12 @@ export function ProductPage({ navigation, route }) {
                                                 }}
                                             >
                                                 <View style={{
-                                                    borderWidth: 1,
-                                                    backgroundColor: '#FFFAFA',
-                                                    borderRadius: 10,
                                                     padding: 4,
                                                 }}>
                                                     <Text
-                                                        style={{ color: "#43BFF5" }}
+                                                        style={{
+                                                            color: "#43BFF5",
+                                                        }}
                                                     >
                                                         #{item.typeModel.name}
                                                     </Text>

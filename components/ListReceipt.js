@@ -6,9 +6,6 @@ export const ListReceipt = ({ receipt }) => {
     const handleOnPressReceipt = (item) => {
         naviation.navigate("SaveReceipt", { receipt: item });
     }
-    useEffect(() => {
-        console.log(receipt[0].contractModel.roomModel.userOne);
-    }, []);
     return (
         receipt.map((item) => (
             <TouchableOpacity key={item.receiptId}

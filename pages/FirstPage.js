@@ -12,13 +12,20 @@ export const FirstPage = ({ navigation }) => {
                 scopes: ['profile', 'email'],
                 responseType: "code",
                 shouldAutoExchangeCode: false,
+                expire_in:360000000,
                 extraParams: {
                     access_type: "offline"
                 },
-
             });
+            
             if (result.type === 'success') {
-                await AsyncStorage.setItem("token", result.idToken);
+                console.log(result);
+                try {
+                    await AsyncStorage.setItem("token", result.idToken);
+                }catch(e){
+                    console.log(e);
+                }
+                console.log(result.refreshToken);
                 const isExist = await API.auth();
                 console.log(isExist);
                 if (!isExist) {

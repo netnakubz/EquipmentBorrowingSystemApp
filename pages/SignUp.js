@@ -5,7 +5,7 @@ import { View, Text, StyleSheet, TextInput, TouchableOpacity, KeyboardAvoidingVi
 import { DismissKeyboard } from "../components/DismissKeybord";
 import { Section } from "../components/Section";
 import API from "../env/API";
-
+import { useNavigation } from "@react-navigation/native";
 const InputField = (props) => {
     const { value, onChange, type, name, placeholder } = props;
     return (
@@ -30,6 +30,7 @@ const InputField = (props) => {
 }
 
 export const SignUp = ({ route }) => {
+    const navigation = useNavigation();
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
@@ -54,6 +55,7 @@ export const SignUp = ({ route }) => {
             tel: phoneNumber,
         }
         await API.addOrUpdateUser(user);
+        navigation.navigate("BottomNav");
     }
     useState(() => {
         const { userInfo } = route.params;

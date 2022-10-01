@@ -27,6 +27,8 @@ const Hr = ({ size }) => {
 }
 export const SaveReceipt = ({ route }) => {
     const { receipt } = route.params;
+    const [borrower, setBorrower] = useState();
+    const [period,setPeriod] = useState();
     const ref = useRef();
     const saveImg = async () => {
         ref.current.capture().then(uri => {
@@ -35,7 +37,11 @@ export const SaveReceipt = ({ route }) => {
             });
         });
     }
-    
+    useEffect(() => {
+        let owner = receipt.contractModel.equipmentModel.user.userId;
+        let bo = receipt.contractModel.roomModel.userOne.userId === owner ? receipt.contractModel.roomModel.userTwo : receipt.contractModel.roomModel.userOne;
+        setBorrower(bo);
+    }, [])
     return (
         <View style={styles.container}>
             <ViewShot ref={ref}
@@ -45,10 +51,10 @@ export const SaveReceipt = ({ route }) => {
                     <View style={styles.column}>
                         <View style={[styles.row]}>
                             <Text>Invoice ID</Text>
-                            <Text style={{ marginLeft: 10, color: "#464646", fontWeight: 'bold' }}>{receipt.invoiceId}</Text>
+                            <Text style={{ marginLeft: 10, color: "#464646", fontWeight: 'bold' }}>{receipt.receiptId}</Text>
                         </View>
                         <View style={[styles.row]}>
-                            <Text>{receipt.date.toLocaleDateString()}</Text>
+                            <Text>{receipt.createDate.split("T")[0]}</Text>
                         </View>
                     </View>
                     <View style={[styles.column, { marginTop: 20 }]}>
@@ -56,18 +62,20 @@ export const SaveReceipt = ({ route }) => {
                             <View style={{ width: "40%" }}>
                                 <Text style={{ textAlign: 'right', color: "#464646", fontWeight: 'bold' }}>Owner Name</Text>
                             </View>
-                            <View style={{ width: "20%" }}></View>
-                            <View style={{ width: "40%" }}>
-                                <Text style={{ textAlign: 'right' }}>{receipt.ownerName}</Text>
+                            <View style={{ width: "10%" }}></View>
+                            <View style={{ width: "50%" }}>
+                                <Text style={{ textAlign: 'right' }}>{receipt.contractModel.equipmentModel.user.name + " " + receipt.contractModel.equipmentModel.user.surname}</Text>
                             </View>
                         </View>
                         <View style={styles.row}>
                             <View style={{ width: "40%" }}>
                                 <Text style={{ textAlign: 'right', color: "#464646", fontWeight: 'bold' }}>Borrower Name</Text>
                             </View>
-                            <View style={{ width: "20%" }}></View>
-                            <View style={{ width: "40%" }}>
-                                <Text style={{ textAlign: 'right' }}>{receipt.borrowerName}</Text>
+                            <View style={{ width: "10%" }}></View>
+                            <View style={{ width: "50%" }}>
+                                {borrower &&
+                                    <Text style={{ textAlign: 'right' }}>{borrower.name + " " + borrower.surname}</Text>
+                                }
                             </View>
                         </View>
                     </View>
@@ -90,13 +98,13 @@ export const SaveReceipt = ({ route }) => {
                         <Hr size={42} />
                         <View style={[styles.row]}>
                             <View style={{ width: "20%" }}>
-                                <Text style={{ textAlign: 'center', color: "#464646" }}>{receipt.quantity}</Text>
+                                <Text style={{ textAlign: 'center', color: "#464646" }}>{receipt.contractModel.totalRent}</Text>
                             </View>
                             <View style={{ width: "40%" }}>
-                                <Text style={{ textAlign: 'center', color: "#464646" }}>{receipt.name}</Text>
+                                <Text style={{ textAlign: 'center', color: "#464646" }}>{receipt.contractModel.equipmentModel.name}</Text>
                             </View>
                             <View style={{ width: "20%" }}>
-                                <Text style={{ textAlign: 'center', color: "#464646" }}>{receipt.period}</Text>
+                                <Text style={{ textAlign: 'center', color: "#464646" }}>{receipt.contractModel.endDate.split("T")[0] - receipt.contractModel.startDate.split("T")[0]}</Text>
                             </View>
                             <View style={{ width: "20%" }}>
                                 <Text style={{ textAlign: 'center', color: "#464646" }}>{receipt.price}</Text>

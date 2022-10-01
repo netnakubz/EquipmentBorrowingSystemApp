@@ -10,6 +10,7 @@ import LottieView from 'lottie-react-native';
 import API from "../env/API";
 
 import { RNHTMLtoPDF } from 'react-native-html-to-pdf-custom';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const FindToBorrowPage = ({ content, setContent, isHomePage, setHomePage }) => {
     const [visible, setVisible] = useState(false);
@@ -60,7 +61,6 @@ export const FindToBorrowPage = ({ content, setContent, isHomePage, setHomePage 
         const data = await API.getPostFindToBorrow(0, totalData);
         setPost(data);
     }
-
     const navigation = useNavigation();
     return (
         <View style={styles.container} containerStyle={{ background: 'transparent' }}>
